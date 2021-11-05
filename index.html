@@ -105,7 +105,7 @@
                   
                     <v-col v-for="j in mywork" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
                       <v-card :href="host.scratch+'/scratch#id='+j.id+'&token='+token" target="_blank">
-                        <v-img :src="host.data+'/image/'+j.image"></v-img>
+                        <v-img :src="host.data+'/static/internalapi/asset/'+j.image"></v-img>
                         <v-card-title>{{ j.name }}</v-card-title>
                       </v-card>
                     </v-col>
