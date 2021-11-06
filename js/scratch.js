@@ -1,6 +1,6 @@
 var workinfo, downloadurl;
 (async () => {
-    if(!getCookie('token') && getQueryString('token')){
+    if(getQueryString('token')){
         setCookie('token',getQueryString('token'),2)
     }
     let d;

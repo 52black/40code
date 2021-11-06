@@ -40,15 +40,15 @@
           <v-main class="grey lighten-2">
             <v-container v-if="viewmode=='index'" id="index">
               <v-row>
-                <template v-for="n in rows.data">
+                <template v-for="n in rows">
                   <v-col :key="n" class="mt-2" cols="12">
                     <strong>{{ n.title }}</strong>
                   </v-col>
 
                   <v-col v-for="j in n.worklist" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
-                    <v-card>
-                      <v-img :src="j.img"></v-img>
-                      <v-card-title>{{ j.title }}</v-card-title>
+                    <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
+                      <v-img :src="host.data+'/static/internalapi/asset/'+j.image"></v-img>
+                      <v-card-title>{{ j.name }}</v-card-title>
                     </v-card>
                   </v-col>
                 </template>
@@ -67,55 +67,114 @@
                     <v-text-field v-model="password" :append-icon="show0 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
                       :type="show0 ? 'text' : 'password'" name="input-1" label="密码" hide-details="auto" counter
                       @click:append="show0 = !show0" id="pw"></v-text-field>
-                    <div cols="12">
-                    <v-btn color="accent" class="pa-2" v-on:click="sign.l(0)">登录</v-btn>
-                    <v-btn color="accent" class="pa-2" v-on:click="sign.l(1)">注册</v-btn>
-                  </div>
+                    <div cols="12" class="float-center mx-auto mt-2">
+                      <v-btn color="accent" class="pa-2" v-on:click="sign.l(0)">登录</v-btn>
+                      <v-btn color="accent" class="pa-2" v-on:click="sign.l(1)">注册</v-btn>
+                    </div>
                     当前站点为测试站点，数据定期清空，损失概不负责
                   </v-card>
                 </template>
               </v-row>
             </v-container>
 
-            <v-container v-if="viewmode=='account'" id="sign">
+            <v-container v-if="viewmode=='account'">
               <v-row>
                 <template>
                   <v-card class="mx-auto pa-8 my-12" width="400">
                     <v-text color="accent">信息更改</v-text>
                     <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0"></v-text-field>
-                    <v-btn color="accent" class="pa-2" v-on:click="account.l(0)">更改昵称</v-btn>
+                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)">更改昵称</v-btn>
                     <v-text-field v-model="password2" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
                       :type="show1 ? 'text' : 'password'" name="input-2" label="旧密码" hide-details="auto" counter
                       @click:append="show1 = !show1" id="a_opw"></v-text-field>
                     <v-text-field v-model="password3" :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
                       :type="show2 ? 'text' : 'password'" name="input-3" label="新密码" hide-details="auto" counter
                       @click:append="show2 = !show2" id="a_npw"></v-text-field>
-                    <v-btn color="accent" class="pa-2" v-on:click="account.n()">更改密码</v-btn>
+                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.n()">更改密码</v-btn>
                   </v-card>
                 </template>
               </v-row>
             </v-container>
 
-            <v-container v-if="viewmode=='mywork'" id="sign">
+            <v-container v-if="viewmode=='mywork'">
               <v-row>
                 <template>
                   <v-col class="" cols="12">
                     我的作品：<v-btn color="accent" class="pa-2" v-on:click="work.new()">新建作品</v-btn>
                   </v-col>
-                  
-                    <v-col v-for="j in mywork" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
-                      <v-card :href="host.scratch+'/scratch#id='+j.id+'&token='+token" target="_blank">
-                        <v-img :src="host.data+'/static/internalapi/asset/'+j.image"></v-img>
-                        <v-card-title>{{ j.name }}</v-card-title>
-                      </v-card>
-                    </v-col>
-                  
+
+                  <v-col v-for="j in mywork" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
+                    <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
+                      <v-img :src="host.data+'/static/internalapi/asset/'+j.image"></v-img>
+                      <v-card-title>{{ j.name }}</v-card-title>
+                      <v-btn color="accent" class="ma-2" :href="host.scratch+'/scratch#id='+j.id+'&token='+token"
+                        target="_blank">继续创作</v-btn>
+                    </v-card>
+                  </v-col>
+
                   </v-card>
                 </template>
               </v-row>
             </v-container>
 
-            <v-container v-if="viewmode=='404'" id="sign">
+            <v-container v-if="viewmode=='work'">
+              <v-row>
+                <template>
+                  <v-card class="mx-3 pa-5 my-12" width="2000" v-if="!workview.id">
+                    作品信息正在加载中
+                  </v-card>
+                  <v-card class="mx-3 pa-5 my-12" width="2000" v-else-if="(workview.isauthor || workview.publish)">
+                    <v-text color="accent" class="text-h4" cols="24">{{ workview.name }}</v-text><br><br>
+                    <iframe
+                      :src="(workview.id) ? ( (workview.isauthor || (workview.publish)) ? (host.scratch+'/worksc.html#id='+workview.id) : '/noqx.html') : '/d.html'"
+                      scrolling="no" frameborder="0" style="width:510px;height: 440px;" class="float-left pr-3"
+                      outlined>
+                    </iframe>
+                    <div class="float-left pl-3">
+                      <v-text color="accent" class="text-h5" cols="24">作品介绍</v-text><br>
+                      <v-text>{{ workview.introduce }}</v-text>
+                      <br><br>
+                      <v-divider class=""></v-divider>
+                      <br><br>
+                      <v-btn color="accent" class="ma-2" :href="host.scratch+'/scratch#id='+workview.id+'&token='+token"
+                        target="_blank" v-bind:disabled="!(workview.isauthor || workview.opensource)">转到创作页</v-btn>
+                      <v-btn color="accent" class="ma-2" v-on:click="qh('workinfo',workview.id)"
+                        v-if="workview.isauthor">编辑作品信息</v-btn>
+                    </div>
+
+                  </v-card>
+                  <v-card class="mx-3 pa-5 my-12" width="2000" v-else>
+                    无权限查看当前作品
+                  </v-card>
+                </template>
+              </v-row>
+            </v-container>
+
+            <v-container v-if="viewmode=='workinfo'">
+              <v-row>
+                <template>
+                  <v-card class="mx-auto pa-8 my-12" width="400" v-if="!workview.id">
+                    作品信息正在加载中
+                  </v-card>
+                  <v-card class="mx-auto pa-8 my-12" width="400" v-else-if="(workview.isauthor)">
+                    <v-text-field label="作品名" hide-details="auto" class="my-2" name="editinfo" t="name"
+                      :value="workview.name"></v-text-field>
+                    <v-textarea label="作品介绍" hide-details="auto" class="my-2" name="editinfo" t="introduce"
+                      :value="workview.introduce"></v-textarea>
+                    <v-checkbox v-model="publish" value :label="`发布 `" name="editinfo" t="publish" ></v-checkbox>
+                    <v-checkbox v-model="opensource" value :label="`开源 `" name="editinfo" t="opensource" ></v-checkbox>
+                    <div class="mx-auto">
+                      <v-btn color="accent" class="pa-2" v-on:click="work.update()">更新</v-btn>
+                    </div>
+                  </v-card>
+                  <v-card class="mx-auto pa-8 my-12" width="400" v-else>
+                    无权限查看当前作品
+                  </v-card>
+                </template>
+              </v-row>
+            </v-container>
+
+            <v-container v-if="viewmode=='404'">
               <v-row>
                 <template>
                   <v-card class="mx-auto pa-8 my-12" width="400">
@@ -124,6 +183,8 @@
                 </template>
               </v-row>
             </v-container>
+
+
 
           </v-main>
 
@@ -140,31 +201,53 @@
     var v = new Vue({
       el: '#app',
       data: {
-        rows: {},
+        rows: {"data":[]},
         show0: 0,
         show1: 0,
         show2: 0,
         mywork: {},
         viewmode: 'index',
-        qh: function (a) {
+        qh: function (a, id) {
           v.$data.viewmode = a
-          pagecz[a] && pagecz[a]();
+          pagecz[a] && pagecz[a](id);
         },
-        host:{
-          data:'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com',
-          scratch:'https://newsccode-1302921490.cos-website.ap-shanghai.myqcloud.com'
+        publish:0,
+        opensource:0,
+        host: {
+          data: 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com',
+          scratch: 'https://newsccode-1302921490.cos-website.ap-shanghai.myqcloud.com'
         },
-        detail: (getCookie('token')===undefined) ? undefined :0,
-        token:getCookie('token'),
+        detail: (getCookie('token') === undefined) ? undefined : 0,
+        token: getCookie('token'),
         work: {
+          checkbox: [],
           new: function () {
             get({
-              url: 'work/new'
+              url: 'work/new',
+              p:'newwork'
             }, function (d) {
-              location.href = scratchhost+"/scratch.html#id=" + d.info.insertId;
+              location.href = scratchhost + "/scratch.html#id=" + d.info.insertId;
+            })
+          },
+          update: function () {
+            let d = $("[name='editinfo']"), data = {};
+            data.name=$("[t='name']").val();
+            data.introduce=$("[t='introduce']").val();
+            data.opensource=$("[t='opensource']")[0].checked;
+            data.publish=$("[t='publish']")[0].checked;
+            data.id=v.$data.workview.id;
+            console.log(data)
+            post({
+              url: 'work/info/update',
+              data: data,
+              p:'updatework'
+            }, function (d) {
+              console.log(d)
+              v.$data.qh('work', v.$data.workview.id)
             })
           }
         },
+        workview: {},
         items: [
           {
             title: '账号设置',
@@ -173,17 +256,17 @@
             }
           },
           {
+            title: '我的作品',
+            c: function () {
+              v.$data.qh('mywork');
+            }
+          },
+          {
             title: '退出登录',
             c: function () {
               document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
               console.log('清除cookie')
               location.href = ""
-            }
-          },
-          {
-            title: '我的作品',
-            c: function () {
-              v.$data.qh('mywork');
             }
           },
         ],
@@ -206,7 +289,8 @@
               data: {
                 email: $('#email').val(),
                 pw: $('#pw').val()
-              }
+              },
+              p:'sign'
             },
               function (data) {
                 if (data.code == 1) {
@@ -235,7 +319,8 @@
               data: {
                 npw: $('#a_npw').val(),
                 opw: $('#a_opw').val()
-              }
+              },
+              p:'account'
             },
               function (data) {
                 alert(data.msg)
@@ -249,7 +334,8 @@
               data: {
                 data: $('#i-input-' + n).val(),
                 t: n
-              }
+              },
+              p:'changeinfo'
             }, function (d) {
               alert(d.msg)
               location.href = ""
@@ -270,18 +356,47 @@
         }
       }),
     })
-    let d = ['index', 'sign', 'account', 'mywork'], q = getQueryString('page');
+    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo'], q = getQueryString('page');
     var pagecz = {
       'index': function () {
-        $.getJSON("/data/index.json", function (result, status) {
-          v.$data.rows = result;
-        });
+        get({
+          url: 'work/index'
+        }, function (d) {
+          v.$data.rows.data = {
+            "title":"最新作品",
+            "worklist":d.data
+          }
+        })
+        location.href="#"
       },
       'mywork': function () {
         get({
           url: 'work/my'
         }, function (d) {
           v.$data.mywork = d.data
+        })
+        location.href="#page=mywork"
+      },
+      'work': function (id) {
+        get({
+          url: 'work/info',
+          data: { id: id }
+        }, function (d) {
+          d.data && (v.$data.workview = d.data)
+          location.href="#page=work&id="+id
+        })
+      },
+      'workinfo': function (id) {
+        v.$data.workview = {};
+        get({
+          url: 'work/info',
+          data: { id: id }
+        }, function (d) {
+          if(!d.data) return;
+          (v.$data.workview = d.data)
+          v.$data.opensource=d.data.opensource;
+          v.$data.publish=d.data.publish;
+          location.href="#page=workinfo&id="+id
         })
       }
     }
@@ -292,7 +407,7 @@
     } else {
       q = '404'
     }
-    v.$data.qh(q)
+    v.$data.qh(q, getQueryString('id'))
     // pagecz[q] && pagecz[q]();
   </script>
 

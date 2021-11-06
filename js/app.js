@@ -1,4 +1,4 @@
-var userdetail;
+var userdetail,waitRequest={};
 function getQueryString(name) {
     let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     if(window.location.hash.indexOf("#") < 0) return null;
@@ -74,6 +74,10 @@ function getQueryString(name) {
   function get(d, n) {
     let d2 = d.data;
     if (!d2) d2 = {};
+    if(d.p){
+      if(waitRequest[d.p]) return;
+      waitRequest[d.p]=1;
+    }
     d2.token = getCookie('token');
     $.ajax({
       url: apihost + d.url,
@@ -86,9 +90,38 @@ function getQueryString(name) {
           document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
           console.log('清除cookie')
         }
+        d.p && (delete waitRequest[d.p])
         n(f)
       },
       Error:function(e){
+        d.p && (delete waitRequest[d.p])
+        alert('错误：'+e);
+      }
+    })
+  }
+  function post(d, n) {
+    let d2 = d.data;
+    if(d.p){
+      if(waitRequest[d.p]) return;
+      waitRequest[d.p]=1;
+    }
+    if (!d2) d2 = {};
+    $.ajax({
+      url: apihost + d.url + '?token='+getCookie('token'),
+      data: JSON.stringify(d2),
+      type: 'post',
+      contentType: 'application/json',
+      success: function (f) {
+        console.log(f)
+        if (f.cz == 'exit') {
+          document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+          console.log('清除cookie')
+        }
+        d.p && (delete waitRequest[d.p])
+        n(f)
+      },
+      Error:function(e){
+        d.p && (delete waitRequest[d.p])
         alert('错误：'+e);
       }
     })
