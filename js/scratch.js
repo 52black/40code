@@ -1,7 +1,7 @@
 var workinfo, downloadurl;
 (async () => {
-    if(getQueryString('token')){
-        setCookie('token',getQueryString('token'),2)
+    if (getQueryString('token')) {
+        setCookie('token', getQueryString('token'), 2)
     }
     let d;
     try {
@@ -20,7 +20,7 @@ var workinfo, downloadurl;
     if (!d.issign) {
         alert("请登录后查看")
         $(document).text("请登录后查看")
-        location.href = mianhost+"/#page=sign"
+        location.href = mianhost + "/#page=sign"
         return
     }
     if (!(d.isauthor || (d.opensource && d.publish))) {
@@ -34,78 +34,95 @@ var workinfo, downloadurl;
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/52black/123@master/scratch/gui9.js"></script>')
 })()
 var scratch2 = () => { };
+downloadFileByBlob(blob, fileName = "file") {
+    let blobUrl = window.URL.createObjectURL(blob)
+    let link = document.createElement('a')
+    link.download = fileName || 'defaultName'
+    link.style.display = 'none'
+    link.href = blobUrl
+    // 触发点击
+    document.body.appendChild(link)
+    link.click()
+    // 移除
+    document.body.removeChild(link)
+}
+function dlp() {
+    window.scratch.getProjectFile(file => {
+        downloadFileByBlob(file);
+    })
+}
 function save() {
     console.log("自定义按钮1");
     console.log('分享按钮');
     let data = new FormData(), data2 = [];
-
-    window.scratch.getProjectCover(cover => {
-        //TODO 获取到作品截图
-        // console.log(cover);
-        // data.append("covers", dataURLToBlob(cover));
-    })
-    window.scratch.getProjectFile(file => {
-        //TODO 获取到项目文件
-        console.log(file.toString());
-        // data.append("scratch", file);
-        let f = function (i) {
-            i = new Blob([vm.assets[i].data], { type: vm.assets[i].assetType.contentType })
-            console.log(URL.createObjectURL(i))
-            return i
+    let f = function (i) {
+        i = new Blob([vm.assets[i].data], { type: vm.assets[i].assetType.contentType })
+        console.log(URL.createObjectURL(i))
+        return i
+    }
+    for (i in vm.assets) {
+        // upload(i.data)
+        if (!vm.assets[i].clean) {
+            data.append('image', f(i))
+            data2.push(i)
         }
-        for (i in vm.assets) {
-            // upload(i.data)
-            if (!vm.assets[i].clean) {
-                data.append('image', f(i))
-                data2.push(i)
+    }
+    function hy() {
+        $("#scratch").css("opacity", "1");
+        $('#view').hide();
+    }
+    function uplw() {
+        let f = new FormData();
+        $("#loadinfo").html('正在保存作品文件');
+        f.append("work", new Blob([vm.toJSON()]))
+        $.ajax({
+            url: apihost + 'upload/work?token=' + getCookie('token') + '&id=' + workinfo.id,
+            method: 'POST',
+            data: f,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            // 图片上传成功
+            success: function (result1) {
+                hy();
+                alert('作品保存成功')
+            },
+            error: function () {
+                hy();
+                alert("保存失败");
             }
-        }
-        function uplw(){
-            let f = new FormData();
-                    f.append("work", new Blob([vm.toJSON()]))
-                    $.ajax({
-                        url: apihost + 'upload/work?token='+getCookie('token')+'&id='+workinfo.id,
-                        method: 'POST',
-                        data: f,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        dataType: 'json',
-                        // 图片上传成功
-                        success: function (result1) {
-                            alert('作品保存成功')
-                        },
-                        error: function () {
-                            alert("保存失败");
-                            console.log('保存失败');
-                        }
-                    });
-        }
-        if (data2.length)
-            $.ajax({
-                url: apihost + 'uploads',
-                method: 'POST',
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                // 图片上传成功
-                success: function (result1) {
-                    for (let i of data2) {
-                        vm.assets[i].clean = true;
-                    }
-                    data2 = [];
-                    alert('素材保存成功，保存作品中……')
-                    uplw();
-                },
-                error: function () {
-                    alert("保存失败");
-                    console.log('保存失败');
+        });
+    }
+    $("#scratch").css("opacity", "0");
+    $('#view').show();
+    $('#dlp').show();
+    if (data2.length) {
+        $("#loadinfo").html('正在保存素材');
+        $.ajax({
+            url: apihost + 'uploads',
+            method: 'POST',
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            // 图片上传成功
+            success: function (result1) {
+                for (let i of data2) {
+                    vm.assets[i].clean = true;
                 }
-            });
-        else uplw();
-    })
+                data2 = [];
+                uplw();
+            },
+            error: function () {
+                hy();
+                alert("保存失败");
+                console.log('保存失败');
+            }
+        });
+    }
+    else uplw();
 }
 function dataURLToBlob(dataurl) {
     var arr = dataurl.split(',');
@@ -263,13 +280,12 @@ window.scratchConfig = {
     },
     handleProjectLoaded: () => {
         console.log("作品载入完毕")
-        location.href="#id="+workinfo.id
+        location.href = "#id=" + workinfo.id
     },
     handleDefaultProjectLoaded: () => {
         //默认作品加载完毕，可以在这里控制项目加载
         window.scratch.loadProject(downloadurl, (e) => {
-            $("#scratch").css("opacity", "1");
-            $('#view').hide();
+            hy();
             if (e === undefined) {
                 console.log("项目加载完毕")
                 for (let i in vm.assets) {
