@@ -27,8 +27,8 @@
               </template>
 
               <v-list>
-                <v-list-item v-for="(item, index) in items" :key="index" @click="() => {}">
-                  <v-list-item-title v-on:click="item.c()">{{ item.title }}</v-list-item-title>
+                <v-list-item v-for="(item, index) in items" :key="index" @click="() => {}" v-on:click="item.c()">
+                  <v-list-item-title >{{ item.title }}</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -82,8 +82,8 @@
                 <template>
                   <v-card class="mx-auto pa-8 my-12" width="400">
                     <v-text color="accent">信息更改</v-text>
-                    <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0"></v-text-field>
-                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)">更改昵称</v-btn>
+                    <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0" :value="detail.nickname"></v-text-field>
+                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)" >更改昵称</v-btn>
                     <v-text-field v-model="password2" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
                       :type="show1 ? 'text' : 'password'" name="input-2" label="旧密码" hide-details="auto" counter
                       @click:append="show1 = !show1" id="a_opw"></v-text-field>
