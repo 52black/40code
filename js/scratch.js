@@ -26,8 +26,8 @@ $('#dlp').hide();
             handleClick: () => {
                 savecover(function(id){
                     post({
-                        url: 'work/info/update?cover=1',
-                        data: {id:workinfo.id,image:id},
+                        url: 'work/info/update',
+                        data: {id:workinfo.id,image:id,coveronly:1},
                         p: 'updatework'
                       }, function (d) {
                         console.log(d)
