@@ -82,7 +82,7 @@ function savecover(callback){
     function uplw(d) {
         let f = new FormData();
         $("#loadinfo").html('正在保存封面文件');
-        f.append("work", d)
+        f.append("image", d)
         $.ajax({
             url: apihost + 'uploads',
             method: 'POST',
@@ -111,7 +111,8 @@ function savecover(callback){
         $("#scratch").css("opacity", "1");
         $('#view').hide();
         $('#dlp').hide();
-        callback && callback();
+        let k=result1.data[2][0][1].Key.split('/');
+        callback && callback(k[k.length-1]);
     }
     $("#scratch").css("opacity", "0");
     $('#view').show();
@@ -139,9 +140,9 @@ function saveproject(id,callback){
         $("#scratch").css("opacity", "1");
         $('#view').hide();
         $('#dlp').hide();
-        let k=result1.data[2][0][1].Key.split('/');
         
-        callback && callback(k[k.length-1]);
+        
+        callback && callback();
     }
     function uplw() {
         let f = new FormData();
