@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<template>
+    <v-app id="inspire">
+      <v-system-bar app>
+        <v-spacer></v-spacer>
+  
+        <v-icon>mdi-square</v-icon>
+  
+        <v-icon>mdi-circle</v-icon>
+  
+        <v-icon>mdi-triangle</v-icon>
+      </v-system-bar>
+  
+      <v-app-bar app>
+        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+  
+        <v-toolbar-title>Application</v-toolbar-title>
+      </v-app-bar>
+  
+      <v-navigation-drawer
+        v-model="drawer"
+        fixed
+        temporary
+      >
+        <!--  -->
+      </v-navigation-drawer>
+  
+      <v-main class="grey lighten-2">
+        <v-container>
+          <v-row>
+            <template v-for="n in 4">
+              <v-col
+                :key="n"
+                class="mt-2"
+                cols="12"
+              >
+                <strong>Category {{ n }}</strong>
+              </v-col>
+  
+              <v-col
+                v-for="j in 6"
+                :key="`${n}${j}`"
+                cols="6"
+                md="2"
+              >
+                <v-sheet height="150"></v-sheet>
+              </v-col>
+            </template>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </template>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script type="module">
+    export default {
+      data: () => ({ drawer: null }),
+    }
+  </script>
