@@ -17,7 +17,7 @@ $('#dlp').hide();
     workinfo = d;
     window.scratchConfig.menuBar.customButtons[0].buttonName = workinfo.isauthor ? '保存' : '改编';
     if(workinfo.isauthor){
-        window.scratchConfig.menuBar.customButtons.pop({
+        window.scratchConfig.menuBar.customButtons.push({
             buttonName: '保存封面',
             style: {
                 color: 'white',
