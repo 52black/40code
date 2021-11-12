@@ -18,7 +18,7 @@ $('#dlp').hide();
     window.scratchConfig.menuBar.customButtons[0].buttonName = workinfo.isauthor ? '保存' : '改编';
     if(workinfo.isauthor){
         window.scratchConfig.menuBar.customButtons.push({
-            buttonName: '保存封面',
+            buttonName: '设置当前截图为封面',
             style: {
                 color: 'white',
                 background: 'hsla(30, 100%, 55%, 1)',
@@ -420,7 +420,7 @@ window.scratchConfig = {
         })
     },
     //默认项目地址,不需要修请删除本配置项
-    // defaultProjectURL: "https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/unreleased/scratch/8050135381552279031529",
+    defaultProjectURL: "https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/unreleased/scratch/8050135381552279031529",
     //若使用官方素材库请删除本配置项, 默认为/static下的素材库
     assetCDN: scratchhost+'/static'
 }
