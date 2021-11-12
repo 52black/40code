@@ -81,10 +81,10 @@ function dlp() {
 function savecover(callback){
     function uplw(d) {
         let f = new FormData();
-        $("#loadinfo").html('正在保存作品文件');
+        $("#loadinfo").html('正在保存封面文件');
         f.append("work", d)
         $.ajax({
-            url: apihost + 'upload/work?token=' + getCookie('token') + '&id=' + (workinfo.id),
+            url: apihost + 'uploads',
             method: 'POST',
             data: f,
             cache: false,
