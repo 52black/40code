@@ -1,2 +1,2 @@
 # sccode
-sccode编辑器介绍，以及安装包发布
+sccode新版前端源代码
