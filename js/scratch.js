@@ -84,7 +84,7 @@ function savecover(callback){
         $("#loadinfo").html('正在保存作品文件');
         f.append("work", d)
         $.ajax({
-            url: apihost + 'upload/work?token=' + getCookie('token') + '&id=' + (id || workinfo.id),
+            url: apihost + 'upload/work?token=' + getCookie('token') + '&id=' + (workinfo.id),
             method: 'POST',
             data: f,
             cache: false,
