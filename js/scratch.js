@@ -16,6 +16,29 @@ $('#dlp').hide();
     // } 
     workinfo = d;
     window.scratchConfig.menuBar.customButtons[0].buttonName = workinfo.isauthor ? '保存' : '改编';
+    if(workinfo.isauthor){
+        window.scratchConfig.menuBar.customButtons.pop({
+            buttonName: '保存封面',
+            style: {
+                color: 'white',
+                background: 'hsla(30, 100%, 55%, 1)',
+            },
+            handleClick: () => {
+                savecover(function(id){
+                    post({
+                        url: 'work/info/update?cover=1',
+                        data: {id:workinfo.id,image:id},
+                        p: 'updatework'
+                      }, function (d) {
+                        console.log(d)
+                        // v.$data.qh('work', v.$data.workview.id)
+                      })
+                })
+                
+            }
+            // 获取到项目名
+        })
+    }
     if (d === undefined) {
         alert("未知错误")
         $(document).text("未知错误")
@@ -55,6 +78,47 @@ function dlp() {
         downloadFileByBlob(file);
     })
 }
+function savecover(callback){
+    function uplw(d) {
+        let f = new FormData();
+        $("#loadinfo").html('正在保存作品文件');
+        f.append("work", d)
+        $.ajax({
+            url: apihost + 'upload/work?token=' + getCookie('token') + '&id=' + (id || workinfo.id),
+            method: 'POST',
+            data: f,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            // 图片上传成功
+            success: function (result1) {
+                if(result1.code!=1){
+                    hy();
+                    alert("保存失败");
+                    return;
+                }
+                hy();
+                alert('封面保存成功')
+            },
+            error: function () {
+                hy();
+                alert("保存失败");
+            }
+        });
+    }
+    function hy() {
+        $("#scratch").css("opacity", "1");
+        $('#view').hide();
+        $('#dlp').hide();
+        callback && callback();
+    }
+    $("#scratch").css("opacity", "0");
+    $('#view').show();
+    $('#dlp').show();
+    $("#loadinfo").html('正在保存封面');
+    window.scratch.getProjectCoverBlob(e => {uplw(e)})
+}
 function saveproject(id,callback){
     console.log("自定义按钮1");
     console.log('分享按钮');
@@ -75,7 +139,9 @@ function saveproject(id,callback){
         $("#scratch").css("opacity", "1");
         $('#view').hide();
         $('#dlp').hide();
-        callback && callback();
+        let k=result1.data[2][0][1].Key.split('/');
+        
+        callback && callback(k[k.length-1]);
     }
     function uplw() {
         let f = new FormData();
@@ -251,8 +317,19 @@ window.scratchConfig = {
                     save()
                 }
                 // 获取到项目名
-
-            }
+            },
+            {
+                buttonName: '项目页',
+                style: {
+                    color: 'white',
+                    background: 'hsla(30, 100%, 55%, 1)',
+                },
+                handleClick: () => {
+                    open("/#page=work&id="+workinfo.id);
+                }
+                // 获取到项目名
+            },
+            
             //可继续新增按钮
         ]
     },
@@ -343,7 +420,7 @@ window.scratchConfig = {
         })
     },
     //默认项目地址,不需要修请删除本配置项
-    defaultProjectURL: "https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/unreleased/scratch/8050135381552279031529",
+    // defaultProjectURL: "https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/unreleased/scratch/8050135381552279031529",
     //若使用官方素材库请删除本配置项, 默认为/static下的素材库
     assetCDN: scratchhost+'/static'
 }
