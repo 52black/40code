@@ -98,7 +98,7 @@ function savecover(callback){
                     alert("保存失败");
                     return;
                 }
-                hy();
+                hy(result1);
                 alert('封面保存成功')
             },
             error: function () {
@@ -107,11 +107,11 @@ function savecover(callback){
             }
         });
     }
-    function hy() {
+    function hy(r) {
         $("#scratch").css("opacity", "1");
         $('#view').hide();
         $('#dlp').hide();
-        let k=result1.data[2][0][1].Key.split('/');
+        let k=r.data[2][0][1].Key.split('/');
         callback && callback(k[k.length-1]);
     }
     $("#scratch").css("opacity", "0");
