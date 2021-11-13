@@ -1,13 +1,14 @@
 function getQueryString(name) {
   let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-  if (window.location.hash.indexOf("#") < 0) return null;
-  let r = window.location.hash.split("#")[1].match(reg);
+  if (window.top.location.hash.indexOf("#") < 0) return null;
+  let r = window.top.location.hash.split("#")[1].match(reg);
   if (r != null) return decodeURIComponent(r[2]);
   return null;
 }
 console.log(location)
 console.log(window.self)
 console.log(window.top.location)
+var id= getQueryString('id');
 var apihost = "https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/",
 mianhost="http://127.0.0.1:5500",
 scratchhost="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com";
