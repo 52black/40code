@@ -173,8 +173,11 @@
                     </v-file-input>
                     <v-img :src="host.data+'/static/internalapi/asset/'+workview.image"
                       :aspect-ratio="4/3" class="ma-5 pb-2"></v-img>
+                    <v-text v-if="waitRequest.cover">图片正在上传中，请等待图片上传完毕后再更新，否则可能会保存失败</v-text>
+                    <v-text v-if="waitRequest.cover===0">图片上传成功</v-text>
                     <div class="mx-auto">
                       <v-btn color="accent" class="pa-2" v-on:click="work.update()">更新</v-btn>
+                      <v-btn color="accent" class="pa-2" v-on:click="work.return()">返回</v-btn>
                     </div>
                   </v-card>
                   <v-card class="mx-auto pa-8 my-12" width="400" v-else>
@@ -223,6 +226,7 @@
             if (value.size > 500000) return '图片必须小于500KB';
             if (['image/jpeg', 'image/png', 'image/gif','image/bmp'].indexOf(value.type) == -1) return '不支持此格式的图片'
             function upa(data) {
+              waitRequest.cover=1;
               $.ajax({
                 url: apihost + 'uploads',
                 method: 'POST',
@@ -236,10 +240,14 @@
                   let k=result1.data[2][0][1].Key.split('/');
                   v.workview.image=k[k.length-1];
                   value=undefined;
+                  // delete waitRequest.cover;
+                  waitRequest.cover=0;
                   // console.log(k,v.workview.imgpre)
                 },
                 error: function () {
-
+                  alert("图片上传失败")
+                  waitRequest.cover=0;
+                  delete waitRequest.cover;
                 }
               });
             }
@@ -422,6 +430,7 @@
         location.href = "#page=mywork"
       },
       'work': function (id) {
+        v.$data.workview = {};
         get({
           url: 'work/info',
           data: { id: id }
@@ -432,6 +441,7 @@
       },
       'workinfo': function (id) {
         v.$data.workview = {image:"6e2b0b1056aaa08419fb69a3d7aa5727.png"};
+        delete waitRequest.cover;
         get({
           url: 'work/info',
           data: { id: id }
