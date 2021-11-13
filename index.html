@@ -219,6 +219,7 @@
         show1: 0,
         show2: 0,
         mywork: {},
+        waitRequest:{},
         rules: [
           value => {
             let f = new FormData();
@@ -226,7 +227,7 @@
             if (value.size > 500000) return '图片必须小于500KB';
             if (['image/jpeg', 'image/png', 'image/gif','image/bmp'].indexOf(value.type) == -1) return '不支持此格式的图片'
             function upa(data) {
-              waitRequest.cover=1;
+              v.waitRequest.cover=1;
               $.ajax({
                 url: apihost + 'uploads',
                 method: 'POST',
@@ -241,13 +242,13 @@
                   v.workview.image=k[k.length-1];
                   value=undefined;
                   // delete waitRequest.cover;
-                  waitRequest.cover=0;
+                  v.waitRequest.cover=0;
                   // console.log(k,v.workview.imgpre)
                 },
                 error: function () {
                   alert("图片上传失败")
-                  waitRequest.cover=0;
-                  delete waitRequest.cover;
+                  v.waitRequest.cover=0;
+                  delete v.waitRequest.cover;
                 }
               });
             }
