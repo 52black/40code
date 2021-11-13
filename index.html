@@ -126,10 +126,14 @@
                   </v-card>
                   <v-card class="mx-3 pa-5 my-12" width="2000" v-else-if="(workview.isauthor || workview.publish)">
                     <v-text color="accent" class="text-h4" cols="24">{{ workview.name }}</v-text><br><br>
-                    <iframe
+                    <!-- <iframe
                       :src="(workview.id) ? ( (workview.isauthor || (workview.publish)) ? ('/other/worksc.html#id='+workview.id) : '/noqx.html') : '/d.html'"
                       scrolling="no" frameborder="0" style="width:510px;height: 440px;" class="float-left pr-3"
-                      outlined>
+                    > -->
+                    <iframe
+                    :src="(workview.id) ? ( (workview.isauthor || (workview.publish)) ? ('/other/worksc.html') : '/noqx.html') : '/d.html'"
+                    scrolling="no" frameborder="0" style="width:510px;height: 440px;" class="float-left pr-3"
+                  >
                     </iframe>
                     <div class="float-left pl-3">
                       <v-text color="accent" class="text-h5" cols="24">作品介绍</v-text><br>
@@ -427,7 +431,7 @@
         })
       },
       'workinfo': function (id) {
-        v.$data.workview = {};
+        v.$data.workview = {image:"6e2b0b1056aaa08419fb69a3d7aa5727.png"};
         get({
           url: 'work/info',
           data: { id: id }
