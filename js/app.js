@@ -93,8 +93,9 @@ function getQueryString(name) {
         d.p && (delete waitRequest[d.p])
         n(f)
       },
-      Error:function(e){
+      error:function(e){
         d.p && (delete waitRequest[d.p])
+        console.log(e)
         alert('错误：'+e);
       }
     })
@@ -120,8 +121,9 @@ function getQueryString(name) {
         d.p && (delete waitRequest[d.p])
         n(f)
       },
-      Error:function(e){
+      error:function(e){
         d.p && (delete waitRequest[d.p])
+        console.log(e)
         alert('错误：'+e);
       }
     })
