@@ -84,7 +84,7 @@ function savecover(callback){
         $("#loadinfo").html('正在保存封面文件');
         f.append("image", d)
         $.ajax({
-            url: apihost + 'uploads',
+            url: apihost + 'work/uploads',
             method: 'POST',
             data: f,
             cache: false,
@@ -149,7 +149,7 @@ function saveproject(id,callback){
         $("#loadinfo").html('正在保存作品文件');
         f.append("work", new Blob([vm.toJSON()]))
         $.ajax({
-            url: apihost + 'upload/work?token=' + getCookie('token') + '&id=' + (id || workinfo.id),
+            url: apihost + 'work/upload?token=' + getCookie('token') + '&id=' + (id || workinfo.id),
             method: 'POST',
             data: f,
             cache: false,
@@ -177,7 +177,7 @@ function saveproject(id,callback){
     $('#dlp').show();
     function upa(t){
          $.ajax({
-            url: apihost + 'uploads',
+            url: apihost + 'work/uploads',
             method: 'POST',
             data: data,
             cache: false,

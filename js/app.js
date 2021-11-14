@@ -33,7 +33,7 @@ function getQueryString(name) {
   }
   function getuserinfo() {
     get({
-      url: 'userinfo'
+      url: 'user/myinfo'
     }, function (d) {
       var userdetail=d.data;
       console.log('获取信息成功',d)
@@ -49,7 +49,7 @@ function getQueryString(name) {
   function getuserinfosync() {
     return new Promise(function(reslove){
         get({
-            url: 'userinfo'
+            url: 'user/myinfo'
           }, function (d) {
             userdetail=d.data;
             console.log('获取信息成功',d)
