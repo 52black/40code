@@ -84,10 +84,11 @@
                     <v-text color="accent">信息更改</v-text>
                     <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0" :value="detail.nickname">
                     </v-text-field>
-                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)">更改昵称</v-btn>
-                    <v-textarea name="input-1" label="个人介绍" :value="detail.introduce" hint="Hint text" id="i-input-1">
+                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)" block>更改昵称</v-btn>
+                    <v-textarea name="input-1" label="个人介绍" :value="detail.introduce" hint="支持使用markdown编写" id="i-input-1"
+                      maxlength="500" counter>
                     </v-textarea>
-                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(1)">更改介绍</v-btn>
+                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(1)" block>更改介绍</v-btn>
 
                     <v-text-field v-model="password2" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
                       :type="show1 ? 'text' : 'password'" name="input-2" label="旧密码" hide-details="auto" counter
@@ -95,7 +96,15 @@
                     <v-text-field v-model="password3" :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
                       :type="show2 ? 'text' : 'password'" name="input-3" label="新密码" hide-details="auto" counter
                       @click:append="show2 = !show2" id="a_npw"></v-text-field>
-                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.n()">更改密码</v-btn>
+                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.n()" block>更改密码</v-btn>
+                    <v-file-input :rules="rules" accept="image/png, image/jpeg, image/bmp, image/gif"
+                      label="头像(建议尺寸1:1)" id="workimg" show-size truncate-length="10">
+                    </v-file-input>
+                    <!-- <v-img :src="host.data+'/static/internalapi/asset/'+ (workview.image || detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" :aspect-ratio="1"
+                      class="ma-5 pb-2"></v-img> -->
+                    <div v-if="waitRequest.cover==1">正在上传中</div>
+                    <div v-if="waitRequest.cover==-1">点击更改头像保存你的头像</div>
+                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.head()" block>更改头像</v-btn>
                   </v-card>
                 </template>
               </v-row>
@@ -114,7 +123,9 @@
                         <v-img :src="host.data+'/static/internalapi/asset/'+j.image" :aspect-ratio="4/3"></v-img>
                         <v-card-title>{{ j.name }}</v-card-title>
                       </span>
-                      <v-btn color="accent" class="ma-2" :href="'/other/scratch.html#id='+j.id" target="_blank">继续创作
+                      <v-btn color="accent" class="" :href="'/other/scratch.html#id='+j.id" target="_blank"
+                        depressed block tile
+                      >继续创作
                       </v-btn>
                     </v-card>
                   </v-col>
@@ -138,7 +149,8 @@
                         <img
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
-                      <v-text color="accent" class="text-subtitle-1" cols="24" v-on:click="qh('user', workview.author);">{{ workview.nickname }}</v-text>
+                      <v-text color="accent" class="text-subtitle-1" cols="24"
+                        v-on:click="qh('user', workview.author);">{{ workview.nickname }}</v-text>
                     </div>
                     <br>
                     <iframe
@@ -183,8 +195,8 @@
                     </v-file-input>
                     <v-img :src="host.data+'/static/internalapi/asset/'+workview.image" :aspect-ratio="4/3"
                       class="ma-5 pb-2"></v-img>
-                    <!-- <v-text v-if="waitRequest.cover">图片正在上传中，请等待图片上传完毕后再更新，否则可能会保存失败</v-text>
-                    <v-text v-if="waitRequest.cover===0">图片上传成功</v-text> -->
+                      <div v-if="waitRequest.cover==1">正在上传中</div>
+                    <div v-if="waitRequest.cover==-1">点击更新保存你的头像</div>
                     <div class="mx-auto">
                       <v-btn color="accent" class="pa-2" v-on:click="work.update()">更新</v-btn>
                       <v-btn color="accent" class="pa-2" v-on:click="work.return()">返回</v-btn>
@@ -215,9 +227,15 @@
                       <v-text color="accent" class="text-h5 text--primary" cols="24">用户介绍</v-text><br><br>
                       <v-text class="text--secondary" v-html="workview.introduce2"></v-text>
                     </v-card>
+                    <v-card class=" pa-5 my-5" width="600">
+                      <v-text color="accent" class="text-h5 text--primary" cols="24">评论</v-text><br><br>
+                      <v-textarea name="input-7-1" filled label="评论" auto-grow value="" maxlength="500" counter id="comment">
+                      </v-textarea>
+                      <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.send()" block >发送</v-btn>
+                    </v-card>
                   </div>
 
-                  <v-card class="mx-3 pa-5 my-12" width="600" v-else>
+                  <v-card class="mx-auto pa-5 my-12" width="600" v-else>
                     无权限查看当前用户
                   </v-card>
                 </template>
@@ -246,7 +264,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script src="/js/app.js?v=2"></script>
+  <script src="/js/app.js?v=3"></script>
   <script>
     var v = new Vue({
       el: '#app',
@@ -270,15 +288,15 @@
                 // 图片上传成功
                 success: function (result1) {
                   let k = result1.data[2][0][1].Key.split('/');
-                  v.workview.image = k[k.length - 1];
+                  v.detail.image=v.workview.image = k[k.length - 1];
                   value = undefined;
                   // delete waitRequest.cover;
-                  v.waitRequest.cover = 0;
+                  v.waitRequest.cover = -1;
                   // console.log(k,v.workview.imgpre)
                 },
                 error: function () {
                   alert("图片上传失败")
-                  v.waitRequest.cover = 0;
+                  v.waitRequest.cover = -1;
                   delete v.waitRequest.cover;
                 }
               });
@@ -423,7 +441,37 @@
               alert(d.msg)
               location.href = ""
             })
-          }
+          },
+          send:function(){
+            if($('#comment').val()){
+              post({
+                url:"user/comment",
+                data:{
+                  comment:$('#comment').val(),
+                  touser:v.workview.id,
+
+                },
+                p:"comment"
+              })
+            }
+          },
+          head:function(){
+            if(!v.detail.image){
+              alert("请选择图片并等待上传完毕后再继续操作")
+              return;
+            }
+            post({
+              url: 'user/change/info',
+              data: {
+                data: v.detail.image,
+                t: 2
+              },
+              p: 'changeinfo'
+            }, function (d) {
+              alert(d.msg)
+              location.href = ""
+            })
+          },
         },
         workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" },
         detail: (getCookie('token') === undefined) ? undefined : 0,
@@ -440,7 +488,7 @@
         show1: 0,
         show2: 0,
         mywork: {},
-        waitRequest: {},
+        waitRequest: {cover:0},
       },
       vuetify: new Vuetify({
         theme: {
@@ -484,7 +532,7 @@
         }, function (d) {
           d.data && (v.$data.workview = d.data)
           location.href = "#page=work&id=" + id
-          v.workview.introduce2=markdown.toHTML(v.workview.introduce);
+          v.workview.introduce2 = markdown.toHTML(v.workview.introduce);
         })
       },
       'workinfo': function (id) {
@@ -499,7 +547,7 @@
           v.$data.opensource = d.data.opensource;
           v.$data.publish = d.data.publish;
           location.href = "#page=workinfo&id=" + id;
-          
+
         })
       },
       'user': function (id) {
@@ -512,8 +560,10 @@
           if (!d.data) return;
           (v.$data.workview = d.data[0])
           location.href = "#page=user&id=" + id;
-          v.workview.introduce2=markdown.toHTML(v.workview.introduce);
+          v.workview.introduce2 = markdown.toHTML(v.workview.introduce);
         })
+      },
+      'account': function (id) {
       }
     }
     if (!q) {
