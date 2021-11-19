@@ -85,8 +85,8 @@
                     <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0" :value="detail.nickname">
                     </v-text-field>
                     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)" block>更改昵称</v-btn>
-                    <v-textarea name="input-1" label="个人介绍" :value="detail.introduce" hint="支持使用markdown编写" id="i-input-1"
-                      maxlength="500" counter>
+                    <v-textarea name="input-1" label="个人介绍" :value="detail.introduce" hint="支持使用markdown编写"
+                      id="i-input-1" maxlength="500" counter>
                     </v-textarea>
                     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(1)" block>更改介绍</v-btn>
 
@@ -123,9 +123,8 @@
                         <v-img :src="host.data+'/static/internalapi/asset/'+j.image" :aspect-ratio="4/3"></v-img>
                         <v-card-title>{{ j.name }}</v-card-title>
                       </span>
-                      <v-btn color="accent" class="" :href="'/other/scratch.html#id='+j.id" target="_blank"
-                        depressed block tile
-                      >继续创作
+                      <v-btn color="accent" class="" :href="'/other/scratch.html#id='+j.id" target="_blank" depressed
+                        block tile>继续创作
                       </v-btn>
                     </v-card>
                   </v-col>
@@ -195,7 +194,7 @@
                     </v-file-input>
                     <v-img :src="host.data+'/static/internalapi/asset/'+workview.image" :aspect-ratio="4/3"
                       class="ma-5 pb-2"></v-img>
-                      <div v-if="waitRequest.cover==1">正在上传中</div>
+                    <div v-if="waitRequest.cover==1">正在上传中</div>
                     <div v-if="waitRequest.cover==-1">点击更新保存你的头像</div>
                     <div class="mx-auto">
                       <v-btn color="accent" class="pa-2" v-on:click="work.update()">更新</v-btn>
@@ -227,12 +226,34 @@
                       <v-text color="accent" class="text-h5 text--primary" cols="24">用户介绍</v-text><br><br>
                       <v-text class="text--secondary" v-html="workview.introduce2"></v-text>
                     </v-card>
+
                     <v-card class=" pa-5 my-5" width="600">
                       <v-text color="accent" class="text-h5 text--primary" cols="24">评论</v-text><br><br>
-                      <v-textarea name="input-7-1" filled label="评论" auto-grow value="" maxlength="500" counter id="comment">
+                      <v-textarea name="input-7-1" filled label="评论" auto-grow value="" maxlength="500" counter
+                        id="comment">
                       </v-textarea>
-                      <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.send()" block >发送</v-btn>
+                      <v-btn color="accent" class="pa-2 mx-auto" v-on:click="user.send()" block>发送</v-btn>
+
+                      <div v-if="user.comment" class="my-5">
+                        <div v-for="i in user.comment.comment" class="my-5">
+                          <div v-for="j in user.comment.user[i.fromuser.toString()]">
+                            <div >
+                              <v-avatar size=40 class="" >
+                                <img
+                                  :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                              </v-avatar>
+                              <v-text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}</v-text><br>
+                            </div>
+                            <v-text color="accent" class="text-h6 ml-12">{{ i.comment }}</v-text>
+                          </div>
+                        </div>
+                      </div>
+                      <div v-else>
+                        此用户暂时没有评论哦
+                      </div>
+
                     </v-card>
+
                   </div>
 
                   <v-card class="mx-auto pa-5 my-12" width="600" v-else>
@@ -288,7 +309,7 @@
                 // 图片上传成功
                 success: function (result1) {
                   let k = result1.data[2][0][1].Key.split('/');
-                  v.detail.image=v.workview.image = k[k.length - 1];
+                  v.detail.image = v.workview.image = k[k.length - 1];
                   value = undefined;
                   // delete waitRequest.cover;
                   v.waitRequest.cover = -1;
@@ -442,21 +463,8 @@
               location.href = ""
             })
           },
-          send:function(){
-            if($('#comment').val()){
-              post({
-                url:"user/comment",
-                data:{
-                  comment:$('#comment').val(),
-                  touser:v.workview.id,
-
-                },
-                p:"comment"
-              })
-            }
-          },
-          head:function(){
-            if(!v.detail.image){
+          head: function () {
+            if (!v.detail.image) {
               alert("请选择图片并等待上传完毕后再继续操作")
               return;
             }
@@ -473,6 +481,37 @@
             })
           },
         },
+        user: {
+          send: function () {
+            if ($('#comment').val()) {
+              post({
+                url: "user/comment",
+                data: {
+                  comment: $('#comment').val(),
+                  touser: v.workview.id,
+
+                },
+                p: "comment"
+              }, (d) => {
+                console.log(d);
+                alert("发送成功")
+              })
+            }
+          },
+          getcomment: () => {
+            get({
+              url: "user/comment",
+              data: {
+                id: v.workview.id
+              }
+            }, (d) => {
+              v.user.comment = d.data
+              console.log('获取评论', d)
+            })
+          },
+          // comment: { comment: [], user: {} },
+          comment: {}
+        },
         workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" },
         detail: (getCookie('token') === undefined) ? undefined : 0,
         token: getCookie('token'),
@@ -484,11 +523,12 @@
         publish: 0,
         opensource: 0,
         rows: { "data": [] },
+        show: { '0': 0, '1': 0, '2': 0 },
         show0: 0,
         show1: 0,
         show2: 0,
         mywork: {},
-        waitRequest: {cover:0},
+        waitRequest: { cover: 0 },
       },
       vuetify: new Vuetify({
         theme: {
@@ -561,6 +601,7 @@
           (v.$data.workview = d.data[0])
           location.href = "#page=user&id=" + id;
           v.workview.introduce2 = markdown.toHTML(v.workview.introduce);
+          v.user.getcomment()
         })
       },
       'account': function (id) {
