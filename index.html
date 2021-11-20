@@ -59,7 +59,7 @@
               <v-row>
                 <template>
                   <v-card class="mx-auto pa-8 my-12" width="400">
-                    <v-text color="accent">登录/注册</v-text>
+                    <span color="accent">登录/注册</span>
                     <v-text-field label="邮箱" :rules="sign.email" hide-details="auto" class="my-2" id="email">
                     </v-text-field>
                     <!-- <v-text-field label="密码" :rules="sign.pw" hide-details="auto" class="my-2 pb-2" id="pw">
@@ -81,7 +81,7 @@
               <v-row>
                 <template>
                   <v-card class="mx-auto pa-8 my-12" width="400">
-                    <v-text color="accent">信息更改</v-text>
+                    <span color="accent">信息更改</span>
                     <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0" :value="detail.nickname">
                     </v-text-field>
                     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)" block>更改昵称</v-btn>
@@ -142,14 +142,15 @@
                   </v-card>
                   <v-card class="mx-3 pa-5 my-12" width="2000" v-else-if="(workview.isauthor || workview.publish)">
 
-                    <v-text color="accent" class="text-h5" cols="24">{{ workview.name }}</v-text>
+                    <span color="accent" class="text-h5" cols="24">{{ workview.name }}</span>
                     <div cols="24">
                       <v-avatar size="25">
                         <img
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
-                      <v-text color="accent" class="text-subtitle-1" cols="24"
-                        v-on:click="qh('user', workview.author);">{{ workview.nickname }}</v-text>
+                      <span color="accent" class="text-subtitle-1"
+                        v-on:click="qh('user', workview.author);">{{ workview.nickname }}</span>
+                      <span color="accent" class="text-subtitle-1 float-right">创建时间：{{ date(workview.time) }}</span>
                     </div>
                     <br>
                     <iframe
@@ -157,8 +158,8 @@
                       scrolling="no" frameborder="0" style="width:510px;height: 440px;" class="float-left pr-3">
                     </iframe>
                     <div class="float-left pl-3">
-                      <v-text color="accent" class="text-h5 text--primary" cols="24">作品介绍</v-text><br><br>
-                      <v-text class="text--secondary" v-html="workview.introduce2"></v-text>
+                      <span color="accent" class="text-h5 text--primary" cols="24">作品介绍</span><br><br>
+                      <span class="text--secondary" v-html="workview.introduce2"></span>
                       <br><br>
                       <v-divider class=""></v-divider>
                       <br><br>
@@ -220,15 +221,28 @@
                         <img
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
-                      <v-text color="accent" class="text-h5">{{ workview.nickname }}</v-text>
-                    </v-card>
-                    <v-card class=" pa-5 my-5" width="600">
-                      <v-text color="accent" class="text-h5 text--primary" cols="24">用户介绍</v-text><br><br>
-                      <v-text class="text--secondary" v-html="workview.introduce2"></v-text>
+                      <span color="accent" class="text-h5">{{ workview.nickname }}</span><br>
+                      <span color="accent"
+                        class="text-subtitle-1 float-right">加入时间：{{ date(workview.signtime) }}</span><br>
                     </v-card>
 
                     <v-card class=" pa-5 my-5" width="600">
-                      <v-text color="accent" class="text-h5 text--primary" cols="24">评论</v-text><br><br>
+                      <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
+                      <span class="text--secondary" v-html="workview.introduce2"></span>
+                    </v-card>
+                    <div>他的作品：</div><br>
+                    <div v-if="worklist">
+                      <v-col v-for="j in worklist" :key="`${n}${j}`" cols="4">
+                        <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
+                          <v-img :src="host.data+'/static/internalapi/asset/'+j.image" :aspect-ratio="4/3"></v-img>
+                          <v-card-title>{{ j.name }}</v-card-title>
+                        </v-card>
+                      </v-col>
+                    </div>
+                    <span v-else>当前用户还没有作品哦</span>
+
+                    <v-card class=" pa-5 my-5" width="600">
+                      <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
                       <v-textarea name="input-7-1" filled label="评论" auto-grow value="" maxlength="500" counter
                         id="comment">
                       </v-textarea>
@@ -236,15 +250,25 @@
 
                       <div v-if="user.comment" class="my-5">
                         <div v-for="i in user.comment.comment" class="my-5">
-                          <div v-for="j in user.comment.user[i.fromuser.toString()]">
-                            <div >
-                              <v-avatar size=40 class="" >
+                          <v-divider></v-divider>
+                          <div v-for="j in user.comment.user[i.fromuser.toString()]" class="mt-2">
+                            <div>
+                              <v-avatar size=40 class="" v-on:click="qh('user',i.fromuser)"
+                                :href="'#page=user&id='+i.fromuser">
                                 <img
                                   :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                               </v-avatar>
-                              <v-text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}</v-text><br>
+                              <span color="accent" class="text-h6 ml-2" style="height: 100%"
+                                v-on:click="qh('user',i.fromuser)" :href="'#page=user&id='+i.fromuser">{{ j.nickname }}
+                              </span>
                             </div>
-                            <v-text color="accent" class="text-h6 ml-12">{{ i.comment }}</v-text>
+                            <span color="accent" class="text-h7 ml-2 float-right">{{ i.time }}</span>
+                            <br>
+                            <span color="accent" class="text-h6 ml-12" v-html="i.comment">{{ i.comment }}</span>
+                            <v-btn text v-if="detail.id==i.touser || detail.id==i.fromuser"
+                              v-on:click="user.delete(i.id)">
+                              删除
+                            </v-btn>
                           </div>
                         </div>
                       </div>
@@ -287,249 +311,303 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   <script src="/js/app.js?v=3"></script>
   <script>
-    var v = new Vue({
-      el: '#app',
-      data: {
-        rules: [
-          value => {
-            let f = new FormData();
-            console.log(value)
-            if (value.size > 500000) return '图片必须小于500KB';
-            if (['image/jpeg', 'image/png', 'image/gif', 'image/bmp'].indexOf(value.type) == -1) return '不支持此格式的图片'
-            function upa(data) {
-              v.waitRequest.cover = 1;
-              $.ajax({
-                url: apihost + 'work/uploads',
-                method: 'POST',
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                dataType: 'json',
-                // 图片上传成功
-                success: function (result1) {
-                  let k = result1.data[2][0][1].Key.split('/');
-                  v.detail.image = v.workview.image = k[k.length - 1];
-                  value = undefined;
-                  // delete waitRequest.cover;
-                  v.waitRequest.cover = -1;
-                  // console.log(k,v.workview.imgpre)
-                },
-                error: function () {
-                  alert("图片上传失败")
-                  v.waitRequest.cover = -1;
-                  delete v.waitRequest.cover;
-                }
-              });
-            }
-            f.append("image", new Blob([value], { type: value.type }))
-            upa(f)
-            // return false;
-          }
-          // value => !value || value.size < 2000000 || '图片必须小于2MB',
-        ],
-        host: {
-          data: 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com',
-          scratch: 'https://newsccode-1302921490.cos-website.ap-shanghai.myqcloud.com'
-        },
-        work: {
-          checkbox: [],
-          new: function () {
-            get({
-              url: 'work/new',
-              p: 'newwork'
-            }, function (d) {
-              location.href = scratchhost + "/scratch.html#id=" + d.info.insertId;
-            })
-          },
-          update: function () {
-            let d = $("[name='editinfo']"), data = {};
-            data.name = $("[t='name']").val();
-            data.introduce = $("[t='introduce']").val();
-            data.opensource = $("[t='opensource']")[0].checked;
-            data.publish = $("[t='publish']")[0].checked;
-            data.image = v.workview.image;
-            data.id = v.$data.workview.id;
-            console.log(data)
-            post({
-              url: 'work/info/update',
+    let functiona = {
+      rules: [
+        value => {
+          let f = new FormData();
+          console.log(value)
+          if (value.size > 500000) return '图片必须小于500KB';
+          if (['image/jpeg', 'image/png', 'image/gif', 'image/bmp'].indexOf(value.type) == -1) return '不支持此格式的图片'
+          function upa(data) {
+            v.waitRequest.cover = 1;
+            $.ajax({
+              url: apihost + 'work/uploads',
+              method: 'POST',
               data: data,
-              p: 'updatework'
-            }, function (d) {
-              console.log(d)
-              v.$data.qh('work', v.$data.workview.id)
-            })
-          },
-          return: function () {
+              cache: false,
+              contentType: false,
+              processData: false,
+              dataType: 'json',
+              // 图片上传成功
+              success: function (result1) {
+                let k = result1.data[2][0][1].Key.split('/');
+                v.detail.image = v.workview.image = k[k.length - 1];
+                value = undefined;
+                // delete waitRequest.cover;
+                v.waitRequest.cover = -1;
+                // console.log(k,v.workview.imgpre)
+              },
+              error: function () {
+                alert("图片上传失败")
+                v.waitRequest.cover = -1;
+                delete v.waitRequest.cover;
+              }
+            });
+          }
+          f.append("image", new Blob([value], { type: value.type }))
+          upa(f)
+          // return false;
+        }
+        // value => !value || value.size < 2000000 || '图片必须小于2MB',
+      ],
+      host: {
+        data: 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com',
+        scratch: 'https://newsccode-1302921490.cos-website.ap-shanghai.myqcloud.com'
+      },
+      work: {
+        checkbox: [],
+        new: function () {
+          get({
+            url: 'work/new',
+            p: 'newwork'
+          }, function (d) {
+            location.href = scratchhost + "/scratch.html#id=" + d.info.insertId;
+          })
+        },
+        update: function () {
+          let d = $("[name='editinfo']"), data = {};
+          data.name = $("[t='name']").val();
+          data.introduce = $("[t='introduce']").val();
+          data.opensource = $("[t='opensource']")[0].checked;
+          data.publish = $("[t='publish']")[0].checked;
+          data.image = v.workview.image;
+          data.id = v.$data.workview.id;
+          console.log(data)
+          post({
+            url: 'work/info/update',
+            data: data,
+            p: 'updatework'
+          }, function (d) {
+            console.log(d)
             v.$data.qh('work', v.$data.workview.id)
+          })
+        },
+        return: function () {
+          v.$data.qh('work', v.$data.workview.id)
+        }
+      },
+      items: [
+        {
+          title: '账号设置',
+          c: function () {
+            v.$data.qh('account');
           }
         },
-        items: [
-          {
-            title: '账号设置',
-            c: function () {
-              v.$data.qh('account');
-            }
-          },
-          {
-            title: '我的主页',
-            c: function () {
-              v.$data.qh('user', v.detail.id);
-            }
-          },
-          {
-            title: '我的作品',
-            c: function () {
-              v.$data.qh('mywork');
-            }
-          },
-          {
-            title: '退出登录',
-            c: function () {
-              document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-              console.log('清除cookie')
-              location.href = ""
-            }
+        {
+          title: '我的主页',
+          c: function () {
+            v.$data.qh('user', v.detail.id);
+          }
+        },
+        {
+          title: '我的作品',
+          c: function () {
+            v.$data.qh('mywork');
+          }
+        },
+        {
+          title: '退出登录',
+          c: function () {
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            console.log('清除cookie')
+            location.href = ""
+          }
+        },
+      ],
+      pw: value => {
+        const pattern = /^[0-9]*$/
+        if (!(!pattern.test(value) || value.length > 9)) return '纯数字密码必须大于8位'
+        if (value.length < 6) return '密码必须大于6位'
+      },
+      sign: {
+        email: [
+          value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || '请输入正确的邮箱'
           },
         ],
-        pw: value => {
-          const pattern = /^[0-9]*$/
-          if (!(!pattern.test(value) || value.length > 9)) return '纯数字密码必须大于8位'
-          if (value.length < 6) return '密码必须大于6位'
-        },
-        sign: {
-          email: [
-            value => {
-              const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-              return pattern.test(value) || '请输入正确的邮箱'
+        l: function (n) {
+          let d = ['login', 'signup']
+          get({
+            url: 'user/' + d[n],
+            data: {
+              email: $('#email').val(),
+              pw: $('#pw').val()
             },
-          ],
-          l: function (n) {
-            let d = ['login', 'signup']
-            get({
-              url: 'user/' + d[n],
-              data: {
-                email: $('#email').val(),
-                pw: $('#pw').val()
-              },
-              p: 'sign'
-            },
-              function (data) {
-                if (data.code == 1) {
-                  if (n == 0) {
-                    v.$data.qh('index');
-                    alert(data.msg)
-                    setCookie('token', data.token, 3)
-                    getuserinfo()
-                  } else {
-                    alert(data.msg)
-                  }
+            p: 'sign'
+          },
+            function (data) {
+              if (data.code == 1) {
+                if (n == 0) {
+                  v.$data.qh('index');
+                  alert(data.msg)
+                  setCookie('token', data.token, 3)
+                  getuserinfo()
                 } else {
                   alert(data.msg)
                 }
-              })
-          },
-          data: {
-            email: '',
-            pw: ''
-          }
-        },
-        account: {
-          n: function () {
-            get({
-              url: 'user/change/password',
-              data: {
-                npw: $('#a_npw').val(),
-                opw: $('#a_opw').val()
-              },
-              p: 'account'
-            },
-              function (data) {
+              } else {
                 alert(data.msg)
-                getuserinfo()
-                location.href = ""
-              })
-          },
-          l: function (n) {
-            post({
-              url: 'user/change/info',
-              data: {
-                data: $('#i-input-' + n).val(),
-                t: n
-              },
-              p: 'changeinfo'
-            }, function (d) {
-              alert(d.msg)
-              location.href = ""
+              }
             })
-          },
-          head: function () {
-            if (!v.detail.image) {
-              alert("请选择图片并等待上传完毕后再继续操作")
-              return;
-            }
-            post({
-              url: 'user/change/info',
-              data: {
-                data: v.detail.image,
-                t: 2
-              },
-              p: 'changeinfo'
-            }, function (d) {
-              alert(d.msg)
-              location.href = ""
-            })
-          },
         },
-        user: {
-          send: function () {
-            if ($('#comment').val()) {
-              post({
-                url: "user/comment",
-                data: {
-                  comment: $('#comment').val(),
-                  touser: v.workview.id,
-
-                },
-                p: "comment"
-              }, (d) => {
-                console.log(d);
-                alert("发送成功")
-              })
-            }
+        data: {
+          email: '',
+          pw: ''
+        }
+      },
+      account: {
+        n: function () {
+          get({
+            url: 'user/change/password',
+            data: {
+              npw: $('#a_npw').val(),
+              opw: $('#a_opw').val()
+            },
+            p: 'account'
           },
-          getcomment: () => {
-            get({
+            function (data) {
+              alert(data.msg)
+              getuserinfo()
+              location.href = ""
+            })
+        },
+        l: function (n) {
+          post({
+            url: 'user/change/info',
+            data: {
+              data: $('#i-input-' + n).val(),
+              t: n
+            },
+            p: 'changeinfo'
+          }, function (d) {
+            alert(d.msg)
+            location.href = ""
+          })
+        },
+        head: function () {
+          if (!v.detail.image) {
+            alert("请选择图片并等待上传完毕后再继续操作")
+            return;
+          }
+          post({
+            url: 'user/change/info',
+            data: {
+              data: v.detail.image,
+              t: 2
+            },
+            p: 'changeinfo'
+          }, function (d) {
+            alert(d.msg)
+            location.href = ""
+          })
+        },
+      },
+      user: {
+        send: function () {
+          if ($('#comment').val()) {
+            post({
               url: "user/comment",
               data: {
-                id: v.workview.id
-              }
+                comment: $('#comment').val(),
+                touser: v.workview.id,
+
+              },
+              p: "comment"
             }, (d) => {
-              v.user.comment = d.data
-              console.log('获取评论', d)
+              console.log(d);
+              alert("发送成功");
+              v.user.getcomment();
             })
-          },
-          // comment: { comment: [], user: {} },
-          comment: {}
+          }
         },
-        workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" },
-        detail: (getCookie('token') === undefined) ? undefined : 0,
-        token: getCookie('token'),
-        viewmode: 'index',
-        qh: function (a, id) {
-          v.$data.viewmode = a
-          pagecz[a] && pagecz[a](id);
+        getcomment: () => {
+          get({
+            url: "user/comment",
+            data: {
+              id: v.workview.id
+            }
+          }, (d) => {
+            let d2 = d.data;
+            for (let i in d2.comment) {
+              d2.comment[i].comment = markdown.toHTML(d2.comment[i].comment)
+              // let date = "", st = new Date(d2.comment[i].time * 1000), et = new Date();
+
+              d2.comment[i].time = other.date(d2.comment[i].time);
+            }
+            v.user.comment = d2
+            console.log('获取评论', d)
+          })
         },
-        publish: 0,
-        opensource: 0,
-        rows: { "data": [] },
-        show: { '0': 0, '1': 0, '2': 0 },
-        show0: 0,
-        show1: 0,
-        show2: 0,
-        mywork: {},
-        waitRequest: { cover: 0 },
+        delete: function (id) {
+          post({
+            url: "user/comment/delete",
+            data: {
+              id: id
+            },
+            p: "commentdelete"
+          }, (d) => {
+            console.log(d);
+            alert("删除成功");
+            v.user.getcomment();
+          })
+        },
+        // comment: { comment: [], user: {} },
+        getwork: (l) => {
+          get({
+            url: "work/user",
+            data: {
+              id: v.workview.id,
+              l:l
+            }
+          }, (d) => {
+            v.worklist = d.data
+            console.log('获取评论', d)
+          })
+        },
+        comment: {}
       },
+    }
+    let functiono = {
+      workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" },
+      detail: (getCookie('token') === undefined) ? undefined : 0,
+      token: getCookie('token'),
+      viewmode: 'index',
+      qh: function (a, id) {
+        v.$data.viewmode = a
+        pagecz[a] && pagecz[a](id);
+      },
+      publish: 0,
+      opensource: 0,
+      rows: { "data": [] },
+      show: { '0': 0, '1': 0, '2': 0 },
+      show0: 0,
+      show1: 0,
+      show2: 0,
+      mywork: {},
+      waitRequest: { cover: 0 },
+      worklist: 0,
+    }
+
+    var other = {
+      date: (d) => {
+        let date = "", st = new Date(d * 1000), et = new Date();
+        if (st.getYear() == et.getYear()) {
+          if ((st.getMonth() == et.getMonth() && st.getDate() == et.getDate())) {
+            date = st.getHours() + ':' + st.getMinutes() + ' ';
+          } else {
+            date = st.getMonth() + '-' + st.getDate() + ' ';
+          }
+        } else {
+          date = st.getYear() + '-' + st.getMonth() + '-' + st.getDate() + ' '
+        }
+        return date;
+      }
+    }
+
+    var v = new Vue({
+      el: '#app',
+      data: Object.assign(functiona, functiono, other),
       vuetify: new Vuetify({
         theme: {
           themes: {
@@ -543,16 +621,20 @@
         }
       }),
     })
+
+  </script>
+  <script>
     let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user'], q = getQueryString('page');
     var pagecz = {
       'index': function () {
         get({
           url: 'work/index'
         }, function (d) {
-          v.$data.rows.data = {
-            "title": "最新作品",
-            "worklist": d.data
-          }
+          v.$data.rows = d.data
+          // v.$data.rows.data = {
+          //   "title": "最新作品",
+          //   "worklist": d.data
+          // }
         })
         location.href = "#"
       },
@@ -602,6 +684,7 @@
           location.href = "#page=user&id=" + id;
           v.workview.introduce2 = markdown.toHTML(v.workview.introduce);
           v.user.getcomment()
+          v.user.getwork(4)
         })
       },
       'account': function (id) {
@@ -610,12 +693,10 @@
     if (!q) {
       q = 'index'
     } else if (d.indexOf(q) != -1) {
-      // v.$data.qh(q)
     } else {
       q = '404'
     }
     v.$data.qh(q, getQueryString('id'))
-    // pagecz[q] && pagecz[q]();
     $(document).ready(function () {
       getuserinfo()
     });
