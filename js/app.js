@@ -96,7 +96,7 @@ function getQueryString(name) {
       error:function(e){
         d.p && (delete waitRequest[d.p])
         console.log(e)
-        alert('错误：'+e);
+        alert('错误：'+e.stack);
       }
     })
   }
@@ -124,7 +124,7 @@ function getQueryString(name) {
       error:function(e){
         d.p && (delete waitRequest[d.p])
         console.log(e)
-        alert('错误：'+e);
+        alert('错误：'+e.stack);
       }
     })
   }

@@ -246,12 +246,12 @@
                       <v-textarea name="input-7-1" filled label="评论" auto-grow value="" maxlength="500" counter
                         id="comment">
                       </v-textarea>
-                      <v-btn color="accent" class="pa-2 mx-auto" v-on:click="user.send()" block>发送</v-btn>
+                      <v-btn color="accent" class="pa-2 mx-auto" v-on:click="comment.send()" block>发送</v-btn>
 
-                      <div v-if="user.comment" class="my-5">
-                        <div v-for="i in user.comment.comment" class="my-5">
+                      <div v-if="comment.comment" class="my-5">
+                        <div v-for="i in comment.comment.comment" class="my-5">
                           <v-divider></v-divider>
-                          <div v-for="j in user.comment.user[i.fromuser.toString()]" class="mt-2">
+                          <div v-for="j in comment.comment.user[i.fromuser.toString()]" class="mt-2">
                             <div>
                               <v-avatar size=40 class="" v-on:click="qh('user',i.fromuser)"
                                 :href="'#page=user&id='+i.fromuser">
@@ -266,7 +266,7 @@
                             <br>
                             <span color="accent" class="text-h6 ml-12" v-html="i.comment">{{ i.comment }}</span>
                             <v-btn text v-if="detail.id==i.touser || detail.id==i.fromuser"
-                              v-on:click="user.delete(i.id)">
+                              v-on:click="comment.delete(i.id)">
                               删除
                             </v-btn>
                           </div>
@@ -309,7 +309,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script src="/js/app.js?v=3"></script>
+  <script src="/js/app.js?v=4"></script>
   <script>
     let functiona = {
       rules: [
@@ -503,69 +503,72 @@
           })
         },
       },
-      user: {
+      comment: {
         send: function () {
           if ($('#comment').val()) {
             post({
-              url: "user/comment",
+              url: "comment/",
               data: {
                 comment: $('#comment').val(),
                 touser: v.workview.id,
-
+                type: {'user':0,'work':1}[v.viewmode],
               },
-              p: "comment"
+              p: "comment",
+              
             }, (d) => {
               console.log(d);
               alert("发送成功");
-              v.user.getcomment();
+              v.comment.getcomment();
             })
           }
         },
         getcomment: () => {
           get({
-            url: "user/comment",
+            url: "comment/",
             data: {
-              id: v.workview.id
+              id: v.workview.id,
+              type: {'user':0,'work':1}[v.viewmode],
             }
           }, (d) => {
             let d2 = d.data;
             for (let i in d2.comment) {
               d2.comment[i].comment = markdown.toHTML(d2.comment[i].comment)
-              // let date = "", st = new Date(d2.comment[i].time * 1000), et = new Date();
-
+              
               d2.comment[i].time = other.date(d2.comment[i].time);
             }
-            v.user.comment = d2
+            v.comment.comment = d2
             console.log('获取评论', d)
           })
         },
         delete: function (id) {
           post({
-            url: "user/comment/delete",
+            url: "comment/delete",
             data: {
-              id: id
+              id: id,
+              type: {'user':0,'work':1}[v.viewmode]
             },
             p: "commentdelete"
           }, (d) => {
             console.log(d);
             alert("删除成功");
-            v.user.getcomment();
+            v.comment.getcomment();
           })
         },
-        // comment: { comment: [], user: {} },
+        comment: {}
+      },
+      user:{
         getwork: (l) => {
           get({
             url: "work/user",
             data: {
               id: v.workview.id,
-              l:l
+              l:l,
             }
           }, (d) => {
             v.worklist = d.data
             console.log('获取评论', d)
           })
         },
-        comment: {}
       },
     }
     let functiono = {
@@ -683,7 +686,7 @@
           (v.$data.workview = d.data[0])
           location.href = "#page=user&id=" + id;
           v.workview.introduce2 = markdown.toHTML(v.workview.introduce);
-          v.user.getcomment()
+          v.comment.getcomment()
           v.user.getwork(4)
         })
       },
