@@ -329,6 +329,18 @@
               </v-row>
             </v-container>
 
+            <v-container v-if="viewmode=='message'">
+              <v-row>
+                <template>
+                  <v-card class="mx-auto pa-8 my-12" width="400" v-if="user.message">
+                    <span v-for="i in user.message">
+                      <p v-html="i.message"></p>
+                    </span>
+                  </v-card>
+                </template>
+              </v-row>
+            </v-container>
+
             <v-container v-if="viewmode=='404'">
               <v-row>
                 <template>
@@ -445,6 +457,12 @@
           title: '我的作品',
           c: function () {
             v.$data.qh('mywork');
+          }
+        },
+        {
+          title: '我的消息',
+          c: function () {
+            v.$data.qh('message');
           }
         },
         {
@@ -611,7 +629,19 @@
             console.log('获取评论', d)
           })
         },
+        getmessage:()=>{
+          get({
+            url: "user/message",
+            data: {
+            }
+          }, (d) => {
+            v.user.message = d.data
+            console.log('获取消息', d)
+          })
+        },
+        message:{}
       },
+      
     }
     let functiono = {
       workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" },
@@ -669,7 +699,7 @@
 
   </script>
   <script>
-    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user'], q = getQueryString('page');
+    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user','message'], q = getQueryString('page');
     var pagecz = {
       'index': function () {
         get({
@@ -719,6 +749,12 @@
         })
       },
       'user': function (id) {
+        if(id==0){
+          setTimeout(()=>{
+            v.$data.qh('user', v.detail.id)
+          },2000)
+          return;
+        }
         v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
         get({
           url: 'user/info',
@@ -734,7 +770,10 @@
         })
       },
       'account': function (id) {
-      }
+      },
+      'message':(id)=>{
+        v.user.getmessage()
+      },
     }
     if (!q) {
       q = 'index'
@@ -750,3 +789,4 @@
 </body>
 
 </html>
+<!-- https://wkvrzm-ijphjp-5555.preview.myide.io/ -->
