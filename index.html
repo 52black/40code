@@ -700,6 +700,7 @@
           d.data && (v.$data.workview = d.data)
           location.href = "#page=work&id=" + id
           v.workview.introduce2 = markdown.toHTML(v.workview.introduce);
+          v.comment.getcomment()
         })
       },
       'workinfo': function (id) {
@@ -714,7 +715,7 @@
           v.$data.opensource = d.data.opensource;
           v.$data.publish = d.data.publish;
           location.href = "#page=workinfo&id=" + id;
-
+          
         })
       },
       'user': function (id) {
