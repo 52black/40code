@@ -6,6 +6,15 @@
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/52black/markdown-js/lib/markdown.js"></script>
+  <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+  // 初始化上报
+  <script>
+    LA.init({
+      id: 'xxxxxxxxx', // 您应用的统计掩码
+      ck: 'xxxxxxxxxxxxx', // 您应用的固定key值（创建后不变）
+      hashMode: true // 开启单页面应用模式
+    })
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 
@@ -140,7 +149,8 @@
                   <v-card class="mx-3 pa-5 my-12" width="400" v-if="!workview.id">
                     作品信息正在加载中
                   </v-card>
-                  <v-card class="mx-auto pa-5 my-12" max-width="2000" v-else-if="(workview.isauthor || workview.publish)">
+                  <v-card class="mx-auto pa-5 my-12" max-width="2000"
+                    v-else-if="(workview.isauthor || workview.publish)">
 
                     <span color="accent" class="text-h5" cols="24">{{ workview.name }}</span>
                     <div cols="24">
@@ -148,9 +158,10 @@
                         <img
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
-                      <span color="accent" class="text-subtitle-1"
-                        v-on:click="qh('user', workview.author);">{{ workview.nickname }}</span>
-                      <span color="accent" class="text-subtitle-1 text-right text--disabled">创建时间：{{ date(workview.time) }}</span>
+                      <span color="accent" class="text-subtitle-1" v-on:click="qh('user', workview.author);">{{
+                        workview.nickname }}</span>
+                      <span color="accent" class="text-subtitle-1 text-right text--disabled">创建时间：{{ date(workview.time)
+                        }}</span>
                     </div>
                     <br>
                     <iframe
@@ -170,7 +181,7 @@
                     </div>
 
                   </v-card>
-                  
+
                   <v-card class="mx-3 pa-5 my-12" width="400" v-else>
                     无权限查看当前作品
                   </v-card>
@@ -197,7 +208,7 @@
                             </span>
                             <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
                           </div>
-                          
+
                           <br>
                           <span color="accent" class="text-h6 ml-12 " v-html="i.comment">{{ i.comment }}</span>
                           <v-btn class="text--secondary" text v-if="detail.id==i.touser || detail.id==i.fromuser"
@@ -213,7 +224,7 @@
 
                   </v-card>
 
-                  
+
                 </template>
               </v-row>
             </v-container>
@@ -263,8 +274,8 @@
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
                       <span color="accent" class="text-h5">{{ workview.nickname }}</span><br>
-                      <span color="accent"
-                        class="text-subtitle-1 float-right">加入时间：{{ date(workview.signtime) }}</span><br>
+                      <span color="accent" class="text-subtitle-1 float-right">加入时间：{{ date(workview.signtime)
+                        }}</span><br>
                     </v-card>
 
                     <v-card class=" pa-5 my-5" width="600">
@@ -304,7 +315,7 @@
                               </span>
                               <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
                             </div>
-                            
+
                             <br>
                             <span color="accent" class="text-h6 ml-12 " v-html="i.comment">{{ i.comment }}</span>
                             <v-btn class="text--secondary" text v-if="detail.id==i.touser || detail.id==i.fromuser"
@@ -571,10 +582,10 @@
               data: {
                 comment: $('#comment').val(),
                 touser: v.workview.id,
-                type: {'user':0,'work':1}[v.viewmode],
+                type: { 'user': 0, 'work': 1 }[v.viewmode],
               },
               p: "comment",
-              
+
             }, (d) => {
               console.log(d);
               alert("发送成功");
@@ -587,13 +598,13 @@
             url: "comment/",
             data: {
               id: v.workview.id,
-              type: {'user':0,'work':1}[v.viewmode],
+              type: { 'user': 0, 'work': 1 }[v.viewmode],
             }
           }, (d) => {
             let d2 = d.data;
             for (let i in d2.comment) {
               d2.comment[i].comment = markdown.toHTML(d2.comment[i].comment)
-              
+
               d2.comment[i].time = other.date(d2.comment[i].time);
             }
             v.comment.comment = d2
@@ -605,7 +616,7 @@
             url: "comment/delete",
             data: {
               id: id,
-              type: {'user':0,'work':1}[v.viewmode]
+              type: { 'user': 0, 'work': 1 }[v.viewmode]
             },
             p: "commentdelete"
           }, (d) => {
@@ -616,20 +627,20 @@
         },
         comment: {}
       },
-      user:{
+      user: {
         getwork: (l) => {
           get({
             url: "work/user",
             data: {
               id: v.workview.id,
-              l:l,
+              l: l,
             }
           }, (d) => {
             v.worklist = d.data
             console.log('获取评论', d)
           })
         },
-        getmessage:()=>{
+        getmessage: () => {
           get({
             url: "user/message",
             data: {
@@ -639,9 +650,9 @@
             console.log('获取消息', d)
           })
         },
-        message:{}
+        message: {}
       },
-      
+
     }
     let functiono = {
       workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" },
@@ -699,7 +710,7 @@
 
   </script>
   <script>
-    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user','message'], q = getQueryString('page');
+    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message'], q = getQueryString('page');
     var pagecz = {
       'index': function () {
         get({
@@ -745,14 +756,14 @@
           v.$data.opensource = d.data.opensource;
           v.$data.publish = d.data.publish;
           location.href = "#page=workinfo&id=" + id;
-          
+
         })
       },
       'user': function (id) {
-        if(id==0){
-          setTimeout(()=>{
+        if (id == 0) {
+          setTimeout(() => {
             v.$data.qh('user', v.detail.id)
-          },2000)
+          }, 2000)
           return;
         }
         v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
@@ -771,7 +782,7 @@
       },
       'account': function (id) {
       },
-      'message':(id)=>{
+      'message': (id) => {
         v.user.getmessage()
       },
     }
