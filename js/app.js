@@ -1,4 +1,5 @@
 var userdetail,waitRequest={};
+var myCaptcha;
 function getQueryString(name) {
     let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     if(window.location.hash.indexOf("#") < 0) return null;

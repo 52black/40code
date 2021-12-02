@@ -7,6 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/52black/markdown-js/lib/markdown.js"></script>
   <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+  <script src="https://cdn.dingxiang-inc.com/ctu-group/captcha-ui/index.js"></script>
   <script>
     LA.init({
       id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", // 您应用的固定key值（创建后不变）
@@ -74,6 +75,7 @@
                     <v-text-field v-model="password" :append-icon="show0 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
                       :type="show0 ? 'text' : 'password'" name="input-1" label="密码" hide-details="auto" counter
                       @click:append="show0 = !show0" id="pw"></v-text-field>
+                    <div id="c1"></div>
                     <div cols="12" class="float-center mx-auto mt-2">
                       <v-btn color="accent" class="pa-2" v-on:click="sign.l(0)">登录</v-btn>
                       <v-btn color="accent" class="pa-2" v-on:click="sign.l(1)">注册</v-btn>
@@ -372,7 +374,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script src="/js/app.js?v=4"></script>
+  <script src="/js/app.js?v=5"></script>
   <script>
     let functiona = {
       rules: [
@@ -497,11 +499,16 @@
         ],
         l: function (n) {
           let d = ['login', 'signup']
+          if(!v.sign.token){
+            alert("请先完成验证码")
+            return;
+          }
           get({
             url: 'user/' + d[n],
             data: {
               email: $('#email').val(),
-              pw: $('#pw').val()
+              pw: $('#pw').val(),
+              t2:v.sign.token
             },
             p: 'sign'
           },
@@ -722,6 +729,17 @@
         })
         location.href = "#"
       },
+      'sign':()=>{
+        setTimeout(()=>{
+          myCaptcha = _dx.Captcha(document.getElementById('c1'), {
+          appId: '39248c3724c1b6b8f2b77645fde5b19e', //appId，在控制台中“应用管理”或“应用配置”模块获取
+          apiServer: 'https://vip56.dingxiang-inc.com', // 请填写这个配置，按照下面“接入域名”所示!注意：末尾不要有斜杆！
+          success: function (token) {
+            v.sign.token=token;
+          }
+        })
+        },200)
+      },
       'mywork': function () {
         get({
           url: 'work/my'
@@ -779,6 +797,7 @@
         })
       },
       'account': function (id) {
+        
       },
       'message': (id) => {
         v.user.getmessage()
