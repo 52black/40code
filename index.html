@@ -46,13 +46,20 @@
 
           <v-main class="grey lighten-2">
 
-            <v-container v-if="viewmode=='index'" id="index">
+            <v-container v-if="viewmode=='index' || viewmode=='allwork'" id="index">
               <v-row>
+                <div v-if="viewmode=='allwork'" class="mb-4 mt-4">
+                  <v-from>
+                    <v-text-field label="作品名" filled class="float-left ml-4" id="sname"></v-text-field>
+                    <v-text-field label="作者id" filled class="float-left ml-4" id="sauthor"></v-text-field>
+                    <v-btn v-on:click="work.search()" class="float-left ml-4">搜索</v-btn>
+                  </v-from>
+                </div>
                 <template v-for="n in rows">
                   <v-col :key="n" class="mt-2" cols="12">
                     <strong>{{ n.title }}</strong>
+                    <span class="float-right" v-on:click="qh('allwork')" herf="#page=allwork">更多</span>
                   </v-col>
-
                   <v-col v-for="j in n.worklist" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
                     <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
                       <v-img :src="host.data+'/static/internalapi/asset/'+j.image" :aspect-ratio="4/3"></v-img>
@@ -62,7 +69,9 @@
                           <img
                             :src="host.data+'/static/internalapi/asset/'+(n.userlist[j.author.toString()][0].head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                         </v-avatar>
-                        <span color="accent" class="text-subtitle-1 text--secondary text-truncate text-caption" v-on:click="qh('user', n.userlist[j.author.toString()][0].nickname);">{{ n.userlist[j.author.toString()][0].nickname }}</span>
+                        <span color="accent" class="text-subtitle-1 text--secondary text-truncate text-caption"
+                          v-on:click="qh('user', n.userlist[j.author.toString()][0].nickname);">{{
+                          n.userlist[j.author.toString()][0].nickname }}</span>
                       </span><br><br>
                     </v-card>
                   </v-col>
@@ -282,7 +291,7 @@
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
                       <span color="accent" class="text-h5">{{ workview.nickname }}</span>
-                      <v-btn class="float-right" v-on:click="user.follow()" > {{ workview.follow ? '取消' : ''}}关注</v-btn>
+                      <v-btn class="float-right" v-on:click="user.follow()"> {{ workview.follow ? '取消' : ''}}关注</v-btn>
                       <br>
                       <span color="accent" class="text-subtitle-1 float-right">加入时间：{{ date(workview.signtime)
                         }}</span><br>
@@ -292,7 +301,7 @@
                       <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
                       <span class="text--secondary" v-html="workview.introduce2"></span>
                     </v-card>
-                    <div>他的作品：</div><br>
+                    <div>他的作品：</div><span class="float-right" v-on:click="qh('allwork',`&user=`+workview.id)">更多</span><br>
                     <div v-if="worklist">
                       <v-col v-for="j in worklist" :key="`${n}${j}`" cols="4">
                         <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
@@ -459,6 +468,31 @@
         },
         return: function () {
           v.$data.qh('work', v.$data.workview.id)
+        },
+        all: function (a) {
+          if(a){
+            location.href = "#page=allwork"+a
+          }
+          setTimeout(() => {
+            get({
+              url: 'work/all',
+              data: {
+                tags: getQueryString('tags'),
+                user: getQueryString('user'),
+                name: getQueryString('name'),
+              }
+            }, function (d) {
+              v.$data.rows = [{
+                title: '作品',
+                worklist: d.data.worklist,
+                userlist: d.data.userlist,
+              }]
+            }),100
+          })
+        },
+        search: function () {
+          location.href = "#page=allwork&name=" + $('#sname').val() + '&user=' + $('#sauthor').val()
+          v.work.all()
         }
       },
       items: [
@@ -509,7 +543,7 @@
         ],
         l: function (n) {
           let d = ['login', 'signup']
-          if(!v.sign.token){
+          if (!v.sign.token) {
             alert("请先完成验证码")
             return;
           }
@@ -518,7 +552,7 @@
             data: {
               email: $('#email').val(),
               pw: $('#pw').val(),
-              t2:v.sign.token
+              t2: v.sign.token
             },
             p: 'sign'
           },
@@ -665,11 +699,11 @@
             console.log('获取消息', d)
           })
         },
-        follow:()=>{
+        follow: () => {
           post({
-            url: "user/follow"+(v.workview.follow ? '/cancel' : ''),
+            url: "user/follow" + (v.workview.follow ? '/cancel' : ''),
             data: {
-              id:v.workview.id
+              id: v.workview.id
             }
           }, (d) => {
             alert(d.msg)
@@ -735,7 +769,7 @@
 
   </script>
   <script>
-    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message'], q = getQueryString('page');
+    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork'], q = getQueryString('page');
     var pagecz = {
       'index': function () {
         get({
@@ -749,16 +783,19 @@
         })
         location.href = "#"
       },
-      'sign':()=>{
-        setTimeout(()=>{
+      allwork: (a) => {
+        v.work.all(a);
+      },
+      'sign': () => {
+        setTimeout(() => {
           myCaptcha = _dx.Captcha(document.getElementById('c1'), {
-          appId: '39248c3724c1b6b8f2b77645fde5b19e', //appId，在控制台中“应用管理”或“应用配置”模块获取
-          apiServer: 'https://vip56.dingxiang-inc.com', // 请填写这个配置，按照下面“接入域名”所示!注意：末尾不要有斜杆！
-          success: function (token) {
-            v.sign.token=token;
-          }
-        })
-        },200)
+            appId: '39248c3724c1b6b8f2b77645fde5b19e', //appId，在控制台中“应用管理”或“应用配置”模块获取
+            apiServer: 'https://vip56.dingxiang-inc.com', // 请填写这个配置，按照下面“接入域名”所示!注意：末尾不要有斜杆！
+            success: function (token) {
+              v.sign.token = token;
+            }
+          })
+        }, 200)
       },
       'mywork': function () {
         get({
@@ -817,7 +854,7 @@
         })
       },
       'account': function (id) {
-        
+
       },
       'message': (id) => {
         v.user.getmessage()
