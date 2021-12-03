@@ -281,7 +281,9 @@
                         <img
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
-                      <span color="accent" class="text-h5">{{ workview.nickname }}</span><br>
+                      <span color="accent" class="text-h5">{{ workview.nickname }}</span>
+                      <v-btn class="float-right" v-on:click="user.follow()" > {{ workview.follow ? '取消' : ''}}关注</v-btn>
+                      <br>
                       <span color="accent" class="text-subtitle-1 float-right">加入时间：{{ date(workview.signtime)
                         }}</span><br>
                     </v-card>
@@ -661,6 +663,16 @@
           }, (d) => {
             v.user.message = d.data
             console.log('获取消息', d)
+          })
+        },
+        follow:()=>{
+          post({
+            url: "user/follow"+(v.workview.follow ? '/cancel' : ''),
+            data: {
+              id:v.workview.id
+            }
+          }, (d) => {
+            alert(d.msg)
           })
         },
         message: {}
