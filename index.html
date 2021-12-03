@@ -56,9 +56,17 @@
                   <v-col v-for="j in n.worklist" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
                     <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
                       <v-img :src="host.data+'/static/internalapi/asset/'+j.image" :aspect-ratio="4/3"></v-img>
-                      <v-card-title>{{ j.name }}</v-card-title>
+                      <div class="text-truncate px-5 mt-3 mb-1 text-heading-6">{{ j.name }}</div>
+                      <span class="px-5">
+                        <v-avatar size="25">
+                          <img
+                            :src="host.data+'/static/internalapi/asset/'+(n.userlist[j.author.toString()][0].head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                        </v-avatar>
+                        <span color="accent" class="text-subtitle-1 text--secondary text-truncate text-caption" v-on:click="qh('user', n.userlist[j.author.toString()][0].nickname);">{{ n.userlist[j.author.toString()][0].nickname }}</span>
+                      </span><br><br>
                     </v-card>
                   </v-col>
+
                 </template>
               </v-row>
             </v-container>
@@ -287,7 +295,7 @@
                       <v-col v-for="j in worklist" :key="`${n}${j}`" cols="4">
                         <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
                           <v-img :src="host.data+'/static/internalapi/asset/'+j.image" :aspect-ratio="4/3"></v-img>
-                          <v-card-title>{{ j.name }}</v-card-title>
+                          <div class="text-truncate px-5 mt-3 pb-4 text-heading-6">{{ j.name }}</div>
                         </v-card>
                       </v-col>
                     </div>
