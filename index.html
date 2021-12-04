@@ -70,7 +70,7 @@
                             :src="host.data+'/static/internalapi/asset/'+(n.userlist[j.author.toString()][0].head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                         </v-avatar>
                         <span color="accent" class="text-subtitle-1 text--secondary text-truncate text-caption"
-                          v-on:click="qh('user', n.userlist[j.author.toString()][0].nickname);">{{
+                          v-on:click="qh('user', j.author);">{{
                           n.userlist[j.author.toString()][0].nickname }}</span>
                       </span><br><br>
                     </v-card>
@@ -291,8 +291,10 @@
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
                       <span color="accent" class="text-h5">{{ workview.nickname }}</span>
-                      <v-btn class="float-right" v-on:click="user.follow()"> {{ workview.follow ? '取消' : ''}}关注</v-btn>
+                      <v-btn class="float-right" v-on:click="user.follow()"> {{ workview.followu ? '取消' : ''}}关注</v-btn>
                       <br>
+                      <span color="accent" class="text-subtitle-1" v-on:click="user.flisttype=0;qh('flist',workview.id)">{{ workview.fan }} 粉丝 </span>
+                      <span color="accent" class="text-subtitle-1" v-on:click="user.flisttype=1;qh('flist',workview.id)">{{ workview.follow }} 关注</span>
                       <span color="accent" class="text-subtitle-1 float-right">加入时间：{{ date(workview.signtime)
                         }}</span><br>
                     </v-card>
@@ -371,6 +373,26 @@
               </v-row>
             </v-container>
 
+            <v-container v-if="viewmode=='flist'">
+              <v-row>
+                <template>
+                  <v-col v-for="j in user.flist" cols="6" sm="4" md="3" lg="2">
+                    <v-card v-on:click="qh('user',j.id)" :href="'#page=work&id='+j.id">
+                      <span class="px-5">
+                        <v-avatar size="40">
+                          <img
+                            :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                        </v-avatar>
+                        <span color="accent" class="text-h5 text--secondary text-truncate"
+                          v-on:click="qh('user', j.id);">{{
+                          j.nickname }}</span>
+                      </span><br><br>
+                    </v-card>
+                  </v-col>
+                </template>
+              </v-row>
+            </v-container>
+
             <v-container v-if="viewmode=='404'">
               <v-row>
                 <template>
@@ -393,7 +415,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script src="/js/app.js?v=5"></script>
+  <script src="/js/app.js?v=6"></script>
   <script>
     let functiona = {
       rules: [
@@ -557,6 +579,7 @@
             p: 'sign'
           },
             function (data) {
+              pagecz.sign()
               if (data.code == 1) {
                 if (n == 0) {
                   v.$data.qh('index');
@@ -701,7 +724,7 @@
         },
         follow: () => {
           post({
-            url: "user/follow" + (v.workview.follow ? '/cancel' : ''),
+            url: "user/follow" + (v.workview.followu ? '/cancel' : ''),
             data: {
               id: v.workview.id
             }
@@ -709,7 +732,20 @@
             alert(d.msg)
           })
         },
-        message: {}
+        getlist: (id)=>{
+          get({
+            url: "user/flist",
+            data: {
+              id: id,
+              type:v.user.flisttype
+            }
+          }, (d) => {
+            v.user.flist=d.data
+          })
+        },
+        flist:[],
+        message: {},
+        flisttype:!!getQueryString('type')-0,
       },
 
     }
@@ -769,7 +805,7 @@
 
   </script>
   <script>
-    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork'], q = getQueryString('page');
+    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork','flist'], q = getQueryString('page');
     var pagecz = {
       'index': function () {
         get({
@@ -858,6 +894,9 @@
       },
       'message': (id) => {
         v.user.getmessage()
+      },
+      'flist':(id)=>{
+        v.user.getlist(id)
       },
     }
     if (!q) {
