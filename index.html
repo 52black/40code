@@ -27,20 +27,25 @@
 
             <v-toolbar-title v-on:click="qh('index')">sccode</v-toolbar-title>
             <v-spacer></v-spacer>
+            <span v-if="detail">
+              <v-btn icon v-on:click="qh('message');">
+                <v-icon>mdi-bell</v-icon>{{ (detail && detail.msgnum) ? detail.msgnum : ''}}
+              </v-btn>
+              <v-menu>
 
-            <v-menu v-if="detail">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="" dark v-bind="attrs" v-on="on">
-                  {{ detail.nickname }}
-                </v-btn>
-              </template>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="" dark v-bind="attrs" v-on="on">
+                    {{ detail.nickname }}
+                  </v-btn>
+                </template>
 
-              <v-list>
-                <v-list-item v-for="(item, index) in items" :key="index" @click="() => {}" v-on:click="item.c()">
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
+                <v-list>
+                  <v-list-item v-for="(item, index) in items" :key="index" @click="() => {}" v-on:click="item.c()">
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </span>
             <v-toolbar-title v-else-if="detail===undefined" v-on:click="qh('sign')">登录/注册</v-toolbar-title>
           </v-app-bar>
 
@@ -293,8 +298,10 @@
                       <span color="accent" class="text-h5">{{ workview.nickname }}</span>
                       <v-btn class="float-right" v-on:click="user.follow()"> {{ workview.followu ? '取消' : ''}}关注</v-btn>
                       <br>
-                      <span color="accent" class="text-subtitle-1" v-on:click="user.flisttype=0;qh('flist',workview.id)">{{ workview.fan }} 粉丝 </span>
-                      <span color="accent" class="text-subtitle-1" v-on:click="user.flisttype=1;qh('flist',workview.id)">{{ workview.follow }} 关注</span>
+                      <span color="accent" class="text-subtitle-1"
+                        v-on:click="user.flisttype=0;qh('flist',workview.id)">{{ workview.fan }} 粉丝 </span>
+                      <span color="accent" class="text-subtitle-1"
+                        v-on:click="user.flisttype=1;qh('flist',workview.id)">{{ workview.follow }} 关注</span>
                       <span color="accent" class="text-subtitle-1 float-right">加入时间：{{ date(workview.signtime)
                         }}</span><br>
                     </v-card>
@@ -303,7 +310,8 @@
                       <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
                       <span class="text--secondary" v-html="workview.introduce2"></span>
                     </v-card>
-                    <div>他的作品：</div><span class="float-right" v-on:click="qh('allwork',`&user=`+workview.id)">更多</span><br>
+                    <div>他的作品：</div><span class="float-right"
+                      v-on:click="qh('allwork',`&user=`+workview.id)">更多</span><br>
                     <div v-if="worklist">
                       <v-col v-for="j in worklist" :key="`${n}${j}`" cols="4">
                         <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
@@ -492,8 +500,8 @@
           v.$data.qh('work', v.$data.workview.id)
         },
         all: function (a) {
-          if(a){
-            location.href = "#page=allwork"+a
+          if (a) {
+            location.href = "#page=allwork" + a
           }
           setTimeout(() => {
             get({
@@ -509,7 +517,7 @@
                 worklist: d.data.worklist,
                 userlist: d.data.userlist,
               }]
-            }),100
+            }), 100
           })
         },
         search: function () {
@@ -534,12 +542,6 @@
           title: '我的作品',
           c: function () {
             v.$data.qh('mywork');
-          }
-        },
-        {
-          title: '我的消息',
-          c: function () {
-            v.$data.qh('message');
           }
         },
         {
@@ -732,25 +734,24 @@
             alert(d.msg)
           })
         },
-        getlist: (id)=>{
+        getlist: (id) => {
           get({
             url: "user/flist",
             data: {
               id: id,
-              type:v.user.flisttype
+              type: v.user.flisttype
             }
           }, (d) => {
-            v.user.flist=d.data
+            v.user.flist = d.data
           })
         },
-        flist:[],
+        flist: [],
         message: {},
-        flisttype:!!getQueryString('type')-0,
+        flisttype: !!getQueryString('type') - 0,
       },
-
     }
     let functiono = {
-      workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" },
+      workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png"},
       detail: (getCookie('token') === undefined) ? undefined : 0,
       token: getCookie('token'),
       viewmode: 'index',
@@ -805,7 +806,7 @@
 
   </script>
   <script>
-    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork','flist'], q = getQueryString('page');
+    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist'], q = getQueryString('page');
     var pagecz = {
       'index': function () {
         get({
@@ -895,7 +896,7 @@
       'message': (id) => {
         v.user.getmessage()
       },
-      'flist':(id)=>{
+      'flist': (id) => {
         v.user.getlist(id)
       },
     }
@@ -908,6 +909,7 @@
     v.$data.qh(q, getQueryString('id'))
     $(document).ready(function () {
       getuserinfo()
+      setInterval(() => { getuserinfo() }, 10000)
     });
   </script>
 </body>
