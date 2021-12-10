@@ -202,7 +202,7 @@ function saveproject(id, callback) {
                 if (i == data2.length - 1)
                     uplw();
                 else
-                    upa(t + n)
+                    upa(t + n, n)
             },
             error: function () {
                 hy();
@@ -213,7 +213,7 @@ function saveproject(id, callback) {
     }
     if (data2.length) {
         $("#loadinfo").html('正在保存素材');
-        upa(0,5);
+        upa(0, 5);
     }
     else uplw();
 }
