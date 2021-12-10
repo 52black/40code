@@ -213,7 +213,7 @@ function saveproject(id, callback) {
     }
     if (data2.length) {
         $("#loadinfo").html('正在保存素材');
-        upa(0);
+        upa(0,5);
     }
     else uplw();
 }
