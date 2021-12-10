@@ -176,9 +176,9 @@ function saveproject(id, callback) {
             data2.push(i)
         }
     }
-    function upa(t) {
-        let list=[];
-        for(let i=t;i<t+10&&i<data2.length;i++){
+    function upa(t, n) {
+        let list = [];
+        for (let i = t; i < t + n && i < data2.length; i++) {
             data.append('image', f(data2[i]))
         }
         $.ajax({
@@ -196,13 +196,13 @@ function saveproject(id, callback) {
                     alert("保存失败");
                     return;
                 }
-                for (let i = t; i < 10 + t && i < data2.length; i++) {
+                for (let i = t; i < n + t && i < data2.length; i++) {
                     vm.assets[data2[i]].clean = true;
                 }
                 if (i == data2.length - 1)
                     uplw();
                 else
-                    upa(t + 10)
+                    upa(t + n)
             },
             error: function () {
                 hy();
