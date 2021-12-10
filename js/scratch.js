@@ -199,7 +199,7 @@ function saveproject(id, callback) {
                 for (let i = t; i < n + t && i < data2.length; i++) {
                     vm.assets[data2[i]].clean = true;
                 }
-                if (i == data2.length - 1)
+                if (n+t == data2.length - 1)
                     uplw();
                 else
                     upa(t + n, n)
