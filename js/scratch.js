@@ -16,7 +16,7 @@ $('#dlp').hide();
     // } 
     workinfo = d;
     window.scratchConfig.menuBar.customButtons[0].buttonName = workinfo.isauthor ? '保存' : '改编';
-    if(workinfo.isauthor){
+    if (workinfo.isauthor) {
         window.scratchConfig.menuBar.customButtons.push({
             buttonName: '设置当前截图为封面',
             style: {
@@ -24,17 +24,17 @@ $('#dlp').hide();
                 background: 'hsla(30, 100%, 55%, 1)',
             },
             handleClick: () => {
-                savecover(function(id){
+                savecover(function (id) {
                     post({
                         url: 'work/info/update',
-                        data: {id:workinfo.id,image:id,coveronly:1},
+                        data: { id: workinfo.id, image: id, coveronly: 1 },
                         p: 'updatework'
-                      }, function (d) {
+                    }, function (d) {
                         console.log(d)
                         // v.$data.qh('work', v.$data.workview.id)
-                      })
+                    })
                 })
-                
+
             }
             // 获取到项目名
         })
@@ -78,7 +78,7 @@ function dlp() {
         downloadFileByBlob(file);
     })
 }
-function savecover(callback){
+function savecover(callback) {
     function uplw(d) {
         let f = new FormData();
         $("#loadinfo").html('正在保存封面文件');
@@ -93,7 +93,7 @@ function savecover(callback){
             dataType: 'json',
             // 图片上传成功
             success: function (result1) {
-                if(result1.code!=1){
+                if (result1.code != 1) {
                     hy();
                     alert("保存失败");
                     return;
@@ -111,16 +111,16 @@ function savecover(callback){
         $("#scratch").css("opacity", "1");
         $('#view').hide();
         $('#dlp').hide();
-        let k=r.data[2][0][1].Key.split('/');
-        callback && callback(k[k.length-1]);
+        let k = r.data[2][0][1].Key.split('/');
+        callback && callback(k[k.length - 1]);
     }
     $("#scratch").css("opacity", "0");
     $('#view').show();
     $('#dlp').show();
     $("#loadinfo").html('正在保存封面');
-    window.scratch.getProjectCoverBlob(e => {uplw(e)})
+    window.scratch.getProjectCoverBlob(e => { uplw(e) })
 }
-function saveproject(id,callback){
+function saveproject(id, callback) {
     console.log("自定义按钮1");
     console.log('分享按钮');
     let data = new FormData(), data2 = [];
@@ -129,19 +129,12 @@ function saveproject(id,callback){
         console.log(URL.createObjectURL(i))
         return i
     }
-    for (i in vm.assets) {
-        // upload(i.data)
-        if (!vm.assets[i].clean) {
-            data.append('image', f(i))
-            data2.push(i)
-        }
-    }
+
     function hy() {
         $("#scratch").css("opacity", "1");
         $('#view').hide();
         $('#dlp').hide();
-        
-        
+
         callback && callback();
     }
     function uplw() {
@@ -158,7 +151,7 @@ function saveproject(id,callback){
             dataType: 'json',
             // 图片上传成功
             success: function (result1) {
-                if(result1.code!=1){
+                if (result1.code != 1) {
                     hy();
                     alert("保存失败");
                     return;
@@ -175,8 +168,20 @@ function saveproject(id,callback){
     $("#scratch").css("opacity", "0");
     $('#view').show();
     $('#dlp').show();
-    function upa(t){
-         $.ajax({
+
+    for (let i in vm.assets) {
+        // upload(i.data)
+        if (!vm.assets[i].clean) {
+            // data.append('image', f(i))
+            data2.push(i)
+        }
+    }
+    function upa(t) {
+        let list=[];
+        for(let i=t;i<t+10&&i<data2.length;i++){
+            data.append('image', f(data2[i]))
+        }
+        $.ajax({
             url: apihost + 'work/uploads',
             method: 'POST',
             data: data,
@@ -186,18 +191,18 @@ function saveproject(id,callback){
             dataType: 'json',
             // 图片上传成功
             success: function (result1) {
-                if(result1.code!=1){
+                if (result1.code != 1) {
                     hy();
                     alert("保存失败");
                     return;
                 }
-                for (let i=t;i<10+t&&i<data2.length;i++) {
+                for (let i = t; i < 10 + t && i < data2.length; i++) {
                     vm.assets[data2[i]].clean = true;
                 }
-                if(i==data2.length-1)
-                uplw();
+                if (i == data2.length - 1)
+                    uplw();
                 else
-                upa(t+10)
+                    upa(t + 10)
             },
             error: function () {
                 hy();
@@ -208,30 +213,30 @@ function saveproject(id,callback){
     }
     if (data2.length) {
         $("#loadinfo").html('正在保存素材');
-       upa(0);
+        upa(0);
     }
     else uplw();
 }
 function save() {
-    if(workinfo.isauthor)
+    if (workinfo.isauthor)
         saveproject()
-    else{
+    else {
         $("#scratch").css("opacity", "0");
         $("#loadinfo").html('正在改编中');
         get({
             url: 'work/new',
-            p:'newwork'
+            p: 'newwork'
         }, function (d) {
             saveproject(
                 d.info.insertId,
-                function(){
-                    location.href="/scratch#id="+d.info.insertId;
+                function () {
+                    location.href = "/scratch#id=" + d.info.insertId;
                     location.reload();
                 }
             )
         })
     }
-        
+
 }
 function dataURLToBlob(dataurl) {
     var arr = dataurl.split(',');
@@ -326,11 +331,11 @@ window.scratchConfig = {
                     background: 'hsla(30, 100%, 55%, 1)',
                 },
                 handleClick: () => {
-                    open("/#page=work&id="+workinfo.id);
+                    open("/#page=work&id=" + workinfo.id);
                 }
                 // 获取到项目名
             },
-            
+
             //可继续新增按钮
         ]
     },
@@ -423,6 +428,6 @@ window.scratchConfig = {
     //默认项目地址,不需要修请删除本配置项
     defaultProjectURL: "https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/unreleased/scratch/8050135381552279031529",
     //若使用官方素材库请删除本配置项, 默认为/static下的素材库
-    assetCDN: scratchhost+'/static'
+    assetCDN: scratchhost + '/static'
 }
 var cdn = 'https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/';
