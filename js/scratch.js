@@ -123,7 +123,7 @@ function savecover(callback) {
 function saveproject(id, callback) {
     console.log("自定义按钮1");
     console.log('分享按钮');
-    let data = new FormData(), data2 = [];
+    let data2 = [];
     let f = function (i) {
         i = new Blob([vm.assets[i].data], { type: vm.assets[i].assetType.contentType })
         console.log(URL.createObjectURL(i))
@@ -177,7 +177,7 @@ function saveproject(id, callback) {
         }
     }
     function upa(t, n) {
-        let list = [];
+        let list = [], data = new FormData();
         for (let i = t; i < t + n && i < data2.length; i++) {
             data.append('image', f(data2[i]))
         }
@@ -199,7 +199,7 @@ function saveproject(id, callback) {
                 for (let i = t; i < n + t && i < data2.length; i++) {
                     vm.assets[data2[i]].clean = true;
                 }
-                if (n+t == data2.length - 1)
+                if (n + t == data2.length - 1)
                     uplw();
                 else
                     upa(t + n, n)
