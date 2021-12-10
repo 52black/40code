@@ -199,7 +199,8 @@ function saveproject(id, callback) {
                 for (let i = t; i < n + t && i < data2.length; i++) {
                     vm.assets[data2[i]].clean = true;
                 }
-                if (n + t == data2.length - 1)
+                $('#d').html(parseInt((n+t)/data2.length))
+                if (n + t >= data2.length - 1)
                     uplw();
                 else
                     upa(t + n, n)
