@@ -178,6 +178,9 @@ function saveproject(id, callback) {
     }
     function upa(t) {
         console.log(t)
+        if(f(data2[t])> 5 * 1024 * 1024){
+            t++;
+        }
         let list = [], data = new FormData(),n=0;
         for (let i = t, s = 0; i < data2.length; i++, n++) {
             let file = f(data2[i])
