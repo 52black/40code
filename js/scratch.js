@@ -177,14 +177,19 @@ function saveproject(id, callback) {
         }
     }
     function upa(t) {
+        console.log(t)
         let list = [], data = new FormData(),n=0;
         for (let i = t, s = 0; i < data2.length; i++, n++) {
             let file = f(data2[i])
             s += file.size;
-            if (s > 5 * 1024 * 1024) break;
-            n--;
+            if (s > 5 * 1024 * 1024){
+                n--;
+                break;
+            } 
+            
             data.append('image', file)
         }
+        console.log(n)
         console.log(data)
         $.ajax({
             url: apihost + 'work/uploads',
@@ -208,7 +213,7 @@ function saveproject(id, callback) {
                 if (n + t >= data2.length - 1)
                     uplw();
                 else
-                    upa(t + n, n)
+                    upa(t + n)
             },
             error: function () {
                 hy();
@@ -219,7 +224,7 @@ function saveproject(id, callback) {
     }
     if (data2.length) {
         $("#loadinfo").html('正在保存素材');
-        upa(0, 5);
+        upa(0);
     }
     else uplw();
 }
