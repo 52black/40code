@@ -176,11 +176,16 @@ function saveproject(id, callback) {
             data2.push(i)
         }
     }
-    function upa(t, n) {
-        let list = [], data = new FormData();
-        for (let i = t; i < t + n && i < data2.length; i++) {
-            data.append('image', f(data2[i]))
+    function upa(t) {
+        let list = [], data = new FormData(),n=0;
+        for (let i = t, s = 0; i < data2.length; i++, n++) {
+            let file = f(data2[i])
+            s += file.size;
+            if (s > 5 * 1024 * 1024) break;
+            n--;
+            data.append('image', file)
         }
+        console.log(data)
         $.ajax({
             url: apihost + 'work/uploads',
             method: 'POST',
@@ -199,7 +204,7 @@ function saveproject(id, callback) {
                 for (let i = t; i < n + t && i < data2.length; i++) {
                     vm.assets[data2[i]].clean = true;
                 }
-                $('#b').html(parseInt((n+t)/data2.length*100)+'%')
+                $('#b').html(parseInt((n + t) / data2.length * 100) + '%')
                 if (n + t >= data2.length - 1)
                     uplw();
                 else
