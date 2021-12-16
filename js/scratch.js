@@ -178,7 +178,7 @@ function saveproject(id, callback) {
     }
     function upa(t) {
         console.log(t)
-        if(f(data2[t])> 5 * 1024 * 1024){
+        if(f(data2[t]).size> 5 * 1024 * 1024){
             t++;
         }
         let list = [], data = new FormData(),n=0;
