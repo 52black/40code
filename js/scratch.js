@@ -177,23 +177,28 @@ function saveproject(id, callback) {
         }
     }
     function upa(t) {
-        console.log(t)
+        debugger;
         if(f(data2[t]).size> 5 * 1024 * 1024){
             t++;
+            debugger;
         }
+        debugger;
         let list = [], data = new FormData(),n=0;
         for (let i = t, s = 0; i < data2.length; i++, n++) {
             let file = f(data2[i])
             s += file.size;
             if (s > 5 * 1024 * 1024){
                 n--;
+                console.log('break',i)
+                debugger;
                 break;
             } 
-            
+            debugger;
             data.append('image', file)
+            console.log('append,',i)
         }
         console.log(n)
-        console.log(data)
+        debugger;
         $.ajax({
             url: apihost + 'work/uploads',
             method: 'POST',
