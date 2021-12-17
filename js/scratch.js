@@ -79,6 +79,7 @@ function dlp() {
     })
 }
 function savecover(callback) {
+    $('#b').hide();
     function uplw(d) {
         let f = new FormData();
         $("#loadinfo").html('正在保存封面文件');
@@ -168,7 +169,6 @@ function saveproject(id, callback) {
     $("#scratch").css("opacity", "0");
     $('#view').show();
     $('#dlp').show();
-
     for (let i in vm.assets) {
         // upload(i.data)
         if (!vm.assets[i].clean) {
@@ -222,8 +222,10 @@ function saveproject(id, callback) {
                 // }
                 vm.assets[data2[t]].clean = true;
                 $('#b').html(parseInt((t+1/*n + t*/) / data2.length * 10000)/100 + '%')
-                if (t+1/*n + t*/ >= data2.length - 1)
+                if (t+1/*n + t*/ >= data2.length - 1){
+                    $('#b').hide();
                     uplw();
+                }  
                 else
                     // upa(t + n)
                     upa(t+1)
@@ -237,6 +239,7 @@ function saveproject(id, callback) {
     }
     if (data2.length) {
         $("#loadinfo").html('正在保存素材');
+        $('#b').show()
         upa(0);
     }
     else uplw();
