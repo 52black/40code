@@ -58,21 +58,21 @@ window.scratchConfig = {
   },
   handleDefaultProjectLoaded: () => {
     //默认作品加载完毕，一般在这里控制项目加载
-    window.scratch.setProjectName("默认项目")
-    window.scratch.loadProject(downloadurl, (e) => {
-      console.log("项目加载完毕")
-      window.scratch.setProjectName("默认项目")
-      if (e === undefined) {
-        console.log("项目加载完毕")
+    // window.scratch.setProjectName("默认项目")
+    // window.scratch.loadProject(downloadurl, (e) => {
+    //   console.log("项目加载完毕")
+    //   window.scratch.setProjectName("默认项目")
+    //   if (e === undefined) {
+    //     console.log("项目加载完毕")
 
-      } else {
-        alert("项目加载失败")
-        console.log("项目加载失败")
-        console.log(e);
-      }
-    })
+    //   } else {
+    //     alert("项目加载失败")
+    //     console.log("项目加载失败")
+    //     console.log(e);
+    //   }
+    // })
   },
-  assetCDN: scratchhost+'/static'
+  assetCDN: scratchhost+'/static',
   //默认项目地址,不需要修请删除本配置项
-  //  defaultProjectURL: "./static/project.sb3",
+   defaultProjectURL: downloadurl //"./static/project.sb3",
 }

@@ -177,26 +177,29 @@ function saveproject(id, callback) {
         }
     }
     function upa(t) {
-        debugger;
+        // debugger;
         if(f(data2[t]).size> 5 * 1024 * 1024){
             t++;
-            debugger;
+            upa(t);
+            return;
         }
-        debugger;
-        let list = [], data = new FormData(),n=0;
-        for (let i = t, s = 0; i < data2.length; i++, n++) {
-            let file = f(data2[i])
-            s += file.size;
-            if (s > 5 * 1024 * 1024){
-                n--;
-                console.log('break',i)
-                debugger;
-                break;
-            } 
-            debugger;
-            data.append('image', file)
-            console.log('append,',i)
-        }
+        // debugger;
+        let list = [], data = new FormData(),n=0,file=f(data2[t]);
+        data.append('image', file)
+        // for (let i = t, s = 0; i < data2.length && n<19 /* 每次最多上次19个素材*/; i++, n++) {
+        //     let file = f(data2[i])
+        //     s += file.size;
+        //     if (s > 5 * 1024 * 1024){
+        //         // n--;
+        //         console.log('break',i)
+        //         /* 单次上传到5MB 分步*/
+        //         debugger;
+        //         break;
+        //     } 
+        //     debugger;
+        //     data.append('image', file)
+        //     console.log('append,',i,n)
+        // }
         console.log(n)
         debugger;
         $.ajax({
@@ -214,14 +217,16 @@ function saveproject(id, callback) {
                     alert("保存失败");
                     return;
                 }
-                for (let i = t; i < n + t && i < data2.length; i++) {
-                    vm.assets[data2[i]].clean = true;
-                }
-                $('#b').html(parseInt((n + t) / data2.length * 100) + '%')
-                if (n + t >= data2.length - 1)
+                // for (let i = t; i < n + t && i < data2.length; i++) {
+                //     vm.assets[data2[i]].clean = true;
+                // }
+                vm.assets[data2[t]].clean = true;
+                $('#b').html(parseInt((t+1/*n + t*/) / data2.length * 10000)/100 + '%')
+                if (t+1/*n + t*/ >= data2.length - 1)
                     uplw();
                 else
-                    upa(t + n)
+                    // upa(t + n)
+                    upa(t+1)
             },
             error: function () {
                 hy();
