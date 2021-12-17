@@ -13,15 +13,15 @@
       id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", // 您应用的固定key值（创建后不变）
       hashMode: true // 开启单页面应用模式
     })
-    (()=>{
-      let time=(new Date());
-      let d=[
-        [12,13],
-        [4,4]
-      ]
-      for(i of d){
-        if(time.getMonth()==i[0]-1&&time.getDate()==i[1]){
-          document.write(`
+      (() => {
+        let time = (new Date());
+        let d = [
+          [12, 13],
+          [4, 4]
+        ]
+        for (i of d) {
+          if (time.getMonth() == i[0] - 1 && time.getDate() == i[1]) {
+            document.write(`
             <style>
               html {
                 filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
@@ -29,9 +29,9 @@
               }
             </style>
             `)
+          }
         }
-      }
-    })()
+      })()
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
@@ -439,6 +439,15 @@
 
 
           </v-main>
+
+          <v-footer padless>
+            <v-col cols="12" class="px-5">
+              <span class="float-left">{{ new Date().getFullYear() }} — <strong>40CODE</strong></span>
+              <span class="float-right">友情链接：
+                <a href="//bu40.com">bu40工具集</a>
+              </span>
+            </v-col>
+          </v-footer>
 
         </v-app>
       </template>
