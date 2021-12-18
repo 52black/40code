@@ -4,24 +4,26 @@
 <head>
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.css" rel="stylesheet">
+  <style>
+    a {
+      text-decoration: none
+    }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/52black/markdown-js/lib/markdown.js"></script>
   <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
   <script src="https://cdn.dingxiang-inc.com/ctu-group/captcha-ui/index.js"></script>
   <script>
-    LA.init({
-      id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", // 您应用的固定key值（创建后不变）
-      hashMode: true // 开启单页面应用模式
-    })
-      (() => {
-        let time = (new Date());
-        let d = [
-          [12, 13],
-          [4, 4]
-        ]
-        for (i of d) {
-          if (time.getMonth() == i[0] - 1 && time.getDate() == i[1]) {
-            document.write(`
+    !function (p) { "use strict"; !function (t) { var s = window, e = document, i = p, c = "".concat("https:" === e.location.protocol ? "https://" : "http://", "sdk.51.la/js-sdk-pro.min.js"), n = e.createElement("script"), r = e.getElementsByTagName("script")[0]; n.type = "text/javascript", n.setAttribute("charset", "UTF-8"), n.async = !0, n.src = c, n.id = "LA_COLLECT", i.d = n; var o = function () { s.LA.ids.push(i) }; s.LA ? s.LA.ids && o() : (s.LA = p, s.LA.ids = [], o()), r.parentNode.insertBefore(n, r) }() }({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB" });
+    (() => {
+      let time = (new Date());
+      let d = [
+        [12, 13],
+        [4, 4]
+      ]
+      for (i of d) {
+        if (time.getMonth() == i[0] - 1 && time.getDate() == i[1]) {
+          document.write(`
             <style>
               html {
                 filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
@@ -29,9 +31,9 @@
               }
             </style>
             `)
-          }
         }
-      })()
+      }
+    })()
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
@@ -43,12 +45,12 @@
         <v-app id="inspire">
 
           <v-app-bar app color="primary" dark>
-
-            <v-toolbar-title v-on:click="qh('index')">40code</v-toolbar-title>
+            <a href="#" style="color:white">40code</a>
+            <!-- <v-toolbar-title><v-btn  text></v-btn></v-toolbar-title> -->
             <v-spacer></v-spacer>
             <span v-if="detail">
 
-              <v-btn icon v-on:click="qh('message');">
+              <v-btn icon href="#page=message">
                 <span v-if="detail && detail.msgnum">
                   <v-badge color="red" :content="detail.msgnum" overlap>
                     <v-icon>mdi-bell</v-icon>
@@ -71,7 +73,7 @@
                 </v-list>
               </v-menu>
             </span>
-            <v-toolbar-title v-else-if="detail===undefined" v-on:click="qh('sign')">登录/注册</v-toolbar-title>
+            <v-toolbar-title v-else-if="detail===undefined" href="#page=sign">登录/注册</v-toolbar-title>
           </v-app-bar>
 
           <v-main class="grey lighten-2">
@@ -88,10 +90,12 @@
                 <template v-for="n in rows">
                   <v-col :key="n" class="mt-2" cols="12">
                     <strong>{{ n.title }}</strong>
-                    <span class="float-right" v-on:click="qh('allwork')" herf="#page=allwork">更多</span>
+                    <a class="float-right" href="#page=allwork">
+                      <v-btn text>更多</v-btn>
+                    </a>
                   </v-col>
                   <v-col v-for="j in n.worklist" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
-                    <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
+                    <v-card :href="'#page=work&id='+j.id">
                       <v-img :src="host.data+'/static/internalapi/asset/'+j.image" :aspect-ratio="4/3"></v-img>
                       <div class="text-truncate px-5 mt-3 mb-1 text-heading-6">{{ j.name }}</div>
                       <span class="px-5">
@@ -100,7 +104,7 @@
                             :src="host.data+'/static/internalapi/asset/'+(n.userlist[j.author.toString()][0].head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                         </v-avatar>
                         <span color="accent" class="text-subtitle-1 text--secondary text-truncate text-caption"
-                          v-on:click="qh('user', j.author);">{{
+                          :href="`#page=user&id=`+j.author">{{
                           n.userlist[j.author.toString()][0].nickname }}</span>
                       </span><br><br>
                     </v-card>
@@ -174,8 +178,8 @@
                   </v-col>
 
                   <v-col v-for="j in mywork" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
-                    <v-card>
-                      <span v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
+                    <v-card :href="'#page=work&id='+j.id">
+                      <span v-on:click="qh('work',j.id)">
                         <v-img :src="host.data+'/static/internalapi/asset/'+j.image" :aspect-ratio="4/3"></v-img>
                         <v-card-title>{{ j.name }}</v-card-title>
                       </span>
@@ -223,7 +227,7 @@
                       <br><br>
                       <v-btn color="accent" class="ma-2" :href="'/other/scratch.html#id='+workview.id" target="_blank"
                         v-bind:disabled="!(workview.isauthor || workview.opensource) || !workview.issign">转到创作页</v-btn>
-                      <v-btn color="accent" class="ma-2" v-on:click="qh('workinfo',workview.id)"
+                      <v-btn color="accent" class="ma-2" :href="'#page=workinfo&id='+workview.id"
                         v-if="workview.isauthor">编辑作品信息</v-btn>
                     </div>
 
@@ -245,14 +249,16 @@
                         <v-divider></v-divider>
                         <div v-for="j in comment.comment.user[i.fromuser.toString()]" class="mt-2">
                           <div>
-                            <v-avatar size=40 class="" v-on:click="qh('user',i.fromuser)"
-                              :href="'#page=user&id='+i.fromuser">
-                              <img
-                                :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                            </v-avatar>
-                            <span color="accent" class="text-h6 ml-2" style="height: 100%"
-                              v-on:click="qh('user',i.fromuser)" :href="'#page=user&id='+i.fromuser">{{ j.nickname }}
-                            </span>
+                            <a :href="'#page=user&id='+i.fromuser">
+                              <v-avatar size=40 class="">
+                                <img
+                                  :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                              </v-avatar>
+                            </a>
+                            <a :href="'#page=user&id='+i.fromuser">
+                              <v-btn text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}
+                              </v-btn>
+                            </a>
                             <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
                           </div>
 
@@ -323,10 +329,14 @@
                       <span color="accent" class="text-h5">{{ workview.nickname }}</span>
                       <v-btn class="float-right" v-on:click="user.follow()"> {{ workview.followu ? '取消' : ''}}关注</v-btn>
                       <br>
-                      <span color="accent" class="text-subtitle-1"
-                        v-on:click="user.flisttype=0;qh('flist',workview.id)">{{ workview.fan }} 粉丝 </span>
-                      <span color="accent" class="text-subtitle-1"
-                        v-on:click="user.flisttype=1;qh('flist',workview.id)">{{ workview.follow }} 关注</span>
+                      <a>
+                        <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=0;"
+                          :href=" `#page=flist&id=`+workview.id">{{ workview.fan }} 粉丝 </v-btn>
+                      </a>
+                      <a :href="`#page=flist&id=`+workview.id">
+                        <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=1;">{{
+                          workview.follow }} 关注</v-btn>
+                      </a>
                       <span color="accent" class="text-subtitle-1 float-right">加入时间：{{ date(workview.signtime)
                         }}</span><br>
                     </v-card>
@@ -335,8 +345,9 @@
                       <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
                       <span class="text--secondary" v-html="workview.introduce2"></span>
                     </v-card>
-                    <div>他的作品：</div><span class="float-right"
-                      v-on:click="qh('allwork',`&user=`+workview.id)">更多</span><br>
+                    <div>他的作品：</div><a class="float-right" :herf="'page=allwork&user='+workview.id">
+                      <v-btn text>更多</v-btn>
+                    </a><br>
                     <div v-if="worklist">
                       <v-col v-for="j in worklist" :key="`${n}${j}`" cols="4">
                         <v-card v-on:click="qh('work',j.id)" :href="'#page=work&id='+j.id">
@@ -359,14 +370,17 @@
                           <v-divider></v-divider>
                           <div v-for="j in comment.comment.user[i.fromuser.toString()]" class="mt-2">
                             <div>
-                              <v-avatar size=40 class="" v-on:click="qh('user',i.fromuser)"
-                                :href="'#page=user&id='+i.fromuser">
-                                <img
-                                  :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                              </v-avatar>
-                              <span color="accent" class="text-h6 ml-2" style="height: 100%"
-                                v-on:click="qh('user',i.fromuser)" :href="'#page=user&id='+i.fromuser">{{ j.nickname }}
-                              </span>
+                              <a :href="'#page=user&id='+i.fromuser">
+                                <v-avatar size=40 class="">
+                                  <img
+                                    :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                                </v-avatar>
+                              </a>
+                              <a :href="'#page=user&id='+i.fromuser">
+                                <v-btn text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}
+                                </v-btn>
+                              </a>
+
                               <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
                             </div>
 
@@ -410,7 +424,7 @@
               <v-row>
                 <template>
                   <v-col v-for="j in user.flist" cols="6" sm="4" md="3" lg="2">
-                    <v-card v-on:click="qh('user',j.id)" :href="'#page=work&id='+j.id">
+                    <v-card :href="'#page=user&id='+j.id">
                       <span class="px-5">
                         <v-avatar size="40">
                           <img
@@ -444,7 +458,7 @@
             <v-col cols="12" class="px-5">
               <span class="float-left">{{ new Date().getFullYear() }} — <strong>40CODE</strong></span>
               <span class="float-right">友情链接：
-                <a href="//bu40.com">bu40工具集</a>
+                <a href="//bu40.com" target="_blank">bu40工具集</a>
               </span>
             </v-col>
           </v-footer>
@@ -459,6 +473,100 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   <script src="/js/app.js?v=6"></script>
   <script>
+    var pagecz = {
+      'index': function () {
+        get({
+          url: 'work/index'
+        }, function (d) {
+          v.$data.rows = d.data
+          // v.$data.rows.data = {
+          //   "title": "最新作品",
+          //   "worklist": d.data
+          // }
+        })
+        // location.href = "#"
+      },
+      allwork: (a) => {
+        v.work.all(a);
+      },
+      'sign': () => {
+        setTimeout(() => {
+          myCaptcha = _dx.Captcha(document.getElementById('c1'), {
+            appId: '39248c3724c1b6b8f2b77645fde5b19e', //appId，在控制台中“应用管理”或“应用配置”模块获取
+            apiServer: 'https://vip56.dingxiang-inc.com', // 请填写这个配置，按照下面“接入域名”所示!注意：末尾不要有斜杆！
+            success: function (token) {
+              v.sign.token = token;
+            }
+          })
+        }, 200)
+      },
+      'mywork': function () {
+        get({
+          url: 'work/my'
+        }, function (d) {
+          v.$data.mywork = d.data
+        })
+        location.href = "#page=mywork"
+      },
+      'work': function (id) {
+        v.$data.workview = {};
+        get({
+          url: 'work/info',
+          data: { id: id }
+        }, function (d) {
+          d.data && (v.$data.workview = d.data)
+          // location.href = "#page=work&id=" + id
+          v.workview.introduce2 = markdown.toHTML(v.workview.introduce);
+          v.comment.getcomment()
+        })
+      },
+      'workinfo': function (id) {
+        v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
+        delete waitRequest.cover;
+        get({
+          url: 'work/info',
+          data: { id: id }
+        }, function (d) {
+          if (!d.data) return;
+          (v.$data.workview = d.data)
+          v.$data.opensource = d.data.opensource;
+          v.$data.publish = d.data.publish;
+          // location.href = "#page=workinfo&id=" + id;
+
+        })
+      },
+      'user': function (id) {
+        if (id == 0) {
+          setTimeout(() => {
+            v.$data.qh('user', v.detail.id)
+          }, 2000)
+          return;
+        }
+        v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
+        get({
+          url: 'user/info',
+          data: { id: id }
+        }, function (d) {
+          console.log(d)
+          if (!d.data) return;
+          (v.$data.workview = d.data[0])
+          // location.href = "#page=user&id=" + id;
+          v.workview.introduce2 = v.workview.introduce ? markdown.toHTML(v.workview.introduce) : '当前用户暂时没有介绍哦';
+          v.comment.getcomment()
+          v.user.getwork(4)
+        })
+      },
+      'account': function (id) {
+
+      },
+      'message': (id) => {
+        v.user.getmessage()
+      },
+      'flist': (id) => {
+        v.user.getlist(id)
+      },
+    };
+
     let functiona = {
       rules: [
         value => {
@@ -527,11 +635,13 @@
             p: 'updatework'
           }, function (d) {
             console.log(d)
-            v.$data.qh('work', v.$data.workview.id)
+            location.href = "#page=work&id=" + v.$data.workview.id;
+            // v.$data.qh('work', v.$data.workview.id)
           })
         },
         return: function () {
-          v.$data.qh('work', v.$data.workview.id)
+          location.href = "#page=work&id=" + v.$data.workview.id;
+          // v.$data.qh('work', v.$data.workview.id)
         },
         all: function (a) {
           if (a) {
@@ -556,26 +666,29 @@
         },
         search: function () {
           location.href = "#page=allwork&name=" + $('#sname').val() + '&user=' + $('#sauthor').val()
-          v.work.all()
+          // v.work.all()
         }
       },
       items: [
         {
           title: '账号设置',
           c: function () {
-            v.$data.qh('account');
+            // v.$data.qh('account');
+            location.href = "#page=account"
           }
         },
         {
           title: '我的主页',
           c: function () {
-            v.$data.qh('user', v.detail.id);
-          }
+            // v.$data.qh('user', v.detail.id);
+            location.href = "#page=user&id=" + v.detail.id
+          },
         },
         {
           title: '我的作品',
           c: function () {
-            v.$data.qh('mywork');
+            // v.$data.qh('mywork');
+            location.href = "#page=mywork"
           }
         },
         {
@@ -790,8 +903,22 @@
       token: getCookie('token'),
       viewmode: 'index',
       qh: function (a, id) {
+        // v.$data.viewmode = a
+        // pagecz[a] && pagecz[a](id);
+      },
+      qh3: function (a, id) {
         v.$data.viewmode = a
         pagecz[a] && pagecz[a](id);
+      },
+      qh2: () => {
+        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist'], q = getQueryString('page');
+        if (!q) {
+          q = 'index'
+        } else if (d.indexOf(q) != -1) {
+        } else {
+          q = '404'
+        }
+        v.$data.qh3(q, getQueryString('id'))
       },
       publish: 0,
       opensource: 0,
@@ -838,109 +965,12 @@
       }),
     })
 
-  </script>
-  <script>
-    let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist'], q = getQueryString('page');
-    var pagecz = {
-      'index': function () {
-        get({
-          url: 'work/index'
-        }, function (d) {
-          v.$data.rows = d.data
-          // v.$data.rows.data = {
-          //   "title": "最新作品",
-          //   "worklist": d.data
-          // }
-        })
-        location.href = "#"
-      },
-      allwork: (a) => {
-        v.work.all(a);
-      },
-      'sign': () => {
-        setTimeout(() => {
-          myCaptcha = _dx.Captcha(document.getElementById('c1'), {
-            appId: '39248c3724c1b6b8f2b77645fde5b19e', //appId，在控制台中“应用管理”或“应用配置”模块获取
-            apiServer: 'https://vip56.dingxiang-inc.com', // 请填写这个配置，按照下面“接入域名”所示!注意：末尾不要有斜杆！
-            success: function (token) {
-              v.sign.token = token;
-            }
-          })
-        }, 200)
-      },
-      'mywork': function () {
-        get({
-          url: 'work/my'
-        }, function (d) {
-          v.$data.mywork = d.data
-        })
-        location.href = "#page=mywork"
-      },
-      'work': function (id) {
-        v.$data.workview = {};
-        get({
-          url: 'work/info',
-          data: { id: id }
-        }, function (d) {
-          d.data && (v.$data.workview = d.data)
-          location.href = "#page=work&id=" + id
-          v.workview.introduce2 = markdown.toHTML(v.workview.introduce);
-          v.comment.getcomment()
-        })
-      },
-      'workinfo': function (id) {
-        v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
-        delete waitRequest.cover;
-        get({
-          url: 'work/info',
-          data: { id: id }
-        }, function (d) {
-          if (!d.data) return;
-          (v.$data.workview = d.data)
-          v.$data.opensource = d.data.opensource;
-          v.$data.publish = d.data.publish;
-          location.href = "#page=workinfo&id=" + id;
+    v.qh2();
+    window.addEventListener('hashchange', function (event) {
+      console.log(event);
+      v.qh2();
+    })
 
-        })
-      },
-      'user': function (id) {
-        if (id == 0) {
-          setTimeout(() => {
-            v.$data.qh('user', v.detail.id)
-          }, 2000)
-          return;
-        }
-        v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
-        get({
-          url: 'user/info',
-          data: { id: id }
-        }, function (d) {
-          console.log(d)
-          if (!d.data) return;
-          (v.$data.workview = d.data[0])
-          location.href = "#page=user&id=" + id;
-          v.workview.introduce2 = v.workview.introduce ? markdown.toHTML(v.workview.introduce) : '当前用户暂时没有介绍哦';
-          v.comment.getcomment()
-          v.user.getwork(4)
-        })
-      },
-      'account': function (id) {
-
-      },
-      'message': (id) => {
-        v.user.getmessage()
-      },
-      'flist': (id) => {
-        v.user.getlist(id)
-      },
-    }
-    if (!q) {
-      q = 'index'
-    } else if (d.indexOf(q) != -1) {
-    } else {
-      q = '404'
-    }
-    v.$data.qh(q, getQueryString('id'))
     $(document).ready(function () {
       getuserinfo()
       setInterval(() => { getuserinfo() }, 10000)
