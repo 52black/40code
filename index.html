@@ -4,6 +4,7 @@
 <head>
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.css" rel="stylesheet">
+  <title>40code少儿编程社区</title>
   <style>
     a {
       text-decoration: none
@@ -355,7 +356,7 @@
                       <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
                       <span class="text--secondary" v-html="workview.introduce2"></span>
                     </v-card>
-                    <div>他的作品：</div><a class="float-right" :herf="'page=allwork&user='+workview.id">
+                    <div>他的作品：</div><a class="float-right" :href="'page=allwork&user='+workview.id">
                       <v-btn text>更多</v-btn>
                     </a><br>
                     <div v-if="worklist">
@@ -899,6 +900,7 @@
             }
           }, (d) => {
             alert(d.msg)
+            v.workview.followu=!v.workview.followu
           })
         },
         getlist: (id) => {
