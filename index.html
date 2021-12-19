@@ -74,7 +74,7 @@
                 </v-list>
               </v-menu>
             </span>
-            <v-toolbar-title v-else-if="detail===undefined" href="#page=sign">登录/注册</v-toolbar-title>
+            <v-toolbar-title v-else-if="detail===undefined" ><a href="#page=sign"><v-btn>登录/注册</v-btn></a></v-toolbar-title>
           </v-app-bar>
 
           <v-main class="grey lighten-2">
@@ -98,13 +98,13 @@
                   <v-col v-for="j in n.worklist" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
                     <v-card :href="'#page=work&id='+j.id">
                       <v-img :src="host.data+'/static/internalapi/asset/'+j.image" :aspect-ratio="4/3"
-                        class="white--text align-end" gradient="to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,.4)">
+                        class="white--text align-end" gradient="to bottom, rgba(0,0,0,0) 80%, rgba(0,0,0,.6)">
                         <span class="ma-2">
                           <span>
-                            <v-icon color="white">mdi-eye</v-icon> {{ j.look }}
+                            <v-icon color="white" size="16">mdi-eye</v-icon> {{ j.look }}
                           </span>
-                          <span>
-                            <v-icon color="white">mdi-heart</v-icon> {{ j.like }}
+                          <span class="ml-1">
+                            <v-icon color="white" size="16">mdi-heart</v-icon> {{ j.like }}
                           </span>
                         </span>
                       </v-img>
@@ -356,7 +356,7 @@
                       <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
                       <span class="text--secondary" v-html="workview.introduce2"></span>
                     </v-card>
-                    <div>他的作品：</div><a class="float-right" :href="'page=allwork&user='+workview.id">
+                    <div>他的作品：</div><a class="float-right" :href="'#page=allwork&user='+workview.id">
                       <v-btn text>更多</v-btn>
                     </a><br>
                     <div v-if="worklist">
@@ -752,7 +752,7 @@
               pagecz.sign()
               if (data.code == 1) {
                 if (n == 0) {
-                  v.$data.qh('index');
+                  location.href="#"
                   alert(data.msg)
                   setCookie('token', data.token, 3)
                   getuserinfo()
