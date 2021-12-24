@@ -57,10 +57,10 @@ $('#dlp').hide();
     }
     downloadurl = 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/work/' + d.id + '.json';
     // downloadurl = '/work/' + d.id + '.json';
-    $('body').append('<script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/lib35.min.js"></script> \
-    <script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/gui9.js"></script>')
-    // $('body').append('<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/52black/123@master/scratch/lib35.min.js"></script> \
-    // <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/52black/123@master/scratch/gui9.js"></script>')
+    // $('body').append('<script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/lib35.min.js"></script> \
+    // <script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/gui9.js"></script>')
+    $('body').append('<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/52black/123@master/scratch/lib35.min.js"></script> \
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/52black/123@master/scratch/gui9.js"></script>')
 })()
 var scratch2 = () => { };
 function downloadFileByBlob(blob, fileName = "file") {
@@ -459,4 +459,4 @@ window.scratchConfig = {
     //若使用官方素材库请删除本配置项, 默认为/static下的素材库
     assetCDN: scratchhost + '/static'
 }
-var cdn = 'https://raw.fastgit.org/52black/xiaoyu/master/public/' //'https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/';
+var cdn = 'https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/' //'https://raw.githubusercontents.com/52black/xiaoyu/master/public/' //'https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/';
