@@ -59,8 +59,10 @@ $('#dlp').hide();
     // downloadurl = '/work/' + d.id + '.json';
     // $('body').append('<script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/lib35.min.js"></script> \
     // <script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/gui9.js"></script>')
-    $('body').append('<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/52black/123@master/scratch/lib35.min.js"></script> \
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/52black/123@master/scratch/gui9.js"></script>')
+    $('body').append(`
+    <script src="/other/scratch/lib35.min.js" id="script"></script>
+    <script src="/other/scratch/gui9.js"></script>
+    `);
 })()
 var scratch2 = () => { };
 function downloadFileByBlob(blob, fileName = "file") {
