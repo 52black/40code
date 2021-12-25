@@ -254,18 +254,17 @@
                     </div>
 
                   </v-card>
-
+                  <comment></comment>
                   <v-card class="mx-3 pa-5 my-12" width="400" v-else>
                     无权限查看当前作品
                   </v-card>
-
-                  <v-card class="mx-auto pa-5 my-5" width="600" v-if="(workview.isauthor || workview.publish)">
+                  <v-card class="mx-auto pa-5 my-5" width="600" v-if="workview && (workview.isauthor || workview.publish)">
                     <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
                     <v-textarea name="input-7-1" filled label="评论" auto-grow value="" maxlength="500" counter
                       id="comment">
                     </v-textarea>
                     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="comment.send()" block>发送</v-btn>
-
+            
                     <div v-if="comment.comment" class="my-5">
                       <div v-for="i in comment.comment.comment" class="my-5">
                         <v-divider></v-divider>
@@ -283,12 +282,16 @@
                             </a>
                             <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
                           </div>
-
+            
                           <br>
                           <span color="accent" class="text-h6 ml-12 " v-html="i.comment">{{ i.comment }}</span>
-                          <v-btn class="text--secondary" text v-if="detail.id==i.touser || detail.id==i.fromuser"
+                          <!-- <v-btn class="text--secondary float-right" text v-if="detail.id==i.touser || detail.id==i.fromuser"
+                            v-on:click="comment.replay(i.id)">
+                            <v-icon>mdi-replay</v-icon> 回复
+                          </v-btn> -->
+                          <v-btn class="text--secondary float-right" text v-if="detail.id==i.touser || detail.id==i.fromuser"
                             v-on:click="comment.delete(i.id)">
-                            删除
+                            <v-icon>mdi-delete</v-icon> 删除
                           </v-btn>
                         </div>
                       </div>
@@ -296,8 +299,9 @@
                     <div v-else>
                       此用户暂时没有评论哦
                     </div>
-
+            
                   </v-card>
+                  
 
 
                 </template>
@@ -389,7 +393,7 @@
                       </v-col>
                     </div>
                     <span v-else>当前用户还没有作品哦</span>
-
+                    
                     <v-card class=" pa-5 my-5" width="600">
                       <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
                       <v-textarea name="input-7-1" filled label="评论" auto-grow value="" maxlength="500" counter
@@ -400,7 +404,7 @@
                       <div v-if="comment.comment" class="my-5">
                         <div v-for="i in comment.comment.comment" class="my-5">
                           <v-divider></v-divider>
-                          <div v-for="j in comment.comment.user[i.fromuser.toString()]" class="mt-2">
+                          <div v-for="j in comment.comment.user[i.fromuser.toString()]" class="mt-2 pb-3">
                             <div>
                               <a :href="'#page=user&id='+i.fromuser">
                                 <v-avatar size=40 class="">
@@ -418,9 +422,9 @@
 
                             <br>
                             <span color="accent" class="text-h6 ml-12 " v-html="i.comment">{{ i.comment }}</span>
-                            <v-btn class="text--secondary" text plain
+                            <v-btn class="text--secondary float-right" text plain
                               v-if="detail.id==i.touser || detail.id==i.fromuser" v-on:click="comment.delete(i.id)">
-                              删除
+                              <v-icon>mdi-delete</v-icon> 删除
                             </v-btn>
                           </div>
                         </div>
@@ -517,6 +521,7 @@
   <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
   <script src="/js/app.js?v=6"></script>
   <script>
+
     var pagecz = {
       'index': function () {
         get({
@@ -865,7 +870,7 @@
 
             }, (d) => {
               console.log(d);
-              alert("发送成功");
+              // alert("发送成功");
               v.comment.getcomment();
             })
           }
@@ -898,9 +903,12 @@
             p: "commentdelete"
           }, (d) => {
             console.log(d);
-            alert("删除成功");
+            // alert("删除成功");
             v.comment.getcomment();
           })
+        },
+        replay:()=>{
+
         },
         comment: {}
       },
@@ -935,7 +943,7 @@
               id: v.workview.id
             }
           }, (d) => {
-            alert(d.msg)
+            // alert(d.msg)
             v.workview.followu = !v.workview.followu
           })
         },
