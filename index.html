@@ -2,7 +2,7 @@
 <html>
 
 <head>
-   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <!-- <link href="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.css" rel="stylesheet">  -->
   <!-- <link href="https://cdn.staticfile.org/material-design-icons/3.0.2/iconfont/material-icons.min.css" rel="stylesheet"> -->
   <link href="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.css" rel="stylesheet">
@@ -75,7 +75,9 @@
                 </v-list>
               </v-menu>
             </span>
-            <v-toolbar-title v-else-if="detail===undefined" ><a href="#page=sign"><v-btn>登录/注册</v-btn></a></v-toolbar-title>
+            <v-toolbar-title v-else-if="detail===undefined"><a href="#page=sign">
+                <v-btn>登录/注册</v-btn>
+              </a></v-toolbar-title>
           </v-app-bar>
 
           <v-main class="grey lighten-2">
@@ -217,20 +219,28 @@
 
                     <span color="accent" class="text-h5" cols="24">{{ workview.name }}</span>
                     <div cols="24">
-                      <v-avatar size="25">
-                        <img
-                          :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                      </v-avatar>
-                      <span color="accent" class="text-subtitle-1" v-on:click="qh('user', workview.author);">{{
-                        workview.nickname }}</span>
+                      <a :href="`#page=user&id=`+workview.author">
+                        <v-avatar size="25">
+                          <img
+                            :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                        </v-avatar>
+                        <span color="accent" class="text-subtitle-1" v-on:click="qh('user', workview.author);">{{
+                          workview.nickname }}</span>
+                      </a>
                       <span color="accent" class="text-subtitle-1 text-right text--disabled">创建时间：{{ date(workview.time)
                         }}</span>
                     </div>
                     <br>
-                    <iframe
-                      :src="(workview.id) ? ( (workview.isauthor || (workview.publish)) ? ('/other/worksc.html') : '/noqx.html') : '/d.html'"
-                      scrolling="no" frameborder="0" style="width:510px;height: 440px;" class="float-left pr-3">
-                    </iframe>
+                    <div class="float-left pl-3">
+                      <iframe
+                        :src="(workview.id) ? ( (workview.isauthor || (workview.publish)) ? ('/other/worksc.html') : '/noqx.html') : '/d.html'"
+                        scrolling="no" frameborder="0" style="width:510px;height: 440px;" class="float-left pr-3">
+                      </iframe>
+                      <br>
+                      <v-btn v-on:click="work.like()" :color="workview.islike ? 'red' : ''" plain text>
+                        <v-icon>mdi-heart</v-icon>{{ workview.like }}
+                      </v-btn>
+                    </div>
                     <div class="float-left pl-3">
                       <span color="accent" class="text-h5 text--primary" cols="24">作品介绍</span><br><br>
                       <span class="text--secondary" v-html="workview.introduce2"></span>
@@ -408,8 +418,8 @@
 
                             <br>
                             <span color="accent" class="text-h6 ml-12 " v-html="i.comment">{{ i.comment }}</span>
-                            <v-btn class="text--secondary" text v-if="detail.id==i.touser || detail.id==i.fromuser"
-                              v-on:click="comment.delete(i.id)">
+                            <v-btn class="text--secondary" text plain
+                              v-if="detail.id==i.touser || detail.id==i.fromuser" v-on:click="comment.delete(i.id)">
                               删除
                             </v-btn>
                           </div>
@@ -478,7 +488,7 @@
 
           <v-footer padless>
             <v-col cols="12" class="px-5">
-              
+
               <span>
                 <div class="float-left">
                   友情链接：<br>
@@ -488,10 +498,10 @@
                 </div>
                 <div class="float-left ml-5">
                   <span>更多：</span><br>
-                  <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank" >Q群:1071652975</a><br>
+                  <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank">Q群:1071652975</a><br>
                   <a>站长QQ:3274235903</a>
                 </div>
-                
+
               </span>
               <span class="float-right">{{ new Date().getFullYear() }} — <strong>40CODE</strong></span>
             </v-col>
@@ -701,7 +711,19 @@
         search: function () {
           location.href = "#page=allwork&name=" + $('#sname').val() + '&user=' + $('#sauthor').val()
           // v.work.all()
-        }
+        },
+        like: () => {
+          post({
+            url: "work/like" + (v.workview.islike ? '/cancel' : ''),
+            data: {
+              id: v.workview.id
+            }
+          }, (d) => {
+            alert(d.msg)
+            v.workview.islike ? v.workview.like-- : v.workview.like++;
+            v.workview.islike = !v.workview.islike;
+          })
+        },
       },
       items: [
         {
@@ -765,7 +787,7 @@
               pagecz.sign()
               if (data.code == 1) {
                 if (n == 0) {
-                  location.href="#"
+                  location.href = "#"
                   alert(data.msg)
                   setCookie('token', data.token, 3)
                   getuserinfo()
@@ -903,6 +925,7 @@
           }, (d) => {
             v.user.message = d.data
             console.log('获取消息', d)
+            v.workview.msgnum = 0;
           })
         },
         follow: () => {
@@ -913,7 +936,7 @@
             }
           }, (d) => {
             alert(d.msg)
-            v.workview.followu=!v.workview.followu
+            v.workview.followu = !v.workview.followu
           })
         },
         getlist: (id) => {
@@ -1012,7 +1035,7 @@
     });
   </script>
   <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-  <script>LA.init({id: "JW9Ijj81HxjUscHB",ck: "JW9Ijj81HxjUscHB"})</script>
+  <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashmode: true })</script>
 </body>
 
 </html>
