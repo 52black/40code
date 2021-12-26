@@ -514,7 +514,7 @@
           </v-footer>
 
         </v-app>
-        <v-snackbar v-model="sb.show" :timeout="sb.timeout" top="true">
+        <v-snackbar v-model="sb.show" :timeout="sb.timeout" top>
           {{ sb.text }}
   
           <template v-slot:action="{ attrs }">
@@ -532,7 +532,7 @@
 
   <script src="https://cdn.staticfile.org/vue/2.6.9/vue.js"></script>
   <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
-  <script src="/js/app.js?v=6"></script>
+  <script src="/js/app.js?v=8"></script>
   <script>
     window.alert = (text,timeout) => {
       v.sb.text=text;
@@ -960,7 +960,7 @@
               id: v.workview.id
             }
           }, (d) => {
-            // alert(d.msg)
+            alert(d.msg)
             v.workview.followu = !v.workview.followu
           })
         },
