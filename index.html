@@ -514,7 +514,7 @@
           </v-footer>
 
         </v-app>
-        <v-snackbar v-model="sb.show" :timeout="sb.timeout" top="1">
+        <v-snackbar v-model="sb.show" :timeout="sb.timeout" top="true">
           {{ sb.text }}
   
           <template v-slot:action="{ attrs }">
@@ -950,7 +950,7 @@
           }, (d) => {
             v.user.message = d.data
             console.log('获取消息', d)
-            v.workview.msgnum = 0;
+            v.detail.msgnum = 0;
           })
         },
         follow: () => {
