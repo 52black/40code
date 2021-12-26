@@ -97,7 +97,7 @@ function getQueryString(name) {
       error:function(e){
         d.p && (delete waitRequest[d.p])
         console.log(e)
-        alert('错误：'+JSON.stringify(e));
+        alert("服务器或网络错误")
       }
     })
   }
@@ -125,7 +125,7 @@ function getQueryString(name) {
       error:function(e){
         d.p && (delete waitRequest[d.p])
         console.log(e)
-        alert('错误：'+JSON.stringify(e));
+        alert("服务器或网络错误")
       }
     })
   }
