@@ -1,0 +1,37 @@
+<div v-if="comment.comment" class="my-5">
+    <div v-for="i in comment.comment.comment" class="my-6">
+        <v-divider></v-divider>
+        <div v-for="j in comment.comment.user[i.fromuser.toString()]" class="mt-2">
+            <div>
+                <a :href="'#page=user&id='+i.fromuser">
+                    <v-avatar size=40 class="">
+                        <img
+                            :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                    </v-avatar>
+                </a>
+                <a :href="'#page=user&id='+i.fromuser">
+                    <v-btn text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}
+                    </v-btn>
+                </a>
+                <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
+            </div>
+
+            <br>
+            <span color="accent" class="text-h6 ml-12" v-html="i.comment">{{ i.comment }}</span>
+            <v-btn class="text--secondary float-left" text v-if="detail.id==i.touser || detail.id==i.fromuser"
+                v-on:click="comment.showreply(i.id)">
+                <v-icon>mdi-reply</v-icon> 回复
+            </v-btn>
+            <v-btn class="text--secondary float-right" text v-if="detail.id==i.touser || detail.id==i.fromuser"
+                v-on:click="comment.delete(i.id)">
+                <v-icon>mdi-delete</v-icon> 删除
+            </v-btn>
+            <br>
+            <s-c2 v-if="comment.replyid==i.id"
+            :comment="comment" :host="host" :detail="detail" :reply="i.id"></s-c2>
+        </div>
+    </div>
+</div>
+<div v-else>
+    此用户暂时没有评论哦
+</div>
