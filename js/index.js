@@ -21,7 +21,7 @@ Vue.component('s-comment', {
             <br>
             <span color="accent" class="text-h6 ml-12" v-html="i.comment">{{ i.comment }}</span>
             <v-btn class="text--secondary float-left" text v-if="detail.id==i.touser || detail.id==i.fromuser"
-                v-on:click="comment.reply(i.id)">
+                v-on:click="comment.showreply(i.id)">
                 <v-icon>mdi-reply</v-icon> 回复
             </v-btn>
             <v-btn class="text--secondary float-right" text v-if="detail.id==i.touser || detail.id==i.fromuser"
@@ -29,6 +29,8 @@ Vue.component('s-comment', {
                 <v-icon>mdi-delete</v-icon> 删除
             </v-btn>
             <br>
+            <s-c2 v-if="comment.replyid==i.id"
+            :comment="comment" :host="host" :detail="detail" :reply="i.id"></s-c2>
         </div>
     </div>
 </div>
@@ -39,11 +41,11 @@ Vue.component('s-comment', {
 Vue.component('s-c2', {
     props: ['comment','reply'],
     template: `<span>
-    <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
     <v-textarea name="input-7-1" filled label="评论" auto-grow value="" maxlength="500" counter id="comment">
     </v-textarea>
     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="comment.send()" block>发送</v-btn>
 </span>
+
 `
 })
 window.alert = (text, timeout) => {
@@ -440,7 +442,7 @@ let functiona = {
 
         },
         showreply:(id)=>{
-            vue.set(v.comment,'reply',id)
+            Vue.set(v.comment,'replyid',id)
         },
         replyid:null,
         comment: {},

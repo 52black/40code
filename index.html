@@ -261,6 +261,7 @@
                   </v-card>
                   <v-card class="mx-auto pa-5 my-5" width="600"
                     v-if="workview && (workview.isauthor || workview.publish)">
+                    <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
                     <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
                     <s-comment :comment="comment" :host="host" :detail="detail" type="1"  :author="workview.author"></s-comment>
                   </v-card>
@@ -358,6 +359,7 @@
                     <span v-else>当前用户还没有作品哦</span>
 
                     <v-card class=" pa-5 my-5" width="600">
+                      <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
                       <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
                       <s-comment :comment="comment" :host="host" :detail="detail" type="0"></s-comment>
                     </v-card>
