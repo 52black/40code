@@ -1,5 +1,5 @@
 Vue.component('s-comment', {
-    props: ['comment','host','detail','type','author'],
+    props: ['comment', 'host', 'detail', 'type', 'author'],
     template: `<div v-if="comment.comment" class="my-5">
     <div v-for="i in comment.comment.comment" class="my-6">
         <v-divider></v-divider>
@@ -60,7 +60,7 @@ Vue.component('s-comment', {
 </div>`
 })
 Vue.component('s-c2', {
-    props: ['comment','reply'],
+    props: ['comment', 'reply'],
     template: `<span>
     <v-textarea :id="reply?'c-'+reply:'comment'" filled label="评论" auto-grow value="" maxlength="500" counter>
     </v-textarea>
@@ -104,7 +104,7 @@ var pagecz = {
         location.href = "#page=mywork"
     },
     'work': function (id) {
-        v.$data.workview = {id:0};
+        v.$data.workview = { id: 0 };
         get({
             url: 'work/info',
             data: { id: id }
@@ -133,7 +133,7 @@ var pagecz = {
     'user': function (id) {
         if (id == "0") {
             setTimeout(() => {
-                location.href="#page=user&id="+v.detail.id
+                location.href = "#page=user&id=" + v.detail.id
             }, 20)
             return;
         }
@@ -277,13 +277,7 @@ let functiona = {
         },
     },
     items: [
-        {
-            title: '账号设置',
-            c: function () {
-                // v.$data.qh('account');
-                location.href = "#page=account"
-            }
-        },
+
         {
             title: '我的主页',
             c: function () {
@@ -296,6 +290,13 @@ let functiona = {
             c: function () {
                 // v.$data.qh('mywork');
                 location.href = "#page=mywork"
+            }
+        },
+        {
+            title: '账号设置',
+            c: function () {
+                // v.$data.qh('account');
+                location.href = "#page=account"
             }
         },
         {
@@ -404,7 +405,7 @@ let functiona = {
     },
     comment: {
         send: function (r) {
-            if(r){
+            if (r) {
                 this.reply(r);
                 return;
             }
@@ -439,12 +440,12 @@ let functiona = {
                     d2.comment[i].time = other.date(d2.comment[i].time);
                 }
                 for (let i in d2.reply) {
-                    for(let j in d2.reply[i]){
+                    for (let j in d2.reply[i]) {
                         d2.reply[i][j].comment = d2.reply[i][j].comment ? markdown.toHTML(d2.reply[i][j].comment) : ''
                         d2.reply[i][j].time = other.date(d2.reply[i][j].time);
                     }
                 }
-                Vue.set(v.comment,'comment',d2)
+                Vue.set(v.comment, 'comment', d2)
                 console.log('获取评论', d)
             })
         },
@@ -463,7 +464,7 @@ let functiona = {
             })
         },
         reply: (r) => {
-            let s='#c-'+r;
+            let s = '#c-' + r;
             if ($(s).val()) {
                 post({
                     url: "comment/reply",
@@ -472,7 +473,7 @@ let functiona = {
                         toid: r,
                         type: { 'user': 0, 'work': 1 }[v.viewmode],
                     },
-                    p: "comment"+r,
+                    p: "comment" + r,
 
                 }, (d) => {
                     console.log(d);
@@ -481,12 +482,12 @@ let functiona = {
                 })
             }
         },
-        showreply:(id)=>{
-            Vue.set(v.comment,'replyid',id)
+        showreply: (id) => {
+            Vue.set(v.comment, 'replyid', id)
         },
-        replyid:null,
+        replyid: null,
         comment: {},
-        t:{ 'user': 0, 'work': 1 }
+        t: { 'user': 0, 'work': 1 }
     },
     user: {
         getwork: (l) => {
@@ -507,7 +508,7 @@ let functiona = {
                 data: {
                 }
             }, (d) => {
-                let d2=d.data
+                let d2 = d.data
                 for (let i in d2) {
                     d2[i].time = other.date(d2[i].time);
                 }
@@ -587,16 +588,16 @@ var other = {
     date: (d) => {
         function p(num) {
             return (Array(2).join('0') + num).slice(-2);
-           }
+        }
         let date = "", st = new Date(d * 1000), et = new Date();
         if (st.getYear() == et.getYear()) {
             if ((st.getMonth() == et.getMonth() && st.getDate() == et.getDate())) {
                 date = (st.getHours()) + ':' + p(st.getMinutes()) + ' ';
             } else {
-                date = (st.getMonth()+1) + '-' + st.getDate() + ' ';
+                date = (st.getMonth() + 1) + '-' + st.getDate() + ' ';
             }
         } else {
-            date = (st.getYear()+1900) + '-' + (st.getMonth()+1) + '-' + st.getDate() + ' '
+            date = (st.getYear() + 1900) + '-' + (st.getMonth() + 1) + '-' + st.getDate() + ' '
         }
         return date;
     }
