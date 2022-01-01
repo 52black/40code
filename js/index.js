@@ -1,63 +1,6 @@
 Vue.component('s-comment', {
     props: ['comment','host','detail','type','author'],
-    template: `<div v-if="comment.comment" class="my-5">
-    <div v-for="i in comment.comment.comment" class="my-6">
-        <v-divider></v-divider>
-        <div v-for="j in comment.comment.user[i.fromuser.toString()]" class="mt-2">
-            <div>
-                <a :href="'#page=user&id='+i.fromuser">
-                    <v-avatar size=40 class="">
-                        <img
-                            :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                    </v-avatar>
-                </a>
-                <a :href="'#page=user&id='+i.fromuser">
-                    <v-btn text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}
-                    </v-btn>
-                </a>
-                <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
-            </div>
-
-            <br>
-            <span color="accent" class="text-h6 ml-12" v-html="i.comment">{{ i.comment }}</span>
-            <v-btn class="text--secondary float-left" text v-if="detail.id==i.touser || detail.id==i.fromuser"
-                v-on:click="comment.showreply(i.id)">
-                <v-icon>mdi-reply</v-icon> 回复
-            </v-btn>
-            <v-btn class="text--secondary float-right" text v-if="detail.id==i.touser || detail.id==i.fromuser"
-                v-on:click="comment.delete(i.id)">
-                <v-icon>mdi-delete</v-icon> 删除
-            </v-btn>
-            <br>
-            <span v-if="comment.replyid==i.id">
-                <br>
-                <s-c2 :comment="comment" :host="host" :detail="detail" :reply="i.id" class="mt"></s-c2>
-            </span>
-
-            <div v-if="i.replynum" class="pa-3 grey lighten-4 mt-2" style="border-radius:3px">
-                <div v-for="k in comment.comment.reply[i.id.toString()]">
-                    <div v-for="j in comment.comment.user[k.fromuser.toString()]" class="mt-2">
-                        <a :href="'#page=user&id='+k.fromuser">
-                            <v-avatar size=40 class="">
-                                <img
-                                    :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                            </v-avatar>
-                        </a>
-                        <a :href="'#page=user&id='+k.fromuser">
-                            <v-btn text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}
-                            </v-btn>
-                        </a>
-                        <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ k.time }}</span><br>
-                        <span color="accent" class="text-h6 ml-12" v-html="k.comment">{{ k.comment }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div v-else>
-    此用户暂时没有评论哦
-</div>`
+    template: `<div v-if="comment.comment"class="my-5"><div v-for="i in comment.comment.comment"class="my-6"><v-divider></v-divider><div v-for="j in comment.comment.user[i.fromuser.toString()]"class="mt-2"><div><a:href="'#page=user&id='+i.fromuser"><v-avatar size=40 class=""><img:src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')"></v-avatar></a><a:href="'#page=user&id='+i.fromuser"><v-btn text color="accent"class="text-h6 ml-2"style="height: 100%">{{j.nickname}}</v-btn></a><span color="accent"class="text-h7 text--disabled ml-2 float-right">{{i.time}}</span></div><br><span color="accent"class="text-h6 ml-12"v-html="i.comment">{{i.comment}}</span><v-btn class="text--secondary float-left"text v-on:click="comment.showreply(i.id)"><v-icon>mdi-reply</v-icon>回复</v-btn><v-btn class="text--secondary float-right"text v-if="detail.id==i.touser || detail.id==i.fromuser"v-on:click="comment.delete(i.id)"><v-icon>mdi-delete</v-icon>删除</v-btn><br><span v-if="comment.replyid==i.id"><br><s-c2:comment="comment":host="host":detail="detail":reply="i.id"class="mt"></s-c2></span><div v-if="i.replynum"class="pa-3 grey lighten-4 mt-2"style="border-radius:3px"><div v-for="k in comment.comment.reply[i.id.toString()]"><div v-for="j in comment.comment.user[k.fromuser.toString()]"class="mt-2"><a:href="'#page=user&id='+k.fromuser"><v-avatar size=40 class=""><img:src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')"></v-avatar></a><a:href="'#page=user&id='+k.fromuser"><v-btn text color="accent"class="text-h6 ml-2"style="height: 100%">{{j.nickname}}</v-btn></a><span color="accent"class="text-h7 text--disabled ml-2 float-right">{{k.time}}</span><br><span color="accent"class="text-h6 ml-12"v-html="k.comment">{{k.comment}}</span></div></div></div></div></div></div><div v-else>此用户暂时没有评论哦</div>`
 })
 Vue.component('s-c2', {
     props: ['comment','reply'],

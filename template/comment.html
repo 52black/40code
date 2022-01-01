@@ -18,7 +18,7 @@
 
             <br>
             <span color="accent" class="text-h6 ml-12" v-html="i.comment">{{ i.comment }}</span>
-            <v-btn class="text--secondary float-left" text v-if="detail.id==i.touser || detail.id==i.fromuser"
+            <v-btn class="text--secondary float-left" text
                 v-on:click="comment.showreply(i.id)">
                 <v-icon>mdi-reply</v-icon> 回复
             </v-btn>
