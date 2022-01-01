@@ -29,8 +29,29 @@ Vue.component('s-comment', {
                 <v-icon>mdi-delete</v-icon> 删除
             </v-btn>
             <br>
-            <s-c2 v-if="comment.replyid==i.id"
-            :comment="comment" :host="host" :detail="detail" :reply="i.id"></s-c2>
+            <span v-if="comment.replyid==i.id">
+                <br>
+                <s-c2 :comment="comment" :host="host" :detail="detail" :reply="i.id" class="mt"></s-c2>
+            </span>
+
+            <div v-if="i.replynum" class="pa-3 grey lighten-4 mt-2" style="border-radius:3px">
+                <div v-for="k in comment.comment.reply[i.id.toString()]">
+                    <div v-for="j in comment.comment.user[k.fromuser.toString()]" class="mt-2">
+                        <a :href="'#page=user&id='+k.fromuser">
+                            <v-avatar size=40 class="">
+                                <img
+                                    :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                            </v-avatar>
+                        </a>
+                        <a :href="'#page=user&id='+k.fromuser">
+                            <v-btn text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}
+                            </v-btn>
+                        </a>
+                        <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ k.time }}</span><br>
+                        <span color="accent" class="text-h6 ml-12" v-html="k.comment">{{ k.comment }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -41,11 +62,10 @@ Vue.component('s-comment', {
 Vue.component('s-c2', {
     props: ['comment','reply'],
     template: `<span>
-    <v-textarea name="input-7-1" filled label="评论" auto-grow value="" maxlength="500" counter id="comment">
+    <v-textarea :id="reply?'c-'+reply:'comment'" filled label="评论" auto-grow value="" maxlength="500" counter>
     </v-textarea>
-    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="comment.send()" block>发送</v-btn>
+    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="comment.send(reply)"   block>发送</v-btn>
 </span>
-
 `
 })
 window.alert = (text, timeout) => {
@@ -59,12 +79,7 @@ var pagecz = {
             url: 'work/index'
         }, function (d) {
             v.$data.rows = d.data
-            // v.$data.rows.data = {
-            //   "title": "最新作品",
-            //   "worklist": d.data
-            // }
         })
-        // location.href = "#"
     },
     allwork: (a) => {
         v.work.all(a);
@@ -116,10 +131,10 @@ var pagecz = {
         })
     },
     'user': function (id) {
-        if (id == 0) {
+        if (id == "0") {
             setTimeout(() => {
-                v.$data.qh('user', v.detail.id)
-            }, 2000)
+                location.href="#page=user&id="+v.detail.id
+            }, 20)
             return;
         }
         v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
@@ -388,7 +403,11 @@ let functiona = {
         },
     },
     comment: {
-        send: function () {
+        send: function (r) {
+            if(r){
+                this.reply(r);
+                return;
+            }
             if ($('#comment').val()) {
                 post({
                     url: "comment/",
@@ -417,8 +436,13 @@ let functiona = {
                 let d2 = d.data;
                 for (let i in d2.comment) {
                     d2.comment[i].comment = markdown.toHTML(d2.comment[i].comment)
-
                     d2.comment[i].time = other.date(d2.comment[i].time);
+                }
+                for (let i in d2.reply) {
+                    for(let j in d2.reply[i]){
+                        d2.reply[i][j].comment = d2.reply[i][j].comment ? markdown.toHTML(d2.reply[i][j].comment) : ''
+                        d2.reply[i][j].time = other.date(d2.reply[i][j].time);
+                    }
                 }
                 Vue.set(v.comment,'comment',d2)
                 console.log('获取评论', d)
@@ -438,8 +462,24 @@ let functiona = {
                 v.comment.getcomment();
             })
         },
-        reply: () => {
+        reply: (r) => {
+            let s='#c-'+r;
+            if ($(s).val()) {
+                post({
+                    url: "comment/reply",
+                    data: {
+                        comment: $(s).val(),
+                        toid: r,
+                        type: { 'user': 0, 'work': 1 }[v.viewmode],
+                    },
+                    p: "comment"+r,
 
+                }, (d) => {
+                    console.log(d);
+                    alert("发送成功");
+                    v.comment.getcomment();
+                })
+            }
         },
         showreply:(id)=>{
             Vue.set(v.comment,'replyid',id)
