@@ -507,7 +507,11 @@ let functiona = {
                 data: {
                 }
             }, (d) => {
-                v.user.message = d.data
+                let d2=d.data
+                for (let i in d2) {
+                    d2[i].time = other.date(d2[i].time);
+                }
+                v.user.message = d2
                 console.log('获取消息', d)
                 v.detail.msgnum = 0;
             })
@@ -581,10 +585,13 @@ let functiono = {
 
 var other = {
     date: (d) => {
+        function p(num) {
+            return (Array(2).join('0') + num).slice(-2);
+           }
         let date = "", st = new Date(d * 1000), et = new Date();
         if (st.getYear() == et.getYear()) {
             if ((st.getMonth() == et.getMonth() && st.getDate() == et.getDate())) {
-                date = st.getHours() + ':' + st.getMinutes() + ' ';
+                date = (st.getHours()) + ':' + p(st.getMinutes()) + ' ';
             } else {
                 date = (st.getMonth()+1) + '-' + st.getDate() + ' ';
             }
