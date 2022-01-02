@@ -135,10 +135,12 @@ var pagecz = {
             url: 'work/info',
             data: { id: id }
         }, function (d) {
-            d.data && (v.$data.workview = d.data)
-            // location.href = "#page=work&id=" + id
-            v.workview.introduce2 = markdown.toHTML(v.workview.introduce);
-            v.comment.getcomment()
+            let d2=d.data
+            if(d2){
+                d2.introduce2 = markdown.toHTML(d2.introduce);
+                v.workview = d2;
+                v.comment.getcomment()
+            }else{alert("服务器或网络错误")}
         })
     },
     'workinfo': function (id) {
@@ -149,11 +151,15 @@ var pagecz = {
             data: { id: id }
         }, function (d) {
             if (!d.data) return;
-            (v.$data.workview = d.data)
-            v.$data.opensource = d.data.opensource;
-            v.$data.publish = d.data.publish;
+            let d2=d.data
+            if(getQueryString('publish')){
+                d2.publish=1;
+            }
+            (v.workview = d2)
+            v.opensource = d2.opensource;
+            v.publish = d2.publish;
             // location.href = "#page=workinfo&id=" + id;
-
+            
         })
     },
     'user': function (id) {

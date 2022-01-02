@@ -31,12 +31,21 @@ $('#dlp').hide();
                         p: 'updatework'
                     }, function (d) {
                         console.log(d)
-                        // v.$data.qh('work', v.$data.workview.id)
                     })
                 })
 
             }
-            // 获取到项目名
+        })
+        window.scratchConfig.menuBar.customButtons.push({
+            buttonName: '发布',
+            style: {
+                color: 'white',
+                background: '#E91E63',
+            },
+            handleClick: async () => {
+                save(1)
+                
+            }
         })
     }
     if (d === undefined) {
@@ -125,7 +134,7 @@ function savecover(callback) {
     $("#loadinfo").html('正在保存封面');
     window.scratch.getProjectCoverBlob(e => { uplw(e) })
 }
-function saveproject(id, callback) {
+function saveproject(id, callback,Open) {
     console.log("自定义按钮1");
     console.log('分享按钮');
     let data2 = [];
@@ -162,6 +171,7 @@ function saveproject(id, callback) {
                     return;
                 }
                 hy();
+                Open && open("/#page=workinfo&publish=1&id=" + workinfo.id)
                 alert('作品保存成功')
             },
             error: function () {
@@ -248,9 +258,9 @@ function saveproject(id, callback) {
     }
     else uplw();
 }
-function save() {
+function save(open) {
     if (workinfo.isauthor)
-        saveproject()
+        saveproject(null,null,open)
     else {
         $("#scratch").css("opacity", "0");
         $("#loadinfo").html('正在改编中');
@@ -263,7 +273,7 @@ function save() {
                 function () {
                     location.href = "/scratch#id=" + d.info.insertId;
                     location.reload();
-                }
+                },open
             )
         })
     }
@@ -348,7 +358,7 @@ window.scratchConfig = {
                 buttonName: '',
                 style: {
                     color: 'white',
-                    background: 'hsla(30, 100%, 55%, 1)',
+                    background: '#E91E63',
                 },
                 handleClick: () => {
                     save()
@@ -359,7 +369,7 @@ window.scratchConfig = {
                 buttonName: '项目页',
                 style: {
                     color: 'white',
-                    background: 'hsla(30, 100%, 55%, 1)',
+                    background: '#E91E63',
                 },
                 handleClick: () => {
                     open("/#page=work&id=" + workinfo.id);
