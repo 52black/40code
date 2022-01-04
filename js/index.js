@@ -95,7 +95,7 @@ Vue.component('s-workcard',{
         </span>
         <span else><br></span>
     </span>
-    <span>
+    <span v-if="my">
         <v-btn color="green" text v-if="work.publish" depressed block text tile>已发布
         </v-btn>
         <v-btn color="red" text v-else depressed block text tile>未发布
