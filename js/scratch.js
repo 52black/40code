@@ -171,7 +171,7 @@ function saveproject(id, callback,Open) {
                     return;
                 }
                 hy();
-                Open && open("/#page=workinfo&publish=1&id=" + workinfo.id)
+                Open && (location.href = ("/#page=workinfo&publish=1&id=" + workinfo.id))
                 alert('作品保存成功')
             },
             error: function () {
