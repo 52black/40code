@@ -73,7 +73,7 @@ $('#dlp').hide();
     <script src="/other/scratch/gui9.js"></script>
     `);
 })()
-var scratch2 = () => { };
+var scratch2 = () => { },temp2={};
 function downloadFileByBlob(blob, fileName = "file") {
     let blobUrl = window.URL.createObjectURL(blob)
     let link = document.createElement('a')

@@ -8,7 +8,7 @@ function getQueryString(name) {
 console.log(location)
 console.log(window.self)
 console.log(window.top.location)
-var id= getQueryString('id');
+var id= getQueryString('id'),temp2={};
 var apihost = "https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/",
 mianhost="http://127.0.0.1:5500",
 scratchhost="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com";
