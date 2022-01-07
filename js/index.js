@@ -391,7 +391,7 @@ let functiona = {
                             alert(data.msg)
                         }
                     } else {
-                        alert(data.msg, 5000)
+                        alert(data.msg, 8000)
                     }
                 })
         },
