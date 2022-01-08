@@ -1,20 +1,25 @@
 <head>
-    <title>邮箱验证</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>邮箱验证</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <style>
+  </style>
 </head>
 <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
 <script src="/js/app.js?v=8"></script>
 <script>
-    post({
-      url: 'user/vf',
-      data:{
-        pw:getQueryString('pw'),
-        hash:getQueryString('hash'),
-        mail:getQueryString('mail'),
-        t:getQueryString('t'),
-      }
-    },(e)=>{
-        $('#info').html(e.msg)
-    })
+  post({
+    url: 'user/vf',
+    data: {
+      pw: getQueryString('pw'),
+      hash: getQueryString('hash'),
+      mail: getQueryString('mail'),
+      t: getQueryString('t'),
+    }
+  }, (e) => {
+    $('#info').html(e.msg)
+  })
 </script>
-<div id="info">请稍等</div>
+<center style="padding: 10px;">
+  <div id="info" style="color:#888;font-size:22px">请稍等</div><br><br>
+  <a href="/" style="text-decoration: none;color: #aaa;;font-size:20px">返回首页</a>
+</center><br>
