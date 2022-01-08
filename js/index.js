@@ -108,18 +108,32 @@ Vue.component('s-workcard',{
 })
 Vue.component('s-usercard',{
     props:['user','host'],
-    template:`<v-card :href="'#page=user&id='+user.id">
-    <br>
+    template:`
+    <v-card :href="'#page=user&id='+user.id">
+    <br />
     <span class="pa-5">
       <v-avatar size="40">
         <img
-          :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+          :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')"
+        />
       </v-avatar>
-      <span color="accent" class="text-h5 text--secondary text-truncate text-caption"
-        >{{
-        user.nickname }}</span>
-    </span><br><br>
-  </v-card>`
+      <span
+        color="accent"
+        class="
+          text-h5 text--secondary text-truncate text-caption
+          float-right
+          pr-3
+        "
+        >{{ user.nickname }}<br />
+  
+        <span class="text--disabled">金币：</span>
+        <span style="color: #ff9800">{{ user.coins }}</span>
+      </span>
+      <br /><br />
+    </span>
+  </v-card>
+  
+`
 })
 window.alert = (text, timeout) => {
     v.sb.text = text;
