@@ -102,7 +102,15 @@
                   <v-col v-for="j in n.worklist" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
                     <s-workcard :work="j" :user="n.userlist[j.author.toString()][0]" :host="host"></s-workcard>
                   </v-col>
-
+                    <v-col :key="n" class="mt-2" cols="12" v-if="viewmode=='index' && user?.list">
+                      <strong>用户榜</strong>
+                      <a class="float-right" href="#">
+                        <v-btn text>更多</v-btn>
+                      </a>
+                    </v-col>
+                    <v-col v-if="viewmode=='index' && user?.list" v-for="j in user?.list" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
+                      <s-usercard :user="j" :host="host"></s-usercard>
+                    </v-col>
                 </template>
               </v-row>
             </v-container>
@@ -296,7 +304,8 @@
                       </v-avatar>
                       <span color="accent" class="text-h5">{{ workview.nickname }}</span>
                       <v-btn class="float-right" v-on:click="user.signin()" v-if="workview.id==detail.id"> 签到</v-btn>
-                      <v-btn class="float-right" v-on:click="user.follow()" v-else> {{ workview.followu ? '取消' : ''}}关注</v-btn>
+                      <v-btn class="float-right" v-on:click="user.follow()" v-else> {{ workview.followu ? '取消' : ''}}关注
+                      </v-btn>
                       <br>
                       <a>
                         <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=0;"
@@ -306,8 +315,19 @@
                         <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=1;">{{
                           workview.follow }} 关注</v-btn>
                       </a><br>
-                      <span color="accent" class="text-subtitle-1 "><span class="text--disabled">金币：</span><span style="color:#FF9800;">{{ workview.coins }}</span></span>
-                      <span color="accent" class="text-subtitle-1 float-right text--disabled">加入时间：{{ date(workview.signtime) }}</span><br>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span color="accent" class="text-subtitle-1 " v-bind="attrs" v-on="on">
+                            <span class="text--disabled">金币：</span>
+                            <span style="color:#FF9800;">{{ workview.coins
+                              }}</span>
+                          </span>
+                        </template>
+                        <span>获取方式：签到，邀请用户，等等</span>
+                      </v-tooltip>
+
+                      <span color="accent" class="text-subtitle-1 float-right text--disabled">加入时间：{{
+                        date(workview.signtime) }}</span><br>
                     </v-card>
 
                     <v-card class=" pa-5 my-5" width="600">
@@ -357,17 +377,7 @@
               <v-row>
                 <template>
                   <v-col v-for="j in user.flist" cols="6" sm="4" md="3" lg="2">
-                    <v-card :href="'#page=user&id='+j.id">
-                      <span class="px-5">
-                        <v-avatar size="40">
-                          <img
-                            :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                        </v-avatar>
-                        <span color="accent" class="text-h5 text--secondary text-truncate"
-                          v-on:click="qh('user', j.id);">{{
-                          j.nickname }}</span>
-                      </span><br><br>
-                    </v-card>
+                    <s-usercard :user="j" :host="host"></s-usercard>
                   </v-col>
                 </template>
               </v-row>
