@@ -70,8 +70,8 @@ Vue.component('s-c2', {
 })
 Vue.component('s-workcard',{
     props:['work','user','host','my'],
-    template:`<v-card :href="'#page=work&id='+work.id">
-    <span>
+    template:`<v-card>
+    <v-card :href="'#page=work&id='+work.id" elevation="0">
         <v-img :src="host.data+'/static/internalapi/asset/'+work.image" :aspect-ratio="4/3"
             class="white--text align-end" gradient="to bottom, rgba(0,0,0,0) 80%, rgba(0,0,0,.6)">
             <span class="ma-2">
@@ -92,18 +92,25 @@ Vue.component('s-workcard',{
             <span color="accent" class="text-subtitle-1 text--secondary text-truncate text-caption"
                 :href="'#page=user&id='+work.author">{{
                 user.nickname }}</span><br>
-        </span>
-        <span else><br></span>
-    </span>
+            </a>
+            <span else><br></span>
+    </v-card>
     <span v-if="my">
         <v-btn color="green" text v-if="work.publish" depressed block text tile>已发布
         </v-btn>
         <v-btn color="red" text v-else depressed block text tile>未发布
         </v-btn>
+        <span class="pa-3">
+            <v-btn color="accent" class="" v-if="my" :href="'/other/scratch.html#id='+work.id" target="_blank"
+                depressed text>继续创作
+            </v-btn>
+            <v-btn color="accent" class="" v-if="my" v-on:click="my.del(work.id)" target="_blank"
+                depressed text>删除
+            </v-btn>
+        </span>
+        <br>
     </span>
-    <v-btn color="accent" class="" v-if="my" :href="'/other/scratch.html#id='+work.id" target="_blank" depressed block
-        tile>继续创作
-    </v-btn>
+
 </v-card>`
 })
 Vue.component('s-usercard',{
@@ -353,6 +360,20 @@ let functiona = {
                 v.workview.islike = !v.workview.islike;
             })
         },
+        del:(id)=>{
+            if(!confirm("你确定要删除此作品吗")){
+                return;
+            }
+            post({
+                url:'work/delete',
+                data:{
+                    id:id
+                }
+            },(d)=>{
+                alert(d.msg);
+                v.qh2();
+            })
+        },
     },
     items: [
 
@@ -388,7 +409,7 @@ let functiona = {
     ],
     pw: value => {
         const pattern = /^[0-9]*$/
-        if (!(!pattern.test(value) || value.length > 9)) return '纯数字密码必须大于8位'
+        if (!(!pattern.test(value) || value.length > 9)) return '纯数字密码必须大于9位'
         if (value.length < 6) return '密码必须大于6位'
     },
     sign: {

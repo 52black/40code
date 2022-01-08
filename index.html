@@ -180,7 +180,7 @@
                   </v-col>
 
                   <v-col v-for="j in mywork" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
-                    <s-workcard :work="j" :host="host" my="1"></s-workcard>
+                    <s-workcard :work="j" :host="host" :my="work"></s-workcard>
                   </v-col>
 
                   </v-card>
@@ -439,7 +439,7 @@
   <script src="https://cdn.staticfile.org/vue/2.6.9/vue.js"></script>
   <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
   <script src="/js/app.js?v=8"></script>
-  <script src="/js/index.js?v=10"></script>
+  <script src="/js/index.js?v=12"></script>
   <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
   <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
 </body>
