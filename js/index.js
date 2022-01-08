@@ -106,6 +106,21 @@ Vue.component('s-workcard',{
     </v-btn>
 </v-card>`
 })
+Vue.component('s-usercard',{
+    props:['user','host'],
+    template:`<v-card :href="'#page=user&id='+user.id">
+    <br>
+    <span class="pa-5">
+      <v-avatar size="40">
+        <img
+          :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+      </v-avatar>
+      <span color="accent" class="text-h5 text--secondary text-truncate text-caption"
+        >{{
+        user.nickname }}</span>
+    </span><br><br>
+  </v-card>`
+})
 window.alert = (text, timeout) => {
     v.sb.text = text;
     v.sb.timeout = timeout || 3000;
@@ -117,6 +132,11 @@ var pagecz = {
             url: 'work/index'
         }, function (d) {
             v.$data.rows = d.data
+        })
+        get({
+            url: 'user/clist'
+        }, function (d) {
+            v.user.list = d.data
         })
     },
     allwork: (a) => {
