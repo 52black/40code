@@ -453,17 +453,20 @@ let functiona = {
                 this.reply(r);
                 return;
             }
-            if ($('#comment').val()) {
+            let s=$('#comment').val();
+            // $('#comment').val('')
+            if (s) {
                 post({
                     url: "comment/",
                     data: {
-                        comment: $('#comment').val(),
+                        comment: s,
                         touser: v.workview.id,
                         type: { 'user': 0, 'work': 1 }[v.viewmode],
                     },
                     p: "comment",
 
                 }, (d) => {
+                    
                     console.log(d);
                     alert("发送成功");
                     v.comment.getcomment();
@@ -509,11 +512,13 @@ let functiona = {
         },
         reply: (r) => {
             let s = '#c-' + r;
-            if ($(s).val()) {
+            let s2=$(s).val();
+            // $(s).val('');
+            if (s2) {
                 post({
                     url: "comment/reply",
                     data: {
-                        comment: $(s).val(),
+                        comment: s2,
                         toid: r,
                         type: { 'user': 0, 'work': 1 }[v.viewmode],
                     },
@@ -581,6 +586,14 @@ let functiona = {
                 }
             }, (d) => {
                 v.user.flist = d.data
+            })
+        },
+        signin:()=>{
+            post({
+                url:'user/signin',
+                p:'signin'
+            },(d)=>{
+                alert(d.msg,10000)
             })
         },
         flist: [],
