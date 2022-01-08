@@ -652,6 +652,7 @@ let functiona = {
             })
         },
         flist: [],
+        list:[],
         message: {},
         flisttype: !!getQueryString('type') - 0,
     },

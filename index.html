@@ -100,17 +100,17 @@
                     </a>
                   </v-col>
                   <v-col v-for="j in n.worklist" cols="6" sm="4" md="3" lg="2">
-                    <s-workcard :work="j" :user="n?.userlist[j?.author.toString()][0]" :host="host"></s-workcard>
+                    <s-workcard :work="j" :user="n.userlist[j.author.toString()][0]" :host="host"></s-workcard>
                   </v-col>
 
                 </template>
-                <v-col class="mt-2" cols="12" v-if="viewmode=='index' && user?.list">
+                <v-col class="mt-2" cols="12" v-if="viewmode=='index' && user.list">
                   <strong>用户榜</strong>
                   <a class="float-right" href="#">
                     <v-btn text>更多</v-btn>
                   </a>
                 </v-col>
-                <v-col v-if="viewmode=='index' && user?.list" v-for="j in user?.list" :key="`${n}${j}`" cols="12" sm="6" md="4" lg="3">
+                <v-col v-if="viewmode=='index' && user.list" v-for="j in user.list" :key="`${n}${j}`" cols="12" sm="6" md="4" lg="3">
                   <s-usercard :user="j" :host="host"></s-usercard>
                 </v-col>
               </v-row>
