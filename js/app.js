@@ -129,6 +129,9 @@ function getQueryString(name) {
       }
     })
   }
+  if(getQueryString('i')){
+    setCookie('i',getQueryString('i'),3);
+  }
   var apihost = "https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/",
   mianhost="http://127.0.0.1:5500",
   scratchhost="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com";

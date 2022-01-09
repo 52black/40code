@@ -5,19 +5,23 @@ function getQueryString(name) {
   if (r != null) return decodeURIComponent(r[2]);
   return null;
 }
-console.log(location)
-console.log(window.self)
-console.log(window.top.location)
 var id= getQueryString('id'),temp2={};
 var apihost = "https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/",
 mianhost="http://127.0.0.1:5500",
 scratchhost="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com";
 
-// if(['test-c.sccode.tk'].indexOf(top.location.host)== -1){
-//   alert("暂不支持当前方式打开")
-//   // return;
-//   throw new Error('不支持的');
-// } 
+function dataURLToBlob(dataurl) {
+  var arr = dataurl.split(',');
+  var mime = arr[0].match(/:(.*?);/)[1];
+  var bstr = atob(arr[1]);
+  var n = bstr.length;
+  var u8arr = new Uint8Array(n);
+  while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
+
 var downloadurl = 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/work/' + getQueryString('id') + '.json';
 window.scratchConfig = {
   stageArea: {
