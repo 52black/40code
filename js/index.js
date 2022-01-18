@@ -468,6 +468,7 @@ let functiona = {
                 function (data) {
                     alert(data.msg)
                     getuserinfo()
+                    if(data.code==1)
                     location.href = ""
                 })
         },
@@ -481,6 +482,7 @@ let functiona = {
                 p: 'changeinfo'
             }, function (d) {
                 alert(d.msg)
+                if(data.code==1)
                 location.href = ""
             })
         },
