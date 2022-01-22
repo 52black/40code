@@ -414,7 +414,7 @@ let functiona = {
                     [对方称呼]，你好，请问你能看看${v.workview.name}吗？非常感谢。链接： ${location.href+'&out=aying&i='+v.detail.id}
                 </code><br>
                 <h2>若你要分享到QQ、微信：</h2>
-                <code>[对方称呼]，你好，请问你能看看我的scratch作品${v.workview.name}吗？非常感谢。<br>链接： ${location.href+'&out=aying&i='+v.detail.id}<br>请复制链接到浏览器访问</code>
+                <code>[对方称呼]，你好，请问你能看看我的scratch作品(${v.workview.name})吗？非常感谢。<br>链接： ${location.href+'&out=aying&i='+v.detail.id}<br>请复制链接到浏览器访问</code>
                 `
                 )
         }
