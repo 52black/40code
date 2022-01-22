@@ -457,12 +457,6 @@
           </template>
         </v-snackbar>
         <v-dialog v-model="sb2.show" width="500">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
-              Click Me
-            </v-btn>
-          </template>
-
           <v-card>
 
             <v-card-title v-html="sb2.text" class="pt-3">
