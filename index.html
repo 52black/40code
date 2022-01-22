@@ -110,7 +110,8 @@
                     <v-btn text>更多</v-btn>
                   </a>
                 </v-col>
-                <v-col v-if="viewmode=='index' && user.list" v-for="j in user.list" :key="`${n}${j}`" cols="12" sm="6" md="4" lg="3">
+                <v-col v-if="viewmode=='index' && user.list" v-for="j in user.list" :key="`${n}${j}`" cols="12" sm="6"
+                  md="4" lg="3">
                   <s-usercard :user="j" :host="host"></s-usercard>
                 </v-col>
               </v-row>
@@ -191,67 +192,78 @@
             <v-container v-if="viewmode=='work'">
               <v-row>
                 <template>
-                  <v-card class="mx-3 pa-5 my-12" width="400" v-if="!workview.id">
+                  <div class="mx-3 pa-5 my-12" class="float-center" v-if="!workview.id">
                     作品信息正在加载中
-                  </v-card>
-                  <v-card class="mx-auto pa-5 my-12" max-width="2000"
-                    v-else-if="(workview.isauthor || workview.publish)">
-                    <v-alert dense type="info" v-if="!workview.publish">
-                      当前作品还没有发布，仅自己可见，请前往
-                      <a :href="'#page=workinfo&id='+workview.id">作品信息编辑页</a>
-                      勾选发布，再点更新，即可发布
-                    </v-alert>
-                    <v-alert dense outlined type="error" v-if="workview.ban">
-                      当前作品已被封禁，请联系QQ:3274235903 进行申诉
-                    </v-alert>
-                    <span color="accent" class="text-h5" cols="24">{{ workview.name }}</span>
-                    <div cols="24">
-                      <a :href="`#page=user&id=`+workview.author">
-                        <v-avatar size="25">
-                          <img
-                            :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                        </v-avatar>
-                        <span color="accent" class="text-subtitle-1" v-on:click="qh('user', workview.author);">{{
-                          workview.nickname }}</span>
-                      </a>
-                      <span color="accent" class="text-subtitle-1 text-right text--disabled">创建时间：{{ date(workview.time)
-                        }}</span>
-                    </div>
-                    <br>
-                    <div class="float-left pl-3">
-                      <iframe
-                        :src="(workview.id) ? ( (workview.isauthor || (workview.publish)) ? ('/other/worksc.html') : '/noqx.html') : '/d.html'"
-                        scrolling="no" frameborder="0" style="width:510px;height: 440px;" class="float-left pr-3">
-                      </iframe>
-                      <br>
-                      <v-btn v-on:click="work.like()" :color="workview.islike ? 'red' : ''" plain text>
-                        <v-icon>mdi-heart</v-icon>{{ workview.like }}
-                      </v-btn>
-                    </div>
-                    <div class="float-left pl-3">
-                      <span color="accent" class="text-h5 text--primary" cols="24">作品介绍</span><br><br>
-                      <span class="text--secondary" v-html="workview.introduce2"></span>
-                      <br><br>
-                      <v-divider class=""></v-divider>
-                      <br><br>
-                      <v-btn color="accent" class="ma-2" :href="'/other/scratch.html#id='+workview.id" target="_blank"
-                        v-bind:disabled="!(workview.isauthor || workview.opensource) || !workview.issign">转到创作页</v-btn>
-                      <v-btn color="accent" class="ma-2" :href="'#page=workinfo&id='+workview.id"
-                        v-if="workview.isauthor">编辑作品信息</v-btn>
-                    </div>
+                  </div>
+                  <v-col cols="12" v-else-if="(workview.isauthor || workview.publish)">
+                    <v-card class="mx-auto pa-5 my-12">
+                      <v-row>
+                        <v-col cols="12">
+                          <v-alert dense type="info" v-if="!workview.publish">
+                            当前作品还没有发布，仅自己可见，请前往
+                            <a :href="'#page=workinfo&id='+workview.id">作品信息编辑页</a>
+                            勾选发布，再点更新，即可发布
+                          </v-alert>
+                          <v-alert dense outlined type="error" v-if="workview.ban">
+                            当前作品已被封禁，请联系QQ:3274235903 进行申诉
+                          </v-alert>
+                          <span color="accent" class="text-h5" cols="24">{{ workview.name }}</span>
+                          <div cols="24">
+                            <a :href="`#page=user&id=`+workview.author">
+                              <v-avatar size="25">
+                                <img
+                                  :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                              </v-avatar>
+                              <span color="accent" class="text-subtitle-1" v-on:click="qh('user', workview.author);">{{
+                                workview.nickname }}</span>
+                            </a>
+                            <span color="accent" class="text-subtitle-1 text-right text--disabled">创建时间：{{
+                              date(workview.time)
+                              }}</span>
+                          </div>
+                        </v-col>
+  
+                        <v-col cols="12" md="7">
+                          <v-responsive :aspect-ratio="51/44">
+                            <iframe
+                              :src="(workview.id) ? ( (workview.isauthor || (workview.publish)) ? ('/other/worksc.html') : '/noqx.html') : '/d.html'"
+                              scrolling="no" frameborder="0" style="width:100%;height:100%">
+                            </iframe>
+                          </v-responsive>
+                            <v-btn v-on:click="work.like()" :color="workview.islike ? 'red' : ''" plain text>
+                              <v-icon>mdi-heart</v-icon>{{ workview.like }}
+                            </v-btn>
+                        </v-col>
+                        <v-col>
+                            <span color="accent" class="text-h5 text--primary" cols="24">作品介绍</span><br><br>
+                            <span class="text--secondary" v-html="workview.introduce2"></span>
+                            <br><br>
+                            <v-divider class=""></v-divider>
+                            <br><br>
+                            <v-btn color="accent" class="ma-2" :href="'/other/scratch.html#id='+workview.id" target="_blank"
+                              v-bind:disabled="!(workview.isauthor || workview.opensource) || !workview.issign">转到创作页
+                            </v-btn>
+                            <v-btn color="accent" class="ma-2" :href="'#page=workinfo&id='+workview.id"
+                              v-if="workview.isauthor">编辑作品信息</v-btn>
+                        </v-col>
+                      </v-row>
+                     
+                      
+                    </v-card>
+                  </v-col>
 
-                  </v-card>
-                  <comment></comment>
-                  <v-card class="mx-3 pa-5 my-12" width="400" v-else>
+                  <div class="mx-3 pa-5 my-12" class="float-center" v-else>
                     无权限查看当前作品
-                  </v-card>
-                  <v-card class="mx-auto pa-5 my-5" width="600"
-                    v-if="workview && (workview.isauthor || workview.publish)">
-                    <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
-                    <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
-                    <s-comment :comment="comment" :host="host" :detail="detail" type="1" :author="workview.author">
-                    </s-comment>
-                  </v-card>
+                  </div>
+                  <v-col cols="12" v-if="workview && (workview.isauthor || workview.publish)">
+                    <v-card class="mx-auto pa-5 my-5">
+                      <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
+                      <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
+                      <s-comment :comment="comment" :host="host" :detail="detail" type="1" :author="workview.author">
+                      </s-comment>
+                    </v-card>
+                  </v-col>
+
 
 
 
@@ -293,152 +305,152 @@
 
             <v-container v-if="viewmode=='user'">
               <v-row>
-                  <v-col class="mx-auto pa-5 my-12" v-if="!workview.id">
-                    用户信息正在加载中
-                  </v-col>
-                  <template v-else-if="(!workview.ban || workview.id==detail.id)" class="mx-auto ">
-                    <v-col cols="12" >
-                      <v-card class="pa-5">
-                        <v-avatar>
-                          <img
-                            :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                        </v-avatar>
-                        <span color="accent" class="text-h5">{{ workview.nickname }}</span>
-                        <v-btn class="float-right" v-on:click="user.signin()" v-if="workview.id==detail.id"> 签到</v-btn>
-                        <v-btn class="float-right" v-on:click="user.follow()" v-else> {{ workview.followu ? '取消' : ''}}关注
-                        </v-btn>
-                        <br>
-                        <a>
-                          <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=0;"
-                            :href=" `#page=flist&id=`+workview.id">{{ workview.fan }} 粉丝 </v-btn>
-                        </a>
-                        <a :href="`#page=flist&id=`+workview.id">
-                          <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=1;">{{
-                            workview.follow }} 关注</v-btn>
-                        </a><br>
-                        <v-tooltip bottom>
-                          <template v-slot:activator="{ on, attrs }">
-                            <span color="accent" class="text-subtitle-1 " v-bind="attrs" v-on="on">
-                              <span class="text--disabled">金币：</span>
-                              <span style="color:#FF9800;">{{ workview.coins
-                                }}</span>
-                            </span>
-                          </template>
-                          <span>获取方式：签到，邀请用户，等等</span>
-                        </v-tooltip>
-  
-                        <span color="accent" class="text-subtitle-1 float-right text--disabled">加入时间：{{
-                          date(workview.signtime) }}</span><br>
-                      </v-card>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-card class="pa-5">
-                        <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
-                        <span class="text--secondary" v-html="workview.introduce2"></span>
-                      </v-card>
-                    </v-col>
-
-                    <v-col cols="12">
-                      <div>他的作品：</div>
-                      <a class="float-right" :href="'#page=allwork&user='+workview.id">
-                        <v-btn text>更多</v-btn>
+                <v-col class="mx-auto pa-5 my-12" v-if="!workview.id">
+                  用户信息正在加载中
+                </v-col>
+                <template v-else-if="(!workview.ban || workview.id==detail.id)" class="mx-auto ">
+                  <v-col cols="12">
+                    <v-card class="pa-5">
+                      <v-avatar>
+                        <img
+                          :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                      </v-avatar>
+                      <span color="accent" class="text-h5">{{ workview.nickname }}</span>
+                      <v-btn class="float-right" v-on:click="user.signin()" v-if="workview.id==detail.id"> 签到</v-btn>
+                      <v-btn class="float-right" v-on:click="user.follow()" v-else> {{ workview.followu ? '取消' : ''}}关注
+                      </v-btn>
+                      <br>
+                      <a>
+                        <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=0;"
+                          :href=" `#page=flist&id=`+workview.id">{{ workview.fan }} 粉丝 </v-btn>
+                      </a>
+                      <a :href="`#page=flist&id=`+workview.id">
+                        <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=1;">{{
+                          workview.follow }} 关注</v-btn>
                       </a><br>
-                    </v-col>
-                    
-                    <template v-if="worklist" cols="12">
-                      <v-col v-for="j in worklist" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
-                        <s-workcard :work="j" :host="host"></s-workcard>
-                      </v-col>
-                    </template>
-                    <span v-else>当前用户还没有作品哦</span>
-                    <v-col cols="12">
-                      <v-card class=" pa-5">
-                        <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
-                        <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
-                        <s-comment :comment="comment" :host="host" :detail="detail" type="0"></s-comment>
-                      </v-card>
-                    </v-col>
-                    
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <span color="accent" class="text-subtitle-1 " v-bind="attrs" v-on="on">
+                            <span class="text--disabled">金币：</span>
+                            <span style="color:#FF9800;">{{ workview.coins
+                              }}</span>
+                          </span>
+                        </template>
+                        <span>获取方式：签到，邀请用户，等等</span>
+                      </v-tooltip>
 
+                      <span color="accent" class="text-subtitle-1 float-right text--disabled">加入时间：{{
+                        date(workview.signtime) }}</span><br>
+                    </v-card>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-card class="pa-5">
+                      <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
+                      <span class="text--secondary" v-html="workview.introduce2"></span>
+                    </v-card>
+                  </v-col>
+
+                  <v-col cols="12">
+                    <div>他的作品：</div>
+                    <a class="float-right" :href="'#page=allwork&user='+workview.id">
+                      <v-btn text>更多</v-btn>
+                    </a><br>
+                  </v-col>
+
+                  <template v-if="worklist" cols="12">
+                    <v-col v-for="j in worklist" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
+                      <s-workcard :work="j" :host="host"></s-workcard>
+                    </v-col>
                   </template>
-
-                  <v-col class="mx-auto pa-5 my-12" width="600" v-else>
-                    无权限查看当前用户
+                  <span v-else>当前用户还没有作品哦</span>
+                  <v-col cols="12">
+                    <v-card class=" pa-5">
+                      <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
+                      <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
+                      <s-comment :comment="comment" :host="host" :detail="detail" type="0"></s-comment>
+                    </v-card>
                   </v-col>
+
+
                 </template>
-            </v-container>
 
-            <v-container v-if="viewmode=='message'">
-              <v-row>
-                <template>
-                  <v-card class="mx-auto pa-8 my-12" width="400" v-if="user.message">
-                    <span v-for="i in user.message">
-                      <span v-html="i.message"></span>
-                      <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
-                      <br><br>
-                    </span>
-                  </v-card>
-                </template>
-              </v-row>
-            </v-container>
-
-            <v-container v-if="viewmode=='flist'">
-              <v-row>
-                <template>
-                  <v-col v-for="j in user.flist" cols="12" sm="6" md="4" lg="3">
-                    <s-usercard :user="j" :host="host"></s-usercard>
-                  </v-col>
-                </template>
-              </v-row>
-            </v-container>
-
-            <v-container v-if="viewmode=='404'">
-              <v-row>
-                <template>
-                  <v-card class="mx-auto pa-8 my-12" width="400">
-                    当前页面不存在 404 not found
-                  </v-card>
-                </template>
-              </v-row>
-            </v-container>
-
-
-
-          </v-main>
-
-          <v-footer padless>
-            <v-col cols="12" class="px-5">
-
-              <span>
-                <div class="float-left">
-                  友情链接：<br>
-                  <a href="//bu40.com" target="_blank">bu40工具集</a><br>
-                  <a href="//sc.bu40.com" target="_blank">scratch最新版下载</a><br>
-                  <a href="http://www.fmcyp.club" target="_blank" style="color:rgba(0, 0, 0, .5)">S云盘</a><br>
-                </div>
-                <div class="float-left ml-5">
-                  <span>更多：</span><br>
-                  <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank">Q群:1071652975</a><br>
-                  <a href="//github.com/52black/sccode">此站点前端源代码</a><br>
-                  <a>站长QQ:3274235903</a>
-                </div>
-
-              </span>
-              <span class="float-right">{{ new Date().getFullYear() }} — <strong>40CODE</strong></span>
-            </v-col>
-          </v-footer>
-
-        </v-app>
-        <v-snackbar v-model="sb.show" :timeout="sb.timeout" top>
-          <span v-html="sb.text"></span>
-
-          <template v-slot:action="{ attrs }">
-            <v-btn color="blue" text v-bind="attrs" @click="sb.show = false">
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
+                <v-col class="mx-auto pa-5 my-12" width="600" v-else>
+                  无权限查看当前用户
+                </v-col>
       </template>
+      </v-container>
+
+      <v-container v-if="viewmode=='message'">
+        <v-row>
+          <template>
+            <v-card class="mx-auto pa-8 my-12" width="400" v-if="user.message">
+              <span v-for="i in user.message">
+                <span v-html="i.message"></span>
+                <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
+                <br><br>
+              </span>
+            </v-card>
+          </template>
+        </v-row>
+      </v-container>
+
+      <v-container v-if="viewmode=='flist'">
+        <v-row>
+          <template>
+            <v-col v-for="j in user.flist" cols="12" sm="6" md="4" lg="3">
+              <s-usercard :user="j" :host="host"></s-usercard>
+            </v-col>
+          </template>
+        </v-row>
+      </v-container>
+
+      <v-container v-if="viewmode=='404'">
+        <v-row>
+          <template>
+            <v-card class="mx-auto pa-8 my-12" width="400">
+              当前页面不存在 404 not found
+            </v-card>
+          </template>
+        </v-row>
+      </v-container>
+
+
+
+      </v-main>
+
+      <v-footer padless>
+        <v-col cols="12" class="px-5">
+
+          <span>
+            <div class="float-left">
+              友情链接：<br>
+              <a href="//bu40.com" target="_blank">bu40工具集</a><br>
+              <a href="//sc.bu40.com" target="_blank">scratch最新版下载</a><br>
+              <a href="http://www.fmcyp.club" target="_blank" style="color:rgba(0, 0, 0, .5)">S云盘</a><br>
+            </div>
+            <div class="float-left ml-5">
+              <span>更多：</span><br>
+              <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank">Q群:1071652975</a><br>
+              <a href="//github.com/52black/sccode">此站点前端源代码</a><br>
+              <a>站长QQ:3274235903</a>
+            </div>
+
+          </span>
+          <span class="float-right">{{ new Date().getFullYear() }} — <strong>40CODE</strong></span>
+        </v-col>
+      </v-footer>
+
+    </v-app>
+    <v-snackbar v-model="sb.show" :timeout="sb.timeout" top>
+      <span v-html="sb.text"></span>
+
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue" text v-bind="attrs" @click="sb.show = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    </template>
 
 
     </v-app>
