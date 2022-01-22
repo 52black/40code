@@ -358,7 +358,7 @@
                   </v-col>
 
                   <template v-if="worklist" cols="12">
-                    <v-col v-for="j in worklist" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
+                    <v-col v-for="j in worklist" cols="6" sm="4" md="3" lg="2">
                       <s-workcard :work="j" :host="host"></s-workcard>
                     </v-col>
                   </template>
