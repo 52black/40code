@@ -68,9 +68,9 @@ Vue.component('s-c2', {
 </span>
 `
 })
-Vue.component('s-workcard',{
-    props:['work','user','host','my'],
-    template:`<v-card>
+Vue.component('s-workcard', {
+    props: ['work', 'user', 'host', 'my'],
+    template: `<v-card>
     <v-card :href="'#page=work&id='+work.id" elevation="0">
         <v-img :src="host.data+'/static/internalapi/asset/'+work.image" :aspect-ratio="4/3"
             class="white--text align-end" gradient="to bottom, rgba(0,0,0,0) 80%, rgba(0,0,0,.6)">
@@ -113,9 +113,9 @@ Vue.component('s-workcard',{
 
 </v-card>`
 })
-Vue.component('s-usercard',{
-    props:['user','host'],
-    template:`
+Vue.component('s-usercard', {
+    props: ['user', 'host'],
+    template: `
     <v-card :href="'#page=user&id='+user.id">
     <br />
     <span class="pa-5">
@@ -142,11 +142,16 @@ Vue.component('s-usercard',{
   
 `
 })
+
 window.alert = (text, timeout) => {
     v.sb.text = text;
     v.sb.timeout = timeout || 3000;
     v.sb.show = 1;
 };
+window.dialog = (text) => {
+    v.sb2.text = text;
+    v.sb2.show = 1;
+}
 var pagecz = {
     'index': function () {
         get({
@@ -188,12 +193,12 @@ var pagecz = {
             url: 'work/info',
             data: { id: id }
         }, function (d) {
-            let d2=d.data
-            if(d2){
+            let d2 = d.data
+            if (d2) {
                 d2.introduce2 = markdown.toHTML(d2.introduce);
                 v.workview = d2;
                 v.comment.getcomment()
-            }else{alert("服务器或网络错误")}
+            } else { alert("服务器或网络错误") }
         })
     },
     'workinfo': function (id) {
@@ -204,15 +209,15 @@ var pagecz = {
             data: { id: id }
         }, function (d) {
             if (!d.data) return;
-            let d2=d.data
-            if(getQueryString('publish')){
-                d2.publish=1;
+            let d2 = d.data
+            if (getQueryString('publish')) {
+                d2.publish = 1;
             }
             (v.workview = d2)
             v.opensource = d2.opensource;
             v.publish = d2.publish;
             // location.href = "#page=workinfo&id=" + id;
-            
+
         })
     },
     'user': function (id) {
@@ -360,20 +365,59 @@ let functiona = {
                 v.workview.islike = !v.workview.islike;
             })
         },
-        del:(id)=>{
-            if(!confirm("你确定要删除此作品吗")){
+        del: (id) => {
+            if (!confirm("你确定要删除此作品吗")) {
                 return;
             }
             post({
-                url:'work/delete',
-                data:{
-                    id:id
+                url: 'work/delete',
+                data: {
+                    id: id
                 }
-            },(d)=>{
+            }, (d) => {
                 alert(d.msg);
                 v.qh2();
             })
         },
+        share:()=>{
+            dialog(
+                `
+                通过分享作品到其他平台，他人通过链接注册账号，你和他都可获得20金币<br>
+                还可以让你的作品有更多人看到<br>
+                链接：<code>${location.href+'&out=any&i='+v.detail.id}</code>
+                推荐分享形式(不推荐在他人作品下发)<br>
+                复制内容到相应位置即可
+                <h2>若你要分享到A营：</h2>
+                1.自己A营个人主页的简介
+                <code>
+                    [${v.workview.name}](${location.href+'&out=aying&i='+v.detail.id})
+                </code>
+                2.A营同个作品的介绍
+                <code>
+                    [这个作品也发布到了40code](${location.href+'&out=aying&i='+v.detail.id})
+                </code><br>
+                3.A营其他人主页评论(不建议)
+                <code>
+                    [对方称呼]，你好，请问你能看看[${v.workview.name}](${location.href+'&out=aying&i='+v.detail.id})吗？非常感谢。
+                </code><br>
+                <h2>若你要分享到小码王、scratch中社、共创世界：</h2>
+                1.自己这些平台主页下的进行留言<br>
+                <code>
+                    我在40code发了一个作品，链接：${location.href+'&out=xmw&i='+v.detail.id}
+                </code>
+                2.这些平台同个作品的介绍
+                <code>
+                    这个作品也发布到了40code: ${location.href+'&out=aying&i='+v.detail.id})
+                </code>
+                3.这些平台其他人主页评论(不建议)
+                <code>
+                    [对方称呼]，你好，请问你能看看${v.workview.name}吗？非常感谢。链接： ${location.href+'&out=aying&i='+v.detail.id}
+                </code><br>
+                <h2>若你要分享到QQ、微信：</h2>
+                <code>[对方称呼]，你好，请问你能看看我的scratch作品${v.workview.name}吗？非常感谢。<br>链接： ${location.href+'&out=aying&i='+v.detail.id}<br>请复制链接到浏览器访问</code>
+                `
+                )
+        }
     },
     items: [
 
@@ -430,7 +474,8 @@ let functiona = {
                 data: {
                     email: $('#email').val(),
                     pw: $('#pw').val(),
-                    t2: v.sign.token
+                    t2: v.sign.token,
+                    i: getCookie('i')
                 },
                 p: 'sign'
             },
@@ -468,8 +513,8 @@ let functiona = {
                 function (data) {
                     alert(data.msg)
                     getuserinfo()
-                    if(data.code==1)
-                    location.href = ""
+                    if (data.code == 1)
+                        location.href = ""
                 })
         },
         l: function (n) {
@@ -482,8 +527,8 @@ let functiona = {
                 p: 'changeinfo'
             }, function (d) {
                 alert(d.msg)
-                if(data.code==1)
-                location.href = ""
+                if (data.code == 1)
+                    location.href = ""
             })
         },
         head: function () {
@@ -510,7 +555,7 @@ let functiona = {
                 this.reply(r);
                 return;
             }
-            let s=$('#comment').val();
+            let s = $('#comment').val();
             // $('#comment').val('')
             if (s) {
                 post({
@@ -523,7 +568,7 @@ let functiona = {
                     p: "comment",
 
                 }, (d) => {
-                    
+
                     console.log(d);
                     alert("发送成功");
                     v.comment.getcomment();
@@ -569,7 +614,7 @@ let functiona = {
         },
         reply: (r) => {
             let s = '#c-' + r;
-            let s2=$(s).val();
+            let s2 = $(s).val();
             // $(s).val('');
             if (s2) {
                 post({
@@ -645,16 +690,16 @@ let functiona = {
                 v.user.flist = d.data
             })
         },
-        signin:()=>{
+        signin: () => {
             post({
-                url:'user/signin',
-                p:'signin'
-            },(d)=>{
-                alert(d.msg,10000)
+                url: 'user/signin',
+                p: 'signin'
+            }, (d) => {
+                alert(d.msg, 10000)
             })
         },
         flist: [],
-        list:[],
+        list: [],
         message: {},
         flisttype: !!getQueryString('type') - 0,
     },
@@ -686,6 +731,10 @@ let functiono = {
         show: false,
         text: '',
         timeout: 2000,
+    },
+    sb2: {
+        show: false,
+        text: ''
     },
     publish: 0,
     opensource: 0,
