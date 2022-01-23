@@ -307,83 +307,83 @@
               </v-row>
             </v-container>
 
-            <v-col v-if="viewmode=='user'">
-              <v-col>
-                <v-col class="mx-auto pa-5 my-12" v-if="!workview.id">
-                  用户信息正在加载中
-                </v-col>
-                <template v-else-if="(!workview.ban || workview.id==detail.id)" class="mx-auto ">
-                  <v-col cols="12">
-                    <v-card class="pa-5">
-                      <v-avatar>
-                        <img
-                          :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                      </v-avatar>
-                      <span color="accent" class="text-h5">{{ workview.nickname }}</span>
-                      <v-btn class="float-right" v-on:click="user.signin()" v-if="workview.id==detail.id"> 签到</v-btn>
-                      <v-btn class="float-right" v-on:click="user.follow()" v-else> {{ workview.followu ? '取消' : ''}}关注
-                      </v-btn>
-                      <br>
-                      <a>
-                        <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=0;"
-                          :href=" `#page=flist&id=`+workview.id">{{ workview.fan }} 粉丝 </v-btn>
-                      </a>
-                      <a :href="`#page=flist&id=`+workview.id">
-                        <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=1;">{{
-                          workview.follow }} 关注</v-btn>
-                      </a><br>
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <span color="accent" class="text-subtitle-1 " v-bind="attrs" v-on="on">
-                            <span class="text--disabled">金币：</span>
-                            <span style="color:#FF9800;">{{ workview.coins
-                              }}</span>
-                          </span>
-                        </template>
-                        <span>获取方式：<br>
-                        1.签到(所得金币数是当月连续签到天数)<br>
-                      2.分享作品，点击作品展示页下方的分享，按照上面的提示做</span>
-                      </v-tooltip>
-
-                      <span color="accent" class="text-subtitle-1 float-right text--disabled">加入时间：{{
-                        date(workview.signtime) }}</span><br>
-                    </v-card>
+              <v-container v-if="viewmode=='user'">
+                <v-row>
+                  <v-col class="mx-auto pa-5 my-12" v-if="!workview.id">
+                    用户信息正在加载中
                   </v-col>
-                  <v-col cols="12">
-                    <v-card class="pa-5">
-                      <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
-                      <span class="text--secondary" v-html="workview.introduce2"></span>
-                    </v-card>
-                  </v-col>
+                  <template v-else-if="(!workview.ban || workview.id==detail.id)" class="mx-auto ">
+                    <v-col cols="12">
+                      <v-card class="pa-5">
+                        <v-avatar>
+                          <img
+                            :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                        </v-avatar>
+                        <span color="accent" class="text-h5">{{ workview.nickname }}</span>
+                        <v-btn class="float-right" v-on:click="user.signin()" v-if="workview.id==detail.id"> 签到</v-btn>
+                        <v-btn class="float-right" v-on:click="user.follow()" v-else> {{ workview.followu ? '取消' : ''}}关注
+                        </v-btn>
+                        <br>
+                        <a>
+                          <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=0;"
+                            :href=" `#page=flist&id=`+workview.id">{{ workview.fan }} 粉丝 </v-btn>
+                        </a>
+                        <a :href="`#page=flist&id=`+workview.id">
+                          <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=1;">{{
+                            workview.follow }} 关注</v-btn>
+                        </a><br>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on, attrs }">
+                            <span color="accent" class="text-subtitle-1 " v-bind="attrs" v-on="on">
+                              <span class="text--disabled">金币：</span>
+                              <span style="color:#FF9800;">{{ workview.coins
+                                }}</span>
+                            </span>
+                          </template>
+                          <span>获取方式：<br>
+                          1.签到(所得金币数是当月连续签到天数)<br>
+                        2.分享作品，点击作品展示页下方的分享，按照上面的提示做</span>
+                        </v-tooltip>
 
-                  <v-col cols="12">
-                    <div>他的作品：</div>
-                    <a class="float-right" :href="'#page=allwork&user='+workview.id">
-                      <v-btn text>更多</v-btn>
-                    </a><br>
-                  </v-col>
-
-                  <template v-if="worklist" cols="12">
-                    <v-col v-for="j in worklist" cols="6" sm="4" md="3" lg="2">
-                      <s-workcard :work="j" :host="host"></s-workcard>
+                        <span color="accent" class="text-subtitle-1 float-right text--disabled">加入时间：{{
+                          date(workview.signtime) }}</span><br>
+                      </v-card>
                     </v-col>
+                    <v-col cols="12">
+                      <v-card class="pa-5">
+                        <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
+                        <span class="text--secondary" v-html="workview.introduce2"></span>
+                      </v-card>
+                    </v-col>
+
+                    <v-col cols="12">
+                      <div>他的作品：</div>
+                      <a class="float-right" :href="'#page=allwork&user='+workview.id">
+                        <v-btn text>更多</v-btn>
+                      </a><br>
+                    </v-col>
+
+                    <template v-if="worklist" cols="12">
+                      <v-col v-for="j in worklist" cols="6" sm="4" md="3" lg="2">
+                        <s-workcard :work="j" :host="host"></s-workcard>
+                      </v-col>
+                    </template>
+                    <span v-else>当前用户还没有作品哦</span>
+                    <v-col cols="12">
+                      <v-card class=" pa-5">
+                        <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
+                        <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
+                        <s-comment :comment="comment" :host="host" :detail="detail" type="0"></s-comment>
+                      </v-card>
+                    </v-col>
+
+
                   </template>
-                  <span v-else>当前用户还没有作品哦</span>
-                  <v-col cols="12">
-                    <v-card class=" pa-5">
-                      <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
-                      <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
-                      <s-comment :comment="comment" :host="host" :detail="detail" type="0"></s-comment>
-                    </v-card>
+
+                  <v-col class="mx-auto pa-5 my-12" width="600" v-else>
+                    无权限查看当前用户
                   </v-col>
-
-
-                </template>
-
-                <v-col class="mx-auto pa-5 my-12" width="600" v-else>
-                  无权限查看当前用户
-                </v-col>
-              </v-col>
+                </v-row>
               </v-container>
 
               <v-container v-if="viewmode=='message'">
