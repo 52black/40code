@@ -10,6 +10,15 @@
     a {
       text-decoration: none
     }
+    .br{
+      border-radius:8px
+    }
+    .l{
+      color:rgba(0, 0, 0, .5)!important;
+    }
+    .l2{
+      color:rgba(0, 0, 0, .6)!important;
+    }
   </style>
   <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script>
@@ -89,7 +98,7 @@
                   <v-from>
                     <v-text-field label="作品名" filled class="float-left ml-4" id="sname"></v-text-field>
                     <v-text-field label="作者id" filled class="float-left ml-4" id="sauthor"></v-text-field>
-                    <v-btn v-on:click="work.search()" class="float-left ml-4">搜索</v-btn>
+                    <v-btn v-on:click="work.search()" class="float-left ml-4"  elevation="0" large  color="white">搜索</v-btn>
                   </v-from>
                 </div>
                 <template v-for="n in rows">
@@ -177,7 +186,7 @@
               <v-row>
                 <template>
                   <v-col class="" cols="12">
-                    我的作品：<v-btn color="accent" class="pa-2" v-on:click="work.new()">新建作品</v-btn>
+                    我的作品：<v-btn color="white" class="pa-2 text--secondary"  elevation="0" v-on:click="work.new()">新建作品</v-btn>
                   </v-col>
 
                   <v-col v-for="j in mywork" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
@@ -314,22 +323,22 @@
                   </v-col>
                   <template v-else-if="(!workview.ban || workview.id==detail.id)" class="mx-auto ">
                     <v-col cols="12">
-                      <v-card class="pa-5">
+                      <v-card class="pa-5" elevation="0"  class="br2">
                         <v-avatar>
                           <img
                             :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                         </v-avatar>
                         <span color="accent" class="text-h5">{{ workview.nickname }}</span>
-                        <v-btn class="float-right" v-on:click="user.signin()" v-if="workview.id==detail.id"> 签到</v-btn>
-                        <v-btn class="float-right" v-on:click="user.follow()" v-else> {{ workview.followu ? '取消' : ''}}关注
+                        <v-btn class="float-right text--secondary" v-on:click="user.signin()" v-if="workview.id==detail.id"  elevation="0"> 签到</v-btn>
+                        <v-btn class="float-right text--secondary" v-on:click="user.follow()" v-else  elevation="0"> {{ workview.followu ? '取消' : ''}}关注
                         </v-btn>
                         <br>
                         <a>
-                          <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=0;"
+                          <v-btn text class="text-subtitle-1 text--secondary" v-on:click="user.flisttype=0;"
                             :href=" `#page=flist&id=`+workview.id">{{ workview.fan }} 粉丝 </v-btn>
                         </a>
                         <a :href="`#page=flist&id=`+workview.id">
-                          <v-btn text color="accent" class="text-subtitle-1" v-on:click="user.flisttype=1;">{{
+                          <v-btn text class="text-subtitle-1 text--secondary" v-on:click="user.flisttype=1;">{{
                             workview.follow }} 关注</v-btn>
                         </a><br>
                         <v-tooltip bottom>
@@ -350,7 +359,7 @@
                       </v-card>
                     </v-col>
                     <v-col cols="12">
-                      <v-card class="pa-5">
+                      <v-card class="pa-5"  elevation="0"  class="br2">
                         <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span><br><br>
                         <span class="text--secondary" v-html="workview.introduce2"></span>
                       </v-card>
@@ -370,7 +379,7 @@
                     </template>
                     <span v-else>当前用户还没有作品哦</span>
                     <v-col cols="12">
-                      <v-card class=" pa-5">
+                      <v-card class=" pa-5"  elevation="0"  class="br2">
                         <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
                         <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
                         <s-comment :comment="comment" :host="host" :detail="detail" type="0"></s-comment>
@@ -428,21 +437,21 @@
             <v-col cols="12" class="px-5">
 
               <span>
-                <div class="float-left">
-                  友情链接：<br>
-                  <a href="//bu40.com" target="_blank">bu40工具集</a><br>
-                  <a href="//sc.bu40.com" target="_blank">scratch最新版下载</a><br>
-                  <a href="http://www.fmcyp.club" target="_blank" style="color:rgba(0, 0, 0, .5)">S云盘</a><br>
+                <div class="float-left" >
+                  <span class="l">友情链接：</span><br>
+                  <a href="//bu40.com" target="_blank" class="l">bu40工具集</a><br>
+                  <a href="//sc.bu40.com" target="_blank" class="l">scratch最新版下载</a><br>
+                  <a href="http://www.fmcyp.club" target="_blank" class="l">S云盘</a><br>
                 </div>
                 <div class="float-left ml-5">
-                  <span>更多：</span><br>
-                  <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank">Q群:1071652975</a><br>
-                  <a href="//github.com/52black/sccode" target="_blank">此站点前端源代码</a><br>
-                  <a>站长QQ:3274235903</a>
+                  <span  class="l">更多：</span><br>
+                  <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank" class="l">Q群:1071652975</a><br>
+                  <a href="//github.com/52black/sccode" target="_blank" class="l">此站点前端源代码</a><br>
+                  <a class="l">站长QQ:3274235903</a>
                 </div>
 
               </span>
-              <span class="float-right">{{ new Date().getFullYear() }} — <strong>40CODE</strong></span>
+              <span class="float-right l">{{ new Date().getFullYear() }} — <strong>40CODE</strong></span>
             </v-col>
           </v-footer>
 
@@ -481,7 +490,7 @@
   <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
   <!-- <script src="https://unpkg.com/vuetify-dialog@2.0.17/dist/vuetify-dialog.min.js"></script> -->
   <script src="/js/app.js?v=8"></script>
-  <script src="/js/index.js?v=14"></script>
+  <script src="/js/index.js?v=15"></script>
   <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
   <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
 </body>

@@ -12,7 +12,7 @@ Vue.component('s-comment', {
                     </v-avatar>
                 </a>
                 <a :href="'#page=user&id='+i.fromuser">
-                    <v-btn text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}
+                    <v-btn text class="text-h6 ml-2 text--secondary" style="height: 100%">{{ j.nickname }}
                     </v-btn>
                 </a>
                 <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
@@ -34,7 +34,7 @@ Vue.component('s-comment', {
                 <s-c2 :comment="comment" :host="host" :detail="detail" :reply="i.id" class="mt"></s-c2>
             </span>
 
-            <div v-if="i.replynum" class="pa-3 grey lighten-4 mt-2" style="border-radius:3px">
+            <div v-if="i.replynum" class="pa-3 grey lighten-4 mt-2" style="border-radius:10px">
                 <div v-for="k in comment.comment.reply[i.id.toString()]">
                     <div v-for="j in comment.comment.user[k.fromuser.toString()]" class="mt-2">
                         <a :href="'#page=user&id='+k.fromuser">
@@ -44,11 +44,11 @@ Vue.component('s-comment', {
                             </v-avatar>
                         </a>
                         <a :href="'#page=user&id='+k.fromuser">
-                            <v-btn text color="accent" class="text-h6 ml-2" style="height: 100%">{{ j.nickname }}
+                            <v-btn text class="text-h6 ml-2 text--secondary" style="height: 100%">{{ j.nickname }}
                             </v-btn>
                         </a>
-                        <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ k.time }}</span><br>
-                        <span color="accent" class="text-h6 ml-12" v-html="k.comment">{{ k.comment }}</span>
+                        <span class="text-h7 text--disabled ml-2 float-right">{{ k.time }}</span><br>
+                        <span class="text-h6 ml-12" v-html="k.comment">{{ k.comment }}</span>
                     </div>
                 </div>
             </div>
@@ -64,13 +64,13 @@ Vue.component('s-c2', {
     template: `<span>
     <v-textarea :id="reply?'c-'+reply:'comment'" filled label="评论" auto-grow value="" maxlength="500" counter>
     </v-textarea>
-    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="comment.send(reply)"   block>发送</v-btn>
+    <v-btn class="pa-2 mx-auto text--secondary" v-on:click="comment.send(reply)"   elevation="0"  block>发送</v-btn>
 </span>
 `
 })
 Vue.component('s-workcard', {
     props: ['work', 'user', 'host', 'my'],
-    template: `<v-card>
+    template: `<v-card elevation="0" class="rounded-lg">
     <v-card :href="'#page=work&id='+work.id" elevation="0">
         <v-img :src="host.data+'/static/internalapi/asset/'+work.image" :aspect-ratio="4/3"
             class="white--text align-end" gradient="to bottom, rgba(0,0,0,0) 80%, rgba(0,0,0,.6)">
@@ -89,7 +89,7 @@ Vue.component('s-workcard', {
                 <img
                     :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
             </v-avatar>
-            <span color="accent" class="text-subtitle-1 text--secondary text-truncate text-caption"
+            <span class="text-subtitle-1 text--secondary text-truncate text-caption"
                 :href="'#page=user&id='+work.author">{{
                 user.nickname }}</span><br>
             </a>
@@ -100,12 +100,12 @@ Vue.component('s-workcard', {
         </v-btn>
         <v-btn color="red" text v-else depressed block text tile>未发布
         </v-btn>
-        <span class="pa-3">
+        <span>
             <v-btn color="accent" class="" v-if="my" :href="'/other/scratch.html#id='+work.id" target="_blank"
-                depressed text>继续创作
+                depressed text block>继续创作
             </v-btn>
             <v-btn color="accent" class="" v-if="my" v-on:click="my.del(work.id)" target="_blank"
-                depressed text>删除
+                depressed text block>删除
             </v-btn>
         </span>
         <br>
@@ -115,8 +115,7 @@ Vue.component('s-workcard', {
 })
 Vue.component('s-usercard', {
     props: ['user', 'host'],
-    template: `
-    <v-card :href="'#page=user&id='+user.id">
+    template: `<v-card :href="'#page=user&id='+user.id" elevation="0" class="rounded-lg">
     <br />
     <span class="pa-5">
       <v-avatar size="40">
