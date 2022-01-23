@@ -133,7 +133,7 @@ Vue.component('s-usercard', {
         >{{ user.nickname }}<br />
   
         <span class="text--disabled">金币：</span>
-        <span style="color: #ff9800">{{ user.coins }}</span>
+        <a style="color:#FFC107">{{ user.coins }}</a>
       </span>
       <br /><br />
     </span>
@@ -378,44 +378,44 @@ let functiona = {
                 v.qh2();
             })
         },
-        share:()=>{
+        share: () => {
             dialog(
                 `
                 通过分享作品到其他平台，他人通过链接注册账号，你和他都可获得20金币<br>
                 还可以让你的作品有更多人看到<br>
-                链接：<code>${location.href+'&out=any&i='+v.detail.id}</code>
+                链接：<code>${location.href + '&out=any&i=' + v.detail.id}</code>
                 推荐分享形式(不推荐在他人作品下发)<br>
                 复制内容到相应位置即可
                 <h2>若你要分享到A营：</h2>
                 1.自己A营个人主页的简介
                 <code>
-                    [${v.workview.name}](${location.href+'&out=aying&i='+v.detail.id})
+                    [${v.workview.name}](${location.href + '&out=aying&i=' + v.detail.id})
                 </code>
                 2.A营同个作品的介绍
                 <code>
-                    [这个作品也发布到了40code](${location.href+'&out=aying&i='+v.detail.id})
+                    [这个作品也发布到了40code](${location.href + '&out=aying&i=' + v.detail.id})
                 </code><br>
                 3.A营其他人主页评论(不建议)
                 <code>
-                    [对方称呼]，你好，请问你能看看[${v.workview.name}](${location.href+'&out=aying&i='+v.detail.id})吗？非常感谢。
+                    [对方称呼]，你好，请问你能看看[${v.workview.name}](${location.href + '&out=aying&i=' + v.detail.id})吗？非常感谢。
                 </code><br>
                 <h2>若你要分享到小码王、scratch中社、共创世界：</h2>
                 1.自己这些平台主页下的进行留言<br>
                 <code>
-                    我在40code发了一个作品，链接：${location.href+'&out=xmw&i='+v.detail.id}
+                    我在40code发了一个作品，链接：${location.href + '&out=xmw&i=' + v.detail.id}
                 </code>
                 2.这些平台同个作品的介绍
                 <code>
-                    这个作品也发布到了40code: ${location.href+'&out=aying&i='+v.detail.id})
+                    这个作品也发布到了40code: ${location.href + '&out=aying&i=' + v.detail.id})
                 </code>
                 3.这些平台其他人主页评论(不建议)
                 <code>
-                    [对方称呼]，你好，请问你能看看${v.workview.name}吗？非常感谢。链接： ${location.href+'&out=aying&i='+v.detail.id}
+                    [对方称呼]，你好，请问你能看看${v.workview.name}吗？非常感谢。链接： ${location.href + '&out=aying&i=' + v.detail.id}
                 </code><br>
                 <h2>若你要分享到QQ、微信：</h2>
-                <code>[对方称呼]，你好，请问你能看看我的scratch作品(${v.workview.name})吗？非常感谢。<br>链接： ${location.href+'&out=aying&i='+v.detail.id}<br>请复制链接到浏览器访问</code>
+                <code>[对方称呼]，你好，请问你能看看我的scratch作品(${v.workview.name})吗？非常感谢。<br>链接： ${location.href + '&out=aying&i=' + v.detail.id}<br>请复制链接到浏览器访问</code>
                 `
-                )
+            )
         }
     },
     items: [
@@ -771,13 +771,11 @@ var v = new Vue({
     data: Object.assign(functiona, functiono, other),
     vuetify: new Vuetify({
         theme: {
-            themes: {
-                light: {
-                    primary: '#3f51b5',
-                    secondary: '#b0bec5',
-                    accent: '#8c9eff',
-                    error: '#b71c1c',
-                },
+            light: {
+                primary: '#3f51b5',
+                secondary: '#03A9F4',
+                accent: '#EC407A',
+                error: '#F44336',
             },
         }
     }),
