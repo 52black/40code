@@ -141,7 +141,35 @@ Vue.component('s-usercard', {
   
 `
 })
-
+Vue.component('s-studiocard', {
+    props: ['studio', 'host'],
+    template: `<v-card :href="'#page=studio&id='+studio.id" elevation="0" class="rounded-lg">
+    <br />
+    <span class="pa-5">
+      <v-avatar size="50">
+        <img
+          :src="host.data+'/static/internalapi/asset/'+(studio.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')"
+        />
+      </v-avatar>
+      <span
+        color="accent"
+        class="
+          text-h5 text--secondary text-truncate text-caption
+          pr-3
+        "
+        >{{ studio.name }}<br />
+  
+        <span class="text--disabled">作品：</span>
+        <a style="color:#555">{{ studio.worknum }}</a>
+        <span class="text--disabled">成员：</span>
+        <a style="color:#555">{{ studio.membernum }}</a>
+      </span>
+      <br /><br />
+    </span>
+  </v-card>
+  
+`
+})
 window.alert = (text, timeout) => {
     v.sb.text = text;
     v.sb.timeout = timeout || 3000;
@@ -185,6 +213,13 @@ var pagecz = {
             v.$data.mywork = d.data
         })
         location.href = "#page=mywork"
+    },
+    'mystudio': function () {
+        get({
+            url: 'studio/my'
+        }, function (d) {
+            Vue.set(v.studio, 'my', d.data)
+        })
     },
     'work': function (id) {
         v.$data.workview = { id: 0 };
@@ -248,6 +283,20 @@ var pagecz = {
     },
     'flist': (id) => {
         v.user.getlist(id)
+    },
+    'studio': function (id) {
+        Vue.set(v.studio, 'info', null)
+        get({
+            url: 'studio/info',
+            data: { id: id }
+        }, function (d) {
+            if (!d.data) return;
+            Vue.set(v.studio, 'info', d.data)
+            v.studio.info.introduce2 = v.studio.info.introduce ? markdown.toHTML(v.studio.info.introduce) : '当前工作室暂时没有介绍哦';
+            // v.comment.getcomment()
+            v.studio.getwork()
+            v.studio.getuser()
+        })
     },
 };
 
@@ -442,6 +491,12 @@ let functiona = {
             }
         },
         {
+            title: '我的工作室',
+            c: function () {
+                location.href = "#page=mystudio"
+            }
+        },
+        {
             title: '退出登录',
             c: function () {
                 document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
@@ -449,6 +504,7 @@ let functiona = {
                 location.href = ""
             }
         },
+
     ],
     pw: value => {
         const pattern = /^[0-9]*$/
@@ -597,7 +653,10 @@ let functiona = {
                 console.log('获取评论', d)
             })
         },
-        delete: function (id) {
+        delete: async function (id) {
+            if (!confirm("你确定要删除此评论吗")) {
+                return;
+            }
             post({
                 url: "comment/delete",
                 data: {
@@ -702,6 +761,42 @@ let functiona = {
         message: {},
         flisttype: !!getQueryString('type') - 0,
     },
+    studio: {
+        new: function () {
+            if (!confirm("你确定要创建工作室吗？")) {
+                return;
+            }
+            get({
+                url: 'studio/new',
+                p: 'newstudio'
+            }, function (d) {
+                location.href = "/#page=studio&id" + d.id;
+            })
+        },
+        my: [],
+        info: null,
+        getwork: () => {
+            get({
+                url: "studio/work",
+                data: {
+                    id: v.studio.info.id,
+                }
+            }, (d) => {
+                v.studio.worklist = d.data
+            })
+        },
+        getuser: () => {
+            get({
+                url: "studio/user",
+                data: {
+                    id: v.studio.info.id,
+                }
+            }, (d) => {
+                v.studio.userlist = d.data
+            })
+        },
+        worklist: [],
+    }
 }
 let functiono = {
     workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" },
@@ -717,7 +812,7 @@ let functiono = {
         pagecz[a] && pagecz[a](id);
     },
     qh2: () => {
-        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist'], q = getQueryString('page');
+        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist', 'mystudio', 'studio'], q = getQueryString('page');
         if (!q) {
             q = 'index'
         } else if (d.indexOf(q) != -1) {
