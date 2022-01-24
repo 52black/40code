@@ -298,6 +298,16 @@ var pagecz = {
             v.studio.getuser()
         })
     },
+    'studio_edit': function (id) {
+        Vue.set(v.studio, 'info', null)
+        get({
+            url: 'studio/info',
+            data: { id: id }
+        }, function (d) {
+            if (!d.data) return;
+            Vue.set(v.studio, 'info', d.data)
+        })
+    },
 };
 
 let functiona = {
@@ -770,6 +780,10 @@ let functiona = {
                 url: 'studio/new',
                 p: 'newstudio'
             }, function (d) {
+                if(d.code==-1){
+                    alert(d.msg);
+                    return;
+                }
                 location.href = "/#page=studio&id" + d.id;
             })
         },
@@ -796,6 +810,37 @@ let functiona = {
             })
         },
         worklist: [],
+        l: function (n) {
+            post({
+                url: 'studio/change/info',
+                data: {
+                    data: $('#i2-input-' + n).val(),
+                    t: n,
+                    id:v.studio.info.id
+                },
+                p: 'changeinfo'
+            }, function (d) {
+                alert(d.msg)
+            })
+        },
+        head: function () {
+            if (!v.detail.image) {
+                alert("请选择图片并等待上传完毕后再继续操作")
+                return;
+            }
+            post({
+                url: 'studio/change/info',
+                data: {
+                    data: v.detail.image,
+                    t: 2,
+                    id:v.studio.info.id
+                },
+                p: 'changeinfo'
+            }, function (d) {
+                alert(d.msg)
+                location.href = ""
+            })
+        },
     }
 }
 let functiono = {
@@ -812,7 +857,7 @@ let functiono = {
         pagecz[a] && pagecz[a](id);
     },
     qh2: () => {
-        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist', 'mystudio', 'studio'], q = getQueryString('page');
+        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist', 'mystudio', 'studio','studio_edit'], q = getQueryString('page');
         if (!q) {
             q = 'index'
         } else if (d.indexOf(q) != -1) {
