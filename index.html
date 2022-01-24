@@ -427,24 +427,27 @@
                 <template v-else class="mx-auto ">
                   <v-col cols="12">
                     <v-card class="pa-5" elevation="0" class="br2">
-                      <v-avatar>
-                        <img
-                          :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                      </v-avatar>
-                      <span color="accent" class="text-h5">{{ studio.info.name }}</span>
-                      <!-- <v-btn class="float-right text--secondary" v-on:click="user.signin()"
-                        v-if="workview.id==detail.id" elevation="0"> 签到</v-btn>
-                      <v-btn class="float-right text--secondary" v-on:click="user.follow()" v-else elevation="0"> {{
-                        workview.followu ? '取消' : ''}}关注
-                      </v-btn> -->
-                      <!-- <br>
-                      <a>
-                        <v-btn text class="text-subtitle-1 text--secondary" v-on:click="user.flisttype=0;"
-                          :href=" `#page=flist&id=`+workview.id">{{ workview.fan }} 粉丝 </v-btn>
-                      </a> -->
+                      <v-row>
+                        <v-col>
+                          <v-avatar>
+                            <img
+                              :src="host.data+'/static/internalapi/asset/'+(studio.info.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                          </v-avatar>
 
-                      <span color="accent" class="text-subtitle-1 float-right text--disabled">创建时间：{{
-                        date(studio.info.created_time) }}</span><br>
+                          <span color="accent" class="text-h5">{{ studio.info.name }}</span>
+                        </v-col>
+                        <v-col v-if="detail && detail.id">
+                          <a v-if="studio.p>0" :href="`#page=studio_edit&id=${studio.info.id}`">
+                            <v-btn class=" text--secondary" elevation="0">编辑工作室信息</v-btn>
+                          </a><br><br>
+                          <v-btn v-if="studio.p===undefined" class=" text--secondary" elevation="0" v-on:click="studio.join()">
+                            加入工作室 </v-btn>
+                          <v-btn v-else class=" text--secondary" elevation="0" v-on:click="studio.del(studio.p)">{{
+                            studio.p==3 ? '解散工作室' : '退出工作室' }}</v-btn>
+                        </v-col>
+                        <span color="accent" class="text-subtitle-1 float-right text--disabled">创建时间：{{
+                          date(studio.info.created_time) }}</span><br>
+                      </v-row>
                     </v-card>
                   </v-col>
                   <v-col cols="12">
@@ -477,17 +480,18 @@
 
                   <template v-if="studio.userlist" cols="12">
                     <v-col v-for="j in studio.userlist" cols="6" sm="4" md="3" lg="2">
-                      <s-usercard :user="j" :host="host"></s-workcard>
+                      <s-usercard :user="j" :host="host">
+                        </s-workcard>
                     </v-col>
                   </template>
                   <span v-else>当前工作室无成员</span>
-                  <!-- <v-col cols="12">
+                  <v-col cols="12">
                     <v-card class=" pa-5" elevation="0" class="br2">
                       <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
                       <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
-                      <s-comment :comment="comment" :host="host" :detail="detail" type="0"></s-comment>
+                      <s-comment :comment="comment" :host="host" :detail="detail" type="2"></s-comment>
                     </v-card>
-                  </v-col> -->
+                  </v-col>
 
 
                 </template>
@@ -499,12 +503,14 @@
                 <v-col cols="12" md="7" class="mx-auto">
                   <span v-if="!studio.info">请等待 正在加载中</span>
                   <v-card class=" pa-8 my-12" v-else>
-                    <span color="accent">信息更改 <a :href="`#page=studio&id=`+studio.info.id">{{studio.info.name}}</a></span>
-                    <v-text-field label="工作室名称" hide-details="auto" class="my-2" id="i2-input-0" :value="studio.info.name">
+                    <span color="accent">信息更改 <a
+                        :href="`#page=studio&id=`+studio.info.id">{{studio.info.name}}</a></span>
+                    <v-text-field label="工作室名称" hide-details="auto" class="my-2" id="i2-input-0"
+                      :value="studio.info.name">
                     </v-text-field>
                     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="studio.l(0)" block>更改工作室名称</v-btn>
                     <v-textarea name="input-1" label="工作室介绍" :value="studio.info.introduce" hint="支持使用markdown编写"
-                      id="i-input-1" maxlength="500" counter>
+                      id="i2-input-1" maxlength="500" counter>
                     </v-textarea>
                     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="studio.l(1)" block>更改介绍</v-btn>
 
@@ -614,7 +620,7 @@
   <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
   <!-- <script src="https://unpkg.com/vuetify-dialog@2.0.17/dist/vuetify-dialog.min.js"></script> -->
   <script src="/js/app.js?v=8"></script>
-  <script src="/js/index.js?v=15"></script>
+  <script src="/js/index.js?v=16"></script>
   <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
   <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
 </body>

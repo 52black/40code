@@ -293,7 +293,7 @@ var pagecz = {
             if (!d.data) return;
             Vue.set(v.studio, 'info', d.data)
             v.studio.info.introduce2 = v.studio.info.introduce ? markdown.toHTML(v.studio.info.introduce) : '当前工作室暂时没有介绍哦';
-            // v.comment.getcomment()
+            v.comment.getcomment()
             v.studio.getwork()
             v.studio.getuser()
         })
@@ -615,7 +615,7 @@ let functiona = {
         },
     },
     comment: {
-        send: function (r) {
+        send: function (r,id) {
             if (r) {
                 this.reply(r);
                 return;
@@ -627,8 +627,8 @@ let functiona = {
                     url: "comment/",
                     data: {
                         comment: s,
-                        touser: v.workview.id,
-                        type: { 'user': 0, 'work': 1 }[v.viewmode],
+                        touser: v.comment.t[v.viewmode]==2 ? v.studio.info.id : v.workview.id,
+                        type: v.comment.t[v.viewmode],
                     },
                     p: "comment",
 
@@ -641,11 +641,12 @@ let functiona = {
             }
         },
         getcomment: () => {
+            Vue.set(v.comment, 'comment', [])
             get({
                 url: "comment/",
                 data: {
-                    id: v.workview.id,
-                    type: { 'user': 0, 'work': 1 }[v.viewmode],
+                    id: v.comment.t[v.viewmode]==2 ? v.studio.info.id : v.workview.id,
+                    type: v.comment.t[v.viewmode],
                 }
             }, (d) => {
                 let d2 = d.data;
@@ -690,7 +691,7 @@ let functiona = {
                     data: {
                         comment: s2,
                         toid: r,
-                        type: { 'user': 0, 'work': 1 }[v.viewmode],
+                        type: v.comment.t[v.viewmode],
                     },
                     p: "comment" + r,
 
@@ -706,7 +707,7 @@ let functiona = {
         },
         replyid: null,
         comment: {},
-        t: { 'user': 0, 'work': 1 }
+        t: { 'user': 0, 'work': 1,'studio':2 }
     },
     user: {
         getwork: (l) => {
@@ -807,9 +808,11 @@ let functiona = {
                 }
             }, (d) => {
                 v.studio.userlist = d.data
+                v.studio.p = d.p
             })
         },
         worklist: [],
+        p:undefined,
         l: function (n) {
             post({
                 url: 'studio/change/info',
@@ -840,6 +843,12 @@ let functiona = {
                 alert(d.msg)
                 location.href = ""
             })
+        },
+        del:()=>{
+            alert('还没做好哦')
+        },
+        join:()=>{
+            alert('还没做好哦')
         },
     }
 }
