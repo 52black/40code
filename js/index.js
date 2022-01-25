@@ -293,6 +293,7 @@ var pagecz = {
             if (!d.data) return;
             Vue.set(v.studio, 'info', d.data)
             v.studio.info.introduce2 = v.studio.info.introduce ? markdown.toHTML(v.studio.info.introduce) : '当前工作室暂时没有介绍哦';
+            v.studio.chose = v.studio.chose.toString();
             v.comment.getcomment()
             v.studio.getwork()
             v.studio.getuser()
@@ -615,7 +616,7 @@ let functiona = {
         },
     },
     comment: {
-        send: function (r,id) {
+        send: function (r, id) {
             if (r) {
                 this.reply(r);
                 return;
@@ -627,7 +628,7 @@ let functiona = {
                     url: "comment/",
                     data: {
                         comment: s,
-                        touser: v.comment.t[v.viewmode]==2 ? v.studio.info.id : v.workview.id,
+                        touser: v.comment.t[v.viewmode] == 2 ? v.studio.info.id : v.workview.id,
                         type: v.comment.t[v.viewmode],
                     },
                     p: "comment",
@@ -645,7 +646,7 @@ let functiona = {
             get({
                 url: "comment/",
                 data: {
-                    id: v.comment.t[v.viewmode]==2 ? v.studio.info.id : v.workview.id,
+                    id: v.comment.t[v.viewmode] == 2 ? v.studio.info.id : v.workview.id,
                     type: v.comment.t[v.viewmode],
                 }
             }, (d) => {
@@ -707,7 +708,7 @@ let functiona = {
         },
         replyid: null,
         comment: {},
-        t: { 'user': 0, 'work': 1,'studio':2 }
+        t: { 'user': 0, 'work': 1, 'studio': 2 }
     },
     user: {
         getwork: (l) => {
@@ -781,7 +782,7 @@ let functiona = {
                 url: 'studio/new',
                 p: 'newstudio'
             }, function (d) {
-                if(d.code==-1){
+                if (d.code == -1) {
                     alert(d.msg);
                     return;
                 }
@@ -812,44 +813,87 @@ let functiona = {
             })
         },
         worklist: [],
-        p:undefined,
-        l: function (n) {
+        p: undefined,
+        // l: function (n) {
+        //     post({
+        //         url: 'studio/change/info',
+        //         data: {
+        //             data: $('#i2-input-' + n).val(),
+        //             t: n,
+        //             id:v.studio.info.id
+        //         },
+        //         p: 'changeinfo'
+        //     }, function (d) {
+        //         alert(d.msg)
+        //     })
+        // },
+        update: function () {
+            let data = {};
+            data.name = $("[t='s-name']").val();
+            data.introduce = $("[t='s-introduce']").val();
+            data.chose = v.studio.info.chose;
+            // data.publish = $("[t='publish']")[0].checked;
+            data.head = v.detail.image;
+            data.id = v.studio.info.id;
+            data.haspw = v.studio.info.haspw;
+            data.pw = v.studio.info.pw;
+            console.log(data)
             post({
-                url: 'studio/change/info',
-                data: {
-                    data: $('#i2-input-' + n).val(),
-                    t: n,
-                    id:v.studio.info.id
-                },
-                p: 'changeinfo'
+                url: 'studio/info/update',
+                data: data,
+                p: 'updatestudio'
             }, function (d) {
-                alert(d.msg)
+                console.log(d)
             })
         },
-        head: function () {
-            if (!v.detail.image) {
-                alert("请选择图片并等待上传完毕后再继续操作")
+        // head: function () {
+        //     if (!v.detail.image) {
+        //         alert("请选择图片并等待上传完毕后再继续操作")
+        //         return;
+        //     }
+        //     post({
+        //         url: 'studio/change/info',
+        //         data: {
+        //             data: v.detail.image,
+        //             t: 2,
+        //             id:v.studio.info.id
+        //         },
+        //         p: 'changeinfo'
+        //     }, function (d) {
+        //         alert(d.msg)
+        //         location.href = ""
+        //     })
+        // },
+        quit: () => {
+            if(!confirm('你确定要退出吗')){
                 return;
             }
             post({
-                url: 'studio/change/info',
-                data: {
-                    data: v.detail.image,
-                    t: 2,
+                url:'studio/quit',
+                data:{
                     id:v.studio.info.id
-                },
-                p: 'changeinfo'
-            }, function (d) {
-                alert(d.msg)
-                location.href = ""
+                }
+            },function(d){
+
             })
         },
-        del:()=>{
-            alert('还没做好哦')
+        join: () => {
+            let c = v.studio.info.chose;
+            if(c==2){
+                alert('此工作室禁止任何人加入')
+            }
+            post({
+                url:'studio/join',
+                data:{
+                    pw:v.studio.info.haspw && prompt('请输入工作室加入密码'),
+                    id:v.studio.info.id
+                }
+            },function(d){
+
+            })
+            
         },
-        join:()=>{
-            alert('还没做好哦')
-        },
+        chose: '0'
     }
 }
 let functiono = {
@@ -866,7 +910,7 @@ let functiono = {
         pagecz[a] && pagecz[a](id);
     },
     qh2: () => {
-        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist', 'mystudio', 'studio','studio_edit'], q = getQueryString('page');
+        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist', 'mystudio', 'studio', 'studio_edit'], q = getQueryString('page');
         if (!q) {
             q = 'index'
         } else if (d.indexOf(q) != -1) {

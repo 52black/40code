@@ -115,6 +115,9 @@ function getQueryString(name) {
       contentType: 'application/json',
       success: function (f) {
         console.log(f)
+        if(f.msg || f.errmsg){
+          alert(f.msg || f.errmsg)
+        }
         if (f.cz == 'exit') {
           document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
           console.log('清除cookie')
