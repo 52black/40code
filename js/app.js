@@ -92,7 +92,7 @@ function getQueryString(name) {
           console.log('清除cookie')
         }
         d.p && (delete waitRequest[d.p])
-        n(f)
+        n && n(f)
       },
       error:function(e){
         d.p && (delete waitRequest[d.p])
@@ -123,7 +123,7 @@ function getQueryString(name) {
           console.log('清除cookie')
         }
         d.p && (delete waitRequest[d.p])
-        n(f)
+        n && n(f)
       },
       error:function(e){
         d.p && (delete waitRequest[d.p])

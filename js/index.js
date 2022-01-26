@@ -12,8 +12,14 @@ Vue.component('s-comment', {
                     </v-avatar>
                 </a>
                 <a :href="'#page=user&id='+i.fromuser">
-                    <v-btn text class="text-h6 ml-2 text--secondary" style="height: 100%">{{ j.nickname }}
+                    <v-btn text class="text-h6 ml-2 text--secondary" style="height: 100%">
+                        {{ j.nickname }}
                     </v-btn>
+                    <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`" v-if="comment.comment.studio[j.studio]">
+                        <v-btn rounded class="ma-2" :color="comment.comment.studio[j.studio].color || 'green'" elevation="0">
+                          <span style="color:white">{{ comment.comment.studio[j.studio].name }}</span>
+                        </v-btn>
+                    </a>
                 </a>
                 <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
             </div>
@@ -119,18 +125,19 @@ Vue.component('s-usercard', {
     <br />
     <span class="pa-5">
       <v-avatar size="40">
-        <img
-          :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')"
-        />
+        <img :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" />
       </v-avatar>
-      <span
-        color="accent"
-        class="
+      <span color="accent" class="
           text-h5 text--secondary text-truncate text-caption
           float-right
           pr-3
-        "
-        >{{ user.nickname }}<br />
+        ">{{ user.nickname }}
+        <!--<a :href="\`#page=studio&id=\${studio.id}\`" v-if="studio">
+          <v-chip class="ma-2" :color="studio.color || 'green'" text-color="white">
+            {{ studio.name }}
+          </v-chip>
+        </a>-->
+        <br />
   
         <span class="text--disabled">金币：</span>
         <a style="color:#FFC107">{{ user.coins }}</a>
@@ -181,6 +188,7 @@ window.dialog = (text) => {
 }
 var pagecz = {
     'index': function () {
+        v.stitle("40code少儿编程社区")
         get({
             url: 'work/index'
         }, function (d) {
@@ -198,9 +206,11 @@ var pagecz = {
         })
     },
     allwork: (a) => {
+        v.stitle("作品搜索")
         v.work.all(a);
     },
     'sign': () => {
+        v.stitle("登录注册")
         setTimeout(() => {
             myCaptcha = _dx.Captcha(document.getElementById('c1'), {
                 appId: '39248c3724c1b6b8f2b77645fde5b19e', //appId，在控制台中“应用管理”或“应用配置”模块获取
@@ -212,6 +222,7 @@ var pagecz = {
         }, 200)
     },
     'mywork': function () {
+        v.stitle("我的作品")
         get({
             url: 'work/my'
         }, function (d) {
@@ -220,6 +231,7 @@ var pagecz = {
         location.href = "#page=mywork"
     },
     'mystudio': function () {
+        v.stitle("我的工作室")
         get({
             url: 'studio/my'
         }, function (d) {
@@ -227,6 +239,7 @@ var pagecz = {
         })
     },
     'work': function (id) {
+        v.stitle("scratch作品")
         v.$data.workview = { id: 0 };
         get({
             url: 'work/info',
@@ -237,12 +250,14 @@ var pagecz = {
                 d2.introduce2 = markdown.toHTML(d2.introduce);
                 v.workview = d2;
                 v.comment.getcomment()
+                v.title=d2.title+' by '+d2.nickname;
             } else { alert("服务器或网络错误") }
         })
     },
     'workinfo': function (id) {
         v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
         delete waitRequest.cover;
+        v.stitle("作品信息设置")
         get({
             url: 'work/info',
             data: { id: id }
@@ -260,6 +275,7 @@ var pagecz = {
         })
     },
     'user': function (id) {
+        v.stitle("用户")
         if (id == "0") {
             setTimeout(() => {
                 location.href = "#page=user&id=" + v.detail.id
@@ -273,6 +289,7 @@ var pagecz = {
         }, function (d) {
             console.log(d)
             if (!d.data) return;
+            v.stitle(d.data[0] && d.data[0].nickname);
             (v.$data.workview = d.data[0])
             // location.href = "#page=user&id=" + id;
             v.workview.introduce2 = v.workview.introduce ? markdown.toHTML(v.workview.introduce) : '当前用户暂时没有介绍哦';
@@ -281,15 +298,18 @@ var pagecz = {
         })
     },
     'account': function (id) {
-
+        v.stitle("账号设置")
     },
     'message': (id) => {
+        v.stitle("消息")
         v.user.getmessage()
     },
     'flist': (id) => {
+        v.stitle("关注列表")
         v.user.getlist(id)
     },
     'studio': function (id) {
+        v.stitle("工作室")
         Vue.set(v.studio, 'info', null)
         get({
             url: 'studio/info',
@@ -305,6 +325,7 @@ var pagecz = {
         })
     },
     'studio_edit': function (id) {
+        v.stitle("工作室设置")
         Vue.set(v.studio, 'info', null)
         get({
             url: 'studio/info',
@@ -313,6 +334,7 @@ var pagecz = {
             if (!d.data) return;
             Vue.set(v.studio, 'info', d.data)
         })
+
     },
 };
 
@@ -500,6 +522,12 @@ let functiona = {
             }
         },
         {
+            title: '我的工作室',
+            c: function () {
+                location.href = "#page=mystudio"
+            }
+        },
+        {
             title: '账号设置',
             c: function () {
                 // v.$data.qh('account');
@@ -507,9 +535,9 @@ let functiona = {
             }
         },
         {
-            title: '我的工作室',
+            title: '刷新',
             c: function () {
-                location.href = "#page=mystudio"
+                location.href = location.href+"&t="+(new Date())/1
             }
         },
         {
@@ -796,7 +824,7 @@ let functiona = {
         },
         my: [],
         info: null,
-        ilist:[],
+        ilist: [],
         getwork: () => {
             get({
                 url: "studio/work",
@@ -871,33 +899,39 @@ let functiona = {
         //     })
         // },
         quit: () => {
-            if(!confirm('你确定要退出吗')){
+            if (!confirm('你确定要退出吗')) {
                 return;
             }
             post({
-                url:'studio/quit',
-                data:{
-                    id:v.studio.info.id
+                url: 'studio/quit',
+                data: {
+                    id: v.studio.info.id
                 }
-            },function(d){
+            }, function (d) {
 
             })
         },
         join: () => {
             let c = v.studio.info.chose;
-            if(c==2){
+            if (c == 2) {
                 alert('此工作室禁止任何人加入')
             }
             post({
-                url:'studio/join',
-                data:{
-                    pw:v.studio.info.haspw && prompt('请输入工作室加入密码'),
-                    id:v.studio.info.id
+                url: 'studio/join',
+                data: {
+                    pw: v.studio.info.haspw && prompt('请输入工作室加入密码'),
+                    id: v.studio.info.id
                 }
-            },function(d){
-
             })
-            
+
+        },
+        main: () => {
+            post({
+                url: 'studio/setmain',
+                data: {
+                    id: v.studio.info.id
+                }
+            })
         },
         chose: '0'
     }
@@ -944,6 +978,10 @@ let functiono = {
     mywork: {},
     waitRequest: { cover: 0 },
     worklist: 0,
+    title:'40code少儿编程社区',
+    stitle:(s)=>{
+        v.title=document.title=(s || v.title)+'  -40code';
+    }
 }
 
 var other = {
@@ -988,5 +1026,21 @@ window.addEventListener('hashchange', function (event) {
 
 $(document).ready(function () {
     getuserinfo()
-    setInterval(() => { getuserinfo() }, 10000)
+    document.addEventListener('visibilitychange', function () {
+        // 页面变为不可见时触发 
+        if (document.visibilityState == 'hidden') {
+            document.title="我等你回来……"
+        }
+        // 页面变为可见时触发 
+        if (document.visibilityState == 'visible') {
+            v.stitle()
+            getuserinfo();
+        }
+    }
+    );
+    setInterval(()=>{
+        if (document.visibilityState == 'visible') {
+            getuserinfo();
+        }
+    },20000)
 });

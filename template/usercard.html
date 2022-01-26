@@ -1,22 +1,23 @@
-<v-card :href="'#page=user&id='+user.id" elevation="0">
+<v-card :href="'#page=user&id='+user.id" elevation="0" class="rounded-lg">
   <br />
   <span class="pa-5">
     <v-avatar size="40">
-      <img
-        :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')"
-      />
+      <img :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" />
     </v-avatar>
-    <span
-      color="accent"
-      class="
+    <span color="accent" class="
         text-h5 text--secondary text-truncate text-caption
         float-right
         pr-3
-      "
-      >{{ user.nickname }}<br />
+      ">{{ user.nickname }}
+      <a :href="`#page=studio&id=${studio.id}`" v-if="studio">
+        <v-chip class="ma-2" :color="studio.color || 'green'" text-color="white">
+          {{ studio.name }}
+        </v-chip>
+      </a>
+      <br />
 
       <span class="text--disabled">金币：</span>
-      <span color="accent">{{ user.coins }}</span>
+      <a style="color:#FFC107">{{ user.coins }}</a>
     </span>
     <br /><br />
   </span>
