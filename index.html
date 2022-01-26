@@ -361,9 +361,9 @@
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
                       <span color="accent" class="text-h5">{{ workview.nickname }}</span>
-                      <v-btn class="float-right text--secondary" v-on:click="user.signin()"
-                        v-if="workview.id==detail.id" elevation="0"> 签到</v-btn>
-                      <v-btn class="float-right text--secondary" v-on:click="user.follow()" v-else elevation="0"> {{
+                      <v-btn class="float-right" v-on:click="user.signin()"
+                        v-if="workview.id==detail.id" elevation="0" color="accent"> 签到</v-btn>
+                      <v-btn class="float-right" v-on:click="user.follow()" v-else elevation="0" color="accent"> {{
                         workview.followu ? '取消' : ''}}关注
                       </v-btn>
                       <br>
@@ -448,15 +448,17 @@
                         </v-col>
                         <v-col v-if="detail && detail.id">
                           <a v-if="studio.p>0" :href="`#page=studio_edit&id=${studio.info.id}`">
-                            <v-btn class=" text--secondary" elevation="0">编辑工作室信息</v-btn>
+                            <v-btn  elevation="0" color="accent">编辑工作室信息</v-btn>
                           </a><br><br>
-                          <v-btn v-if="studio.p===undefined" class=" text--secondary" elevation="0"
-                            v-on:click="studio.join()">
+                          <v-btn v-if="studio.p===undefined"  elevation="0"
+                            v-on:click="studio.join()" color="accent">
                             加入工作室 </v-btn>
-                          <v-btn v-else-if="studio.p!==3" class=" text--secondary" elevation="0"
-                            v-on:click="studio.quit()">退出工作室</v-btn>
-                            <v-btn v-if="studio.p!==undefined" class=" text--secondary" elevation="0"
-                            v-on:click="studio.main()">设为主工作室(即可享有头衔)</v-btn>
+                          <v-btn v-else-if="studio.p!==3"  elevation="0"
+                            v-on:click="studio.quit()" color="accent">退出工作室</v-btn>
+                            <v-btn v-if="studio.p!==undefined"  elevation="0"
+                            v-on:click="studio.main()" color="accent">设为主工作室(即可享有头衔)</v-btn>
+                            <v-btn v-if="studio.p!==undefined"  elevation="0"
+                            v-on:click="studio.upload()" color="accent">投稿作品</v-btn>
                         </v-col>
                         <span color="accent" class="text-subtitle-1 float-right text--disabled">创建时间：{{
                           date(studio.info.created_time) }}</span><br>
@@ -533,6 +535,10 @@
                       <v-radio :label="`允许${studio.info.haspw?'输对密码并':''}没有工作室的人加入`" value="1"></v-radio>
                       <v-radio label="禁止任何人加入" value="2"></v-radio>
                     </v-radio-group>
+
+                    <v-text-field label="工作室头衔颜色(仅支持英文，例如green)" hide-details="auto" class="mx-3" t="s-color"
+                    :value="studio.info.color" width="100px"></v-text-field>
+
                     <v-file-input :rules="rules" accept="image/png, image/jpeg, image/bmp, image/gif"
                       label="工作室头像(建议尺寸1:1)" id="simg" show-size truncate-length="10">
                     </v-file-input>
@@ -643,7 +649,7 @@
   <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
   <!-- <script src="https://unpkg.com/vuetify-dialog@2.0.17/dist/vuetify-dialog.min.js"></script> -->
   <script src="/js/app.js?v=10"></script>
-  <script src="/js/index.js?v=18"></script>
+  <script src="/js/index.js?v=19"></script>
   <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
   <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
 </body>

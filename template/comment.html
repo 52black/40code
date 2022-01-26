@@ -13,11 +13,11 @@
                     <v-btn text class="text-h6 ml-2 text--secondary" style="height: 100%">
                         {{ j.nickname }}
                     </v-btn>
-                    <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`" v-if="comment.comment.studio[j.studio]">
-                        <v-btn rounded class="ma-2" :color="comment.comment.studio[j.studio].color || 'green'" elevation="0">
-                          <span style="color:white">{{ comment.comment.studio[j.studio].name }}</span>
-                        </v-btn>
-                    </a>
+                </a>
+                <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`" v-if="comment.comment.studio[j.studio]">
+                    <v-btn rounded class="ma-2" :color="comment.comment.studio[j.studio].color || 'green'" elevation="0">
+                      <span style="color:white">{{ comment.comment.studio[j.studio].name }}</span>
+                    </v-btn>
                 </a>
                 <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
             </div>
@@ -49,6 +49,11 @@
                         </a>
                         <a :href="'#page=user&id='+k.fromuser">
                             <v-btn text class="text-h6 ml-2 text--secondary" style="height: 100%">{{ j.nickname }}
+                            </v-btn>
+                        </a>
+                        <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`" v-if="comment.comment.studio[j.studio]">
+                            <v-btn rounded class="ma-2" :color="comment.comment.studio[j.studio].color || 'green'" elevation="0">
+                              <span style="color:white">{{ comment.comment.studio[j.studio].name }}</span>
                             </v-btn>
                         </a>
                         <span class="text-h7 text--disabled ml-2 float-right">{{ k.time }}</span><br>

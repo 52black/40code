@@ -15,11 +15,11 @@ Vue.component('s-comment', {
                     <v-btn text class="text-h6 ml-2 text--secondary" style="height: 100%">
                         {{ j.nickname }}
                     </v-btn>
-                    <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`" v-if="comment.comment.studio[j.studio]">
-                        <v-btn rounded class="ma-2" :color="comment.comment.studio[j.studio].color || 'green'" elevation="0">
-                          <span style="color:white">{{ comment.comment.studio[j.studio].name }}</span>
-                        </v-btn>
-                    </a>
+                </a>
+                <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`" v-if="comment.comment.studio[j.studio]">
+                    <v-btn rounded class="ma-2" :color="comment.comment.studio[j.studio].color || 'green'" elevation="0">
+                      <span style="color:white">{{ comment.comment.studio[j.studio].name }}</span>
+                    </v-btn>
                 </a>
                 <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
             </div>
@@ -51,6 +51,11 @@ Vue.component('s-comment', {
                         </a>
                         <a :href="'#page=user&id='+k.fromuser">
                             <v-btn text class="text-h6 ml-2 text--secondary" style="height: 100%">{{ j.nickname }}
+                            </v-btn>
+                        </a>
+                        <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`" v-if="comment.comment.studio[j.studio]">
+                            <v-btn rounded class="ma-2" :color="comment.comment.studio[j.studio].color || 'green'" elevation="0">
+                              <span style="color:white">{{ comment.comment.studio[j.studio].name }}</span>
                             </v-btn>
                         </a>
                         <span class="text-h7 text--disabled ml-2 float-right">{{ k.time }}</span><br>
@@ -848,23 +853,11 @@ let functiona = {
         },
         worklist: [],
         p: undefined,
-        // l: function (n) {
-        //     post({
-        //         url: 'studio/change/info',
-        //         data: {
-        //             data: $('#i2-input-' + n).val(),
-        //             t: n,
-        //             id:v.studio.info.id
-        //         },
-        //         p: 'changeinfo'
-        //     }, function (d) {
-        //         alert(d.msg)
-        //     })
-        // },
         update: function () {
             let data = {};
             data.name = $("[t='s-name']").val();
             data.introduce = $("[t='s-introduce']").val();
+            data.color = $("[t='s-color']").val();
             data.chose = v.studio.info.chose;
             // data.publish = $("[t='publish']")[0].checked;
             data.head = v.detail.image;
@@ -880,24 +873,6 @@ let functiona = {
                 console.log(d)
             })
         },
-        // head: function () {
-        //     if (!v.detail.image) {
-        //         alert("请选择图片并等待上传完毕后再继续操作")
-        //         return;
-        //     }
-        //     post({
-        //         url: 'studio/change/info',
-        //         data: {
-        //             data: v.detail.image,
-        //             t: 2,
-        //             id:v.studio.info.id
-        //         },
-        //         p: 'changeinfo'
-        //     }, function (d) {
-        //         alert(d.msg)
-        //         location.href = ""
-        //     })
-        // },
         quit: () => {
             if (!confirm('你确定要退出吗')) {
                 return;
@@ -930,6 +905,32 @@ let functiona = {
                 url: 'studio/setmain',
                 data: {
                     id: v.studio.info.id
+                }
+            })
+        },
+        upload:()=>{
+            let url=prompt("请输入作品的链接或id"),id;
+            if(isNaN(parseInt(url,10))){
+                if(url.indexOf("#") < 0){
+                    alert("请输入正确的链接")
+                    return;
+                }
+                let z=/(\w+):\/\/([^/:]+)(:\d*)?([^# ]*)/;
+                let reg=new RegExp("(^|&)" + "id" + "=([^&]*)(&|$)", "i")
+                id=url.split("#")[1].match(reg)[2]
+                if(!id){
+                    alert("请输入正确的链接")
+                    return;
+                }
+            }else{
+                id=url;
+            }
+            
+            post({
+                url: 'studio/upload',
+                data: {
+                    id: v.studio.info.id,
+                    work:id
                 }
             })
         },
