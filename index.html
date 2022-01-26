@@ -119,13 +119,23 @@
                 </template>
                 <v-col class="mt-2" cols="12" v-if="viewmode=='index' && user.list">
                   <strong>用户榜</strong>
-                  <a class="float-right" href="#">
+                  <!-- <a class="float-right" href="#">
                     <v-btn text>更多</v-btn>
-                  </a>
+                  </a> -->
                 </v-col>
                 <v-col v-if="viewmode=='index' && user.list" v-for="j in user.list" :key="`${n}${j}`" cols="12" sm="6"
                   md="4" lg="3">
                   <s-usercard :user="j" :host="host"></s-usercard>
+                </v-col>
+                <v-col class="mt-2" cols="12" v-if="viewmode=='index' && studio.ilist">
+                  <strong>工作室榜</strong>
+                  <!-- <a class="float-right" href="#">
+                    <v-btn text>更多</v-btn>
+                  </a> -->
+                </v-col>
+                <v-col v-if="viewmode=='index' && user.list" v-for="j in studio.ilist" :key="`${n}${j}`" cols="12" sm="6"
+                  md="4" lg="3">
+                  <s-studiocard :studio="j" :host="host"></s-usercard>
                 </v-col>
               </v-row>
             </v-container>
@@ -516,11 +526,9 @@
                     <v-text-field label="密码" hide-details="auto" class="mx-3" name="editinfo" t="s-name"
                       :value="studio.info.pw" v-if="studio.info.haspw" width="100px"></v-text-field>
 
-
-
                     <v-radio-group v-model="studio.info.chose" mandatory>
-                      <v-radio :label="`允许${studio.info.haspw?'输对密码':''}所有人加入`" value="0"></v-radio>
-                      <v-radio :label="`允许${studio.info.haspw?'输对密码':''}并没有工作室的人加入`" value="1"></v-radio>
+                      <v-radio :label="`允许${studio.info.haspw?'输对密码的':''}所有人加入`" value="0"></v-radio>
+                      <v-radio :label="`允许${studio.info.haspw?'输对密码并':''}没有工作室的人加入`" value="1"></v-radio>
                       <v-radio label="禁止任何人加入" value="2"></v-radio>
                     </v-radio-group>
                     <v-file-input :rules="rules" accept="image/png, image/jpeg, image/bmp, image/gif"

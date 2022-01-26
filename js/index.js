@@ -191,6 +191,11 @@ var pagecz = {
         }, function (d) {
             v.user.list = d.data
         })
+        get({
+            url: 'studio/index'
+        }, function (d) {
+            v.studio.ilist = d.data
+        })
     },
     allwork: (a) => {
         v.work.all(a);
@@ -791,6 +796,7 @@ let functiona = {
         },
         my: [],
         info: null,
+        ilist:[],
         getwork: () => {
             get({
                 url: "studio/work",
