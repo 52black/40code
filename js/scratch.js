@@ -69,8 +69,8 @@ $('#dlp').hide();
     // $('body').append('<script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/lib35.min.js"></script> \
     // <script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/gui9.js"></script>')
     $('body').append(`
-    <script src="/other/scratch/lib38.min.js" id="script"></script>
-    <script src="/other/scratch/gui11.js"></script>
+    <script src="/other/scratch/lib.min.js" id="script"></script>
+    <script src="/other/scratch/gui.js"></script>
     `);
 })()
 var scratch2 = () => { },temp2={};
