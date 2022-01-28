@@ -1,3 +1,6 @@
+console.log(window,top,self);
+var $=top.$,v=top.v;
+
 function getQueryString(name) {
   let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
   if (window.top.location.hash.indexOf("#") < 0) return null;

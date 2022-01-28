@@ -36,7 +36,7 @@ function getQueryString(name) {
     get({
       url: 'user/myinfo'
     }, function (d) {
-      var userdetail=d.data;
+      userdetail=d.data;
       console.log('获取信息成功',d)
       if((typeof v) !== "undefined"){
         v.$data.detail = d.data;
