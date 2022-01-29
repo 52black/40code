@@ -45,7 +45,7 @@ $('#dlp').hide();
             },
             handleClick: async () => {
                 save(1)
-                
+
             }
         })
     }
@@ -74,7 +74,7 @@ $('#dlp').hide();
     <script src="/other/scratch/gui.js?v=2"></script>
     `);
 })()
-var scratch2 = () => { },temp2={};
+var scratch2 = () => { }, temp2 = {};
 function downloadFileByBlob(blob, fileName = "file") {
     let blobUrl = window.URL.createObjectURL(blob)
     let link = document.createElement('a')
@@ -135,12 +135,17 @@ function savecover(callback) {
     $("#loadinfo").html('正在保存封面');
     window.scratch.getProjectCoverBlob(e => { uplw(e) })
 }
-function saveproject(id, callback,Open) {
+function saveproject(id, callback, Open) {
     console.log("自定义按钮1");
     console.log('分享按钮');
-    let data2 = [];
+    let data2 = [],data3=[];
+    var vs = vm.assets;
+    $("#scratch").css("opacity", "0");
+    $('#view').show();
+    $('#dlp').show();
+    $('#i2').hide();
     let f = function (i) {
-        i = new Blob([vm.assets[i].data], { type: vm.assets[i].assetType.contentType })
+        i = new Blob([vs[i].data], { type: vs[i].assetType.contentType })
         console.log(URL.createObjectURL(i))
         return i
     }
@@ -181,40 +186,17 @@ function saveproject(id, callback,Open) {
             }
         });
     }
-    $("#scratch").css("opacity", "0");
-    $('#view').show();
-    $('#dlp').show();
-    for (let i in vm.assets) {
-        // upload(i.data)
-        if (!vm.assets[i].clean) {
-            // data.append('image', f(i))
-            data2.push(i)
-        }
-    }
+
     function upa(t) {
         // debugger;
-        if(f(data2[t]).size> 5 * 1024 * 1024){
+        if (f(data2[t]).size > 5 * 1024 * 1024) {
             t++;
             upa(t);
             return;
         }
         // debugger;
-        let list = [], data = new FormData(),n=0,file=f(data2[t]);
+        let list = [], data = new FormData(), n = 0, file = f(data2[t]);
         data.append('image', file)
-        // for (let i = t, s = 0; i < data2.length && n<19 /* 每次最多上次19个素材*/; i++, n++) {
-        //     let file = f(data2[i])
-        //     s += file.size;
-        //     if (s > 5 * 1024 * 1024){
-        //         // n--;
-        //         console.log('break',i)
-        //         /* 单次上传到5MB 分步*/
-        //         debugger;
-        //         break;
-        //     } 
-        //     debugger;
-        //     data.append('image', file)
-        //     console.log('append,',i,n)
-        // }
         console.log(n)
         debugger;
         $.ajax({
@@ -232,18 +214,14 @@ function saveproject(id, callback,Open) {
                     alert("保存失败");
                     return;
                 }
-                // for (let i = t; i < n + t && i < data2.length; i++) {
-                //     vm.assets[data2[i]].clean = true;
-                // }
-                vm.assets[data2[t]].clean = true;
-                $('#b').html(parseInt((t+1/*n + t*/) / data2.length * 10000)/100 + '%')
-                if (t+1/*n + t*/ >= data2.length - 1){
+                // vm.assets[data2[t]].clean = true;
+                $('#b').html(parseInt((t + 1/*n + t*/) / data2.length * 10000) / 100 + '%')
+                if (t + 1/*n + t*/ >= data2.length - 1) {
                     $('#b').hide();
                     uplw();
-                }  
+                }
                 else
-                    // upa(t + n)
-                    upa(t+1)
+                    upa(t + 1)
             },
             error: function () {
                 hy();
@@ -252,16 +230,50 @@ function saveproject(id, callback,Open) {
             }
         });
     }
-    if (data2.length) {
-        $("#loadinfo").html('正在保存素材');
-        $('#b').show()
-        upa(0);
+
+    function chunk(arr, size) {
+        var objArr = new Array();
+        var index = 0;
+        var objArrLen = arr.length/size;
+        for(var i=0;i<objArrLen;i++){
+          var arrTemp = new Array();
+          for(var j=0;j<size;j++){
+              arrTemp[j] = arr[index++];
+              if(index==arr.length){
+                  break;
+              }
+          }
+          objArr[i] = arrTemp;
+        }
+        return objArr;
+      }
+
+    function c(t,callback){
+        post({
+            url: 'work/imagelist',
+            data: { list: t }
+        }, (d) => {
+            console.log(d)
+            data3=data3.concat(d.data);
+            callback()
+            if (data2.length) {
+                $("#loadinfo").html('正在保存素材');
+                $('#b').show()
+                upa(0);
+            }
+            else uplw();
+        })
     }
-    else uplw();
+    for (let i of vs) {
+        data2.push(i.assetId + '.' + i.dataFormat)
+    }
+    $("#loadinfo").html('正在检查素材列表');
+    var dsp=chunk(data2, 4);
+    
 }
 function save(open) {
     if (workinfo.isauthor)
-        saveproject(null,null,open)
+        saveproject(null, null, open)
     else {
         $("#scratch").css("opacity", "0");
         $("#loadinfo").html('正在改编中');
@@ -274,7 +286,7 @@ function save(open) {
                 function () {
                     location.href = "/scratch#id=" + d.info.insertId;
                     location.reload();
-                },open
+                }, open
             )
         })
     }
