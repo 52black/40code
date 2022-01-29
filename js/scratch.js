@@ -135,16 +135,23 @@ function savecover(callback) {
     $("#loadinfo").html('正在保存封面');
     window.scratch.getProjectCoverBlob(e => { uplw(e) })
 }
-function saveproject(id, callback, Open) {
+async function saveproject(id, callback, Open) {
     console.log("自定义按钮1");
     console.log('分享按钮');
-    let data2 = [],data3=[];
+    let data2 = [];
     var vs = vm.assets;
     $("#scratch").css("opacity", "0");
     $('#view').show();
     $('#dlp').show();
-    $('#i2').hide();
-    let f = function (i) {
+    $('#i2').hide
+    let f = function (i2) {
+        let i=i2
+        for(let j=0;j<vs.length;j++){
+            if(vs[j].assetId==i.split('.')[0]){
+                i=j;break;
+            }
+        }
+        debugger
         i = new Blob([vs[i].data], { type: vs[i].assetType.contentType })
         console.log(URL.createObjectURL(i))
         return i
@@ -190,6 +197,7 @@ function saveproject(id, callback, Open) {
     function upa(t) {
         // debugger;
         if (f(data2[t]).size > 5 * 1024 * 1024) {
+            console.log('尺寸过大',t,data2[t],'跳过')
             t++;
             upa(t);
             return;
@@ -216,7 +224,7 @@ function saveproject(id, callback, Open) {
                 }
                 // vm.assets[data2[t]].clean = true;
                 $('#b').html(parseInt((t + 1/*n + t*/) / data2.length * 10000) / 100 + '%')
-                if (t + 1/*n + t*/ >= data2.length - 1) {
+                if (t + 1/*n + t*/ >= data2.length) {
                     $('#b').hide();
                     uplw();
                 }
@@ -234,42 +242,67 @@ function saveproject(id, callback, Open) {
     function chunk(arr, size) {
         var objArr = new Array();
         var index = 0;
-        var objArrLen = arr.length/size;
-        for(var i=0;i<objArrLen;i++){
-          var arrTemp = new Array();
-          for(var j=0;j<size;j++){
-              arrTemp[j] = arr[index++];
-              if(index==arr.length){
-                  break;
-              }
-          }
-          objArr[i] = arrTemp;
+        var objArrLen = arr.length / size;
+        for (var i = 0; i < objArrLen; i++) {
+            var arrTemp = new Array();
+            for (var j = 0; j < size; j++) {
+                arrTemp[j] = arr[index++];
+                if (index == arr.length) {
+                    break;
+                }
+            }
+            objArr[i] = arrTemp;
         }
         return objArr;
-      }
-
-    function c(t,callback){
-        post({
-            url: 'work/imagelist',
-            data: { list: t }
-        }, (d) => {
-            console.log(d)
-            data3=data3.concat(d.data);
-            callback()
-            if (data2.length) {
-                $("#loadinfo").html('正在保存素材');
-                $('#b').show()
-                upa(0);
-            }
-            else uplw();
-        })
     }
+
+    function aftercheck() {
+        if (data2.length) {
+            $("#loadinfo").html('正在保存素材');
+            $('#b').show()
+            upa(0);
+        }
+        else uplw();
+    }
+
+    $('#i2').hide()
+    $("#loadinfo").html('正在检查素材列表');
     for (let i of vs) {
         data2.push(i.assetId + '.' + i.dataFormat)
     }
-    $("#loadinfo").html('正在检查素材列表');
-    var dsp=chunk(data2, 4);
-    
+    let checkdata = await new Promise((resolve) => {
+        console.log('fuckyou', data2)
+        let list = chunk(data2, 20), filelist = [], num = 0;
+        debugger;
+        if(!list.length) resolve([])
+        for (let i = 0; i < list.length; i++) {
+            debugger;
+            post({
+                url: 'work/imagelist',
+                data: { list: list[i] }
+            }, (d) => {
+                num++;
+                console.log(d);
+                filelist = filelist.concat(d.data);
+                if (num == list.length) {
+                    resolve(filelist);
+                }
+            }, (d) => {
+                resolve(null)
+            })
+        }
+
+    });
+    if (checkdata) {
+        data2 = checkdata
+        console.log(data2)
+        aftercheck();
+    } else {
+        alert('作品素材检查失败，请联系QQ:3274235903查看原因')
+        hy();
+    }
+
+
 }
 function save(open) {
     if (workinfo.isauthor)

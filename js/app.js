@@ -72,7 +72,7 @@ function getQueryString(name) {
           })
     })
   }
-  function get(d, n) {
+  function get(d, n, eee) {
     let d2 = d.data;
     if (!d2) d2 = {};
     if(d.p){
@@ -96,12 +96,16 @@ function getQueryString(name) {
       },
       error:function(e){
         d.p && (delete waitRequest[d.p])
+        
         console.log(e)
+        if(eee)
+          eee()
+        else
         alert("服务器或网络错误")
       }
     })
   }
-  function post(d, n) {
+  function post(d, n, eee) {
     let d2 = d.data;
     if(d.p){
       if(waitRequest[d.p]) return;
@@ -128,7 +132,8 @@ function getQueryString(name) {
       error:function(e){
         d.p && (delete waitRequest[d.p])
         console.log(e)
-        alert("服务器或网络错误")
+        if(eee) eee()
+        else alert("服务器或网络错误")
       }
     })
   }
