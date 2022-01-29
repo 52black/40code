@@ -70,7 +70,7 @@ $('#dlp').hide();
     // $('body').append('<script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/lib35.min.js"></script> \
     // <script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/gui9.js"></script>')
     $('body').append(`
-    <script src="/other/scratch/lib.min.js?v=2" id="script"></script>
+    <script src="/other/scratch/lib.min.js?v=3" id="script"></script>
     <script src="/other/scratch/gui.js?v=2"></script>
     `);
 })()

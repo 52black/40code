@@ -863,7 +863,7 @@ let functiona = {
             data.head = v.detail.image;
             data.id = v.studio.info.id;
             data.haspw = v.studio.info.haspw;
-            data.pw = v.studio.info.pw;
+            data.pw = $("[t='s-pw']").val();
             console.log(data)
             post({
                 url: 'studio/info/update',
