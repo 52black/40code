@@ -81,7 +81,8 @@ Vue.component('s-c2', {
 })
 Vue.component('s-workcard', {
     props: ['work', 'user', 'host', 'my'],
-    template: `<v-card elevation="0" class="rounded-lg">
+    template: `
+    <v-card elevation="0" class="rounded-lg">
     <v-card :href="'#page=work&id='+work.id" elevation="0">
         <v-img :src="host.data+'/static/internalapi/asset/'+work.image" :aspect-ratio="4/3"
             class="white--text align-end" gradient="to bottom, rgba(0,0,0,0) 80%, rgba(0,0,0,.6)">
@@ -95,16 +96,18 @@ Vue.component('s-workcard', {
             </span>
         </v-img>
         <div class="text-truncate px-5 mt-3 mb-1 text-heading-6">{{ work.name }}</div>
-        <span class="px-5" v-if="user">
-            <v-avatar size="25">
-                <img
-                    :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-            </v-avatar>
-            <span class="text-subtitle-1 text--secondary text-truncate text-caption"
-                :href="'#page=user&id='+work.author">{{
-                user.nickname }}</span><br>
-            </a>
-            <span else><br></span>
+        <span class="px-5 text-truncate text-caption row" v-if="user">
+            <span class="col-12 text-truncate">
+                <v-avatar size="25">
+                    <img
+                        :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                </v-avatar>
+                <span class="text-subtitle-1 text--secondary "
+                    :href="'#page=user&id='+work.author">{{
+                    user.nickname }}</span><br>
+                </a>
+                <span else><br></span>
+            </span>
     </v-card>
     <span v-if="my">
         <v-btn color="green" text v-if="work.publish" depressed block text tile>已发布
@@ -121,64 +124,79 @@ Vue.component('s-workcard', {
         </span>
         <br>
     </span>
-
-</v-card>`
+</v-card>
+    `
 })
 Vue.component('s-usercard', {
     props: ['user', 'host'],
-    template: `<v-card :href="'#page=user&id='+user.id" elevation="0" class="rounded-lg">
-    <br />
-    <span class="pa-5">
+    template: `
+    <v-card :href="'#page=user&id='+user.id" elevation="0" class="rounded-lg py-2">
+  <v-row class="pa-5">
+    <v-col cols="4">
       <v-avatar size="40">
         <img :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" />
       </v-avatar>
+    </v-col>
+    <v-col cols="8">
       <span color="accent" class="
           text-h5 text--secondary text-truncate text-caption
-          float-right
+          
           pr-3
-        ">{{ user.nickname }}
+          ">
+        <div class="row">
+          <div class="col-12 text-truncate">
+            {{ user.nickname }}
+          </div>
+        </div>
+        <span class="text-truncate"></span>
         <!--<a :href="\`#page=studio&id=\${studio.id}\`" v-if="studio">
           <v-chip class="ma-2" :color="studio.color || 'green'" text-color="white">
-            {{ studio.name }}
+              {{ studio.name }}
           </v-chip>
-        </a>-->
-        <br />
-  
-        <span class="text--disabled">金币：</span>
+          </a>-->
+
+
+        <span class="text--disabled">金币:</span>
         <a style="color:#FFC107">{{ user.coins }}</a>
       </span>
-      <br /><br />
-    </span>
-  </v-card>
+    </v-col>
+  </v-row>
+</v-card>
   
 `
 })
 Vue.component('s-studiocard', {
     props: ['studio', 'host'],
-    template: `<v-card :href="'#page=studio&id='+studio.id" elevation="0" class="rounded-lg">
-    <br />
-    <span class="pa-5">
-      <v-avatar size="50">
-        <img
-          :src="host.data+'/static/internalapi/asset/'+(studio.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')"
-        />
-      </v-avatar>
-      <span
-        color="accent"
-        class="
-          text-h5 text--secondary text-truncate text-caption
-          pr-3
-        "
-        >{{ studio.name }}<br />
-  
-        <span class="text--disabled">作品：</span>
-        <a style="color:#555">{{ studio.worknum }}</a>
-        <span class="text--disabled">成员：</span>
-        <a style="color:#555">{{ studio.membernum }}</a>
-      </span>
-      <br /><br />
-    </span>
-  </v-card>
+    template: `
+    <v-card :href="'#page=studio&id='+studio.id" elevation="0" class="rounded-lg py-2">
+
+    <v-row class="pa-5">
+        <v-col cols="4">
+            <v-avatar size="50">
+                <img
+                    :src="host.data+'/static/internalapi/asset/'+(studio.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" />
+            </v-avatar>
+        </v-col>
+        <v-col cols="8">
+            <span color="accent" class="
+            text-h5 text--secondary text-truncate text-caption
+            pr-3
+            ">
+                <div class="row">
+                    <div class="col-12 text-truncate">
+                        {{ studio.name }}
+                    </div>
+                </div>
+
+                <span class="text--disabled">作品:</span>
+                <a style="color:#555">{{ studio.worknum }}</a>
+                <span class="text--disabled">成员:</span>
+                <a style="color:#555">{{ studio.membernum }}</a>
+            </span>
+
+        </v-col>
+    </v-row>
+</v-card>
   
 `
 })

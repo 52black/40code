@@ -123,8 +123,8 @@
                     <v-btn text>更多</v-btn>
                   </a> -->
                 </v-col>
-                <v-col v-if="viewmode=='index' && user.list" v-for="j in user.list" :key="`${n}${j}`" cols="12" sm="6"
-                  md="4" lg="3">
+                <v-col v-if="viewmode=='index' && user.list" v-for="j in user.list" :key="`${n}${j}`" cols="6" sm="4"
+                  md="3" lg="2">
                   <s-usercard :user="j" :host="host"></s-usercard>
                 </v-col>
                 <v-col class="mt-2" cols="12" v-if="viewmode=='index' && studio.ilist">
@@ -133,8 +133,8 @@
                     <v-btn text>更多</v-btn>
                   </a> -->
                 </v-col>
-                <v-col v-if="viewmode=='index' && user.list" v-for="j in studio.ilist" :key="`${n}${j}`" cols="12" sm="6"
-                  md="4" lg="3">
+                <v-col v-if="viewmode=='index' && user.list" v-for="j in studio.ilist" :key="`${n}${j}`" cols="6" sm="4"
+                md="3" lg="2">
                   <s-studiocard :studio="j" :host="host"></s-usercard>
                 </v-col>
               </v-row>
@@ -168,11 +168,11 @@
                 <template>
                   <v-card class="mx-auto pa-8 my-12" width="400">
                     <span color="accent">信息更改</span>
-                    <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0" :value="detail.nickname">
+                    <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0" :value="detail.nickname" maxlength="30">
                     </v-text-field>
                     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)" block>更改昵称</v-btn>
                     <v-textarea name="input-1" label="个人介绍" :value="detail.introduce" hint="支持使用markdown编写"
-                      id="i-input-1" maxlength="500" counter>
+                      id="i-input-1" maxlength="20000" counter>
                     </v-textarea>
                     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(1)" block>更改介绍</v-btn>
 
@@ -439,7 +439,7 @@
                     <v-card class="pa-5" elevation="0" class="br2">
                       <v-row>
                         <v-col>
-                          <v-avatar>
+                          <v-avatar size="100">
                             <img
                               :src="host.data+'/static/internalapi/asset/'+(studio.info.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                           </v-avatar>
@@ -520,9 +520,9 @@
                   <v-card class=" pa-8 my-12" v-else>
                     <a :href="`#page=studio&id=${studio.info.id}`">{{ studio.info.name }}</a>
                     <v-text-field label="工作室名" hide-details="auto" class="my-2" name="editinfo" t="s-name"
-                      :value="studio.info.name"></v-text-field>
+                      :value="studio.info.name"  maxlength="30"></v-text-field>
                     <v-textarea label="工作室介绍" hide-details="auto" class="my-2" name="editinfo" t="s-introduce"
-                      :value="studio.info.introduce"></v-textarea>
+                      :value="studio.info.introduce"  maxlength="20000"></v-textarea>
 
                     <v-checkbox v-model="studio.info.haspw" label="启用密码" value name="editinfo" t="publish">
                     </v-checkbox>
