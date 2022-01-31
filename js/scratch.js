@@ -57,7 +57,7 @@ $('#dlp').hide();
     if (!d.issign) {
         alert("请登录后查看")
         $(document).text("请登录后查看")
-        location.href = mianhost + "/#page=sign"
+        location.href = "/#page=sign"
         return
     }
     if (!(d.isauthor || (d.opensource && d.publish))) {

@@ -999,7 +999,8 @@ let functiono = {
     worklist: 0,
     title:'40code少儿编程社区',
     stitle:(s)=>{
-        v.title=document.title=(s || v.title)+'  -40code';
+        document.title=(s || v.title)+'  -40code';
+        s && (v.title=s)
     }
 }
 
@@ -1061,5 +1062,5 @@ $(document).ready(function () {
         if (document.visibilityState == 'visible') {
             getuserinfo();
         }
-    },20000)
+    },40000)
 });

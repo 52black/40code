@@ -361,6 +361,11 @@
                           :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                       </v-avatar>
                       <span color="accent" class="text-h5">{{ workview.nickname }}</span>
+                      <a :href="`#page=studio&id=${workview.studio.id}`" v-if="workview.studio">
+                        <v-btn rounded class="ma-2" :color="workview.studio.color || 'green'" elevation="0">
+                          <span style="color:white">{{ workview.studio.name }}</span>
+                        </v-btn>
+                    </a>
                       <v-btn class="float-right" v-on:click="user.signin()"
                         v-if="workview.id==detail.id" elevation="0" color="accent"> 签到</v-btn>
                       <v-btn class="float-right" v-on:click="user.follow()" v-else elevation="0" color="accent"> {{
@@ -384,8 +389,11 @@
                           </span>
                         </template>
                         <span>获取方式：<br>
-                          1.签到(每次所得金币数是当月连续签到天数)<br>
-                          2.分享作品，点击作品展示页下方的分享，按照上面的提示做</span>
+                          1.签到(每次所得金币数是当月连续签到天数+2)*2<br>
+                          2.分享作品，点击作品展示页下方的分享，按照上面的提示做
+                          3.点赞作品，点赞1作品金币+3
+                          4.被点赞作品，被点赞1次金币+4
+                        </span>
                       </v-tooltip>
 
                       <span color="accent" class="text-subtitle-1 float-right text--disabled">加入时间：{{
@@ -443,22 +451,22 @@
                             <img
                               :src="host.data+'/static/internalapi/asset/'+(studio.info.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                           </v-avatar>
-
                           <span color="accent" class="text-h5">{{ studio.info.name }}</span>
+                          
                         </v-col>
-                        <v-col v-if="detail && detail.id">
+                        <v-col v-if="detail && detail.id" cols="3">
                           <a v-if="studio.p>0" :href="`#page=studio_edit&id=${studio.info.id}`">
-                            <v-btn  elevation="0" color="accent">编辑工作室信息</v-btn>
-                          </a><br><br>
-                          <v-btn v-if="studio.p===undefined"  elevation="0"
-                            v-on:click="studio.join()" color="accent">
+                            <v-btn  elevation="0" color="accent" block class="my-2">编辑工作室信息</v-btn>
+                          </a>
+                          <v-btn v-if="studio.p===undefined"  elevation="0" class="py-2"
+                            v-on:click="studio.join()" color="accent" block>
                             加入工作室 </v-btn>
                           <v-btn v-else-if="studio.p!==3"  elevation="0"
-                            v-on:click="studio.quit()" color="accent">退出工作室</v-btn>
+                            v-on:click="studio.quit()" color="accent" block class="my-2">退出工作室</v-btn>
                             <v-btn v-if="studio.p!==undefined"  elevation="0"
-                            v-on:click="studio.main()" color="accent">设为主工作室(即可享有头衔)</v-btn>
+                            v-on:click="studio.main()" color="accent" block class="my-2">设为主工作室</v-btn>
                             <v-btn v-if="studio.p!==undefined"  elevation="0"
-                            v-on:click="studio.upload()" color="accent">投稿作品</v-btn>
+                            v-on:click="studio.upload()" color="accent" block class="my-2">投稿作品</v-btn>
                         </v-col>
                         <span color="accent" class="text-subtitle-1 float-right text--disabled">创建时间：{{
                           date(studio.info.created_time) }}</span><br>
@@ -571,7 +579,8 @@
             <v-container v-if="viewmode=='flist'">
               <v-row>
                 <template>
-                  <v-col v-for="j in user.flist" cols="12" sm="6" md="4" lg="3">
+                  <v-col v-for="j in user.flist" cols="6" sm="4"
+                  md="3" lg="2">
                     <s-usercard :user="j" :host="host"></s-usercard>
                   </v-col>
                 </template>
