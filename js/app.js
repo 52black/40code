@@ -85,6 +85,7 @@ function getQueryString(name) {
       data: d2,
       type: 'get',
       // headers: { "Authorization": getCookie('token') },
+      headers:{'onreferer':location.pathname},
       success: function (f) {
         console.log(f)
         if (f.cz == 'exit') {
@@ -117,6 +118,7 @@ function getQueryString(name) {
       data: JSON.stringify(d2),
       type: 'post',
       contentType: 'application/json',
+      headers:{'onreferer':location.pathname},
       success: function (f) {
         console.log(f)
         if(f.msg || f.errmsg){

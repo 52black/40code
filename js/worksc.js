@@ -25,7 +25,7 @@ function dataURLToBlob(dataurl) {
   return new Blob([u8arr], { type: mime });
 }
 
-var downloadurl = 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/work/' + getQueryString('id') + '.json';
+var downloadurl = 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/work/' + getQueryString('id') + '.json?' + atob(top.v.workview.fuckyou);
 window.scratchConfig = {
   stageArea: {
     scale: window.innerWidth / 480,
