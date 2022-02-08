@@ -512,18 +512,18 @@ let functiona = {
                 <h2>若你要分享到小码王、scratch中社、共创世界：</h2>
                 1.自己这些平台主页下的进行留言<br>
                 <code>
-                    我在40code发了一个作品，链接：${location.href + '&out=xmw&i=' + v.detail.id}
+                    我在40code发了一个作品，链接：${location.href + '&out=any&i=' + v.detail.id}
                 </code>
                 2.这些平台同个作品的介绍
                 <code>
-                    这个作品也发布到了40code: ${location.href + '&out=aying&i=' + v.detail.id})
+                    这个作品也发布到了40code: ${location.href + '&out=any&i=' + v.detail.id})
                 </code>
                 3.这些平台其他人主页评论(不建议)
                 <code>
-                    [对方称呼]，你好，请问你能看看${v.workview.name}吗？非常感谢。链接： ${location.href + '&out=aying&i=' + v.detail.id}
+                    [对方称呼]，你好，请问你能看看${v.workview.name}吗？非常感谢。链接： ${location.href + '&out=any&i=' + v.detail.id}
                 </code><br>
                 <h2>若你要分享到QQ、微信：</h2>
-                <code>[对方称呼]，你好，请问你能看看我的scratch作品(${v.workview.name})吗？非常感谢。<br>链接： ${location.href + '&out=aying&i=' + v.detail.id}<br>请复制链接到浏览器访问</code>
+                <code>[对方称呼]，你好，请问你能看看我的scratch作品(${v.workview.name})吗？非常感谢。<br>链接： ${location.href + '&out=any&i=' + v.detail.id}<br>请复制链接到浏览器访问</code>
                 `
             )
         }
@@ -555,6 +555,18 @@ let functiona = {
             c: function () {
                 // v.$data.qh('account');
                 location.href = "#page=account"
+            }
+        },
+        {
+            title: '邀请用户',
+            c: function () {
+               dialog(`
+               你的专属链接<code>
+               ${'https://40code.com/#out=any&i=' + v.detail.id}
+               </code><br>
+               别人通过你的专属链接进行账号注册<br>
+               你和他都可获得20金币
+               `)
             }
         },
         {
