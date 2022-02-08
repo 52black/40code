@@ -558,7 +558,7 @@ let functiona = {
             }
         },
         {
-            title: '邀请用户',
+            title: '邀请用户领金币',
             c: function () {
                dialog(`
                你的专属链接<code>
