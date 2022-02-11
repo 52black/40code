@@ -334,6 +334,7 @@ var pagecz = {
     'studio': function (id) {
         v.stitle("工作室")
         Vue.set(v.studio, 'info', null)
+        Vue.set(v.studio, 'userlist', null)
         get({
             url: 'studio/info',
             data: { id: id }
