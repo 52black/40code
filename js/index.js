@@ -317,7 +317,7 @@ var pagecz = {
             // location.href = "#page=user&id=" + id;
             v.workview.introduce2 = v.workview.introduce ? markdown.toHTML(v.workview.introduce) : '当前用户暂时没有介绍哦';
             v.comment.getcomment()
-            v.user.getwork(4)
+            v.user.getwork(6)
         })
     },
     'account': function (id) {
