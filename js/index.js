@@ -1062,7 +1062,7 @@ $(document).ready(function () {
     document.addEventListener('visibilitychange', function () {
         // 页面变为不可见时触发 
         if (document.visibilityState == 'hidden') {
-            document.title="我等你回来……"
+            // document.title="我等你回来……"
         }
         // 页面变为可见时触发 
         if (document.visibilityState == 'visible') {
