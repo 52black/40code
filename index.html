@@ -185,8 +185,8 @@
 
                     <v-file-input :rules="rules" accept="image/png, image/jpeg, image/bmp, image/gif"
                       label="头像(建议尺寸1:1)" id="workimg" show-size truncate-length="10">
-                    </v-file-input>
-                    <v-switch v-model="detail.darkmode" label="夜间模式(更改好后按下ctrl+r生效)" color="primary" value="1" hide-details></v-switch><br><br>
+                    </v-file-input> 
+                    <v-switch v-model="detail.darkmode" v-show="0" label="夜间模式(更改好后按下ctrl+r生效)" color="primary" value="1" hide-details></v-switch><br><br>
                     <!-- <v-img :src="host.data+'/static/internalapi/asset/'+ (workview.image || detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" :aspect-ratio="1"
                       class="ma-5 pb-2"></v-img> -->
                     <div v-if="waitRequest.cover==1">正在上传中……</div>
