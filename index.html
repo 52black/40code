@@ -3,7 +3,7 @@
 
 <head>
   <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
-  <link href="/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="/mdi/css/materialdesignicons.min.css" rel="stylesheet">
   <!-- <link rel="stylesheet" href="https://unpkg.com/vuetify-dialog@2.0.17/dist/vuetify-dialog.min.css"> -->
   <link href="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.css" rel="stylesheet">
   <link rel="shortcut icon" href="/other/favicon.ico" />
@@ -68,16 +68,16 @@
             <a href="#" style="color:white">40code</a>
             <!-- <v-toolbar-title><v-btn  text></v-btn></v-toolbar-title> -->
             <v-spacer></v-spacer>
+            <v-btn icon href="#page=message">
+              <span v-if="detail && detail.msgnum">
+                <v-badge color="red" :content="detail.msgnum" overlap>
+                  <v-icon>mdi-bell</v-icon>
+                </v-badge>
+              </span>
+              <v-icon v-else>mdi-bell</v-icon>
+            </v-btn>
             <span v-if="detail">
 
-              <v-btn icon href="#page=message">
-                <span v-if="detail && detail.msgnum">
-                  <v-badge color="red" :content="detail.msgnum" overlap>
-                    <v-icon>mdi-bell</v-icon>
-                  </v-badge>
-                </span>
-                <v-icon v-else>mdi-bell</v-icon>
-              </v-btn>
 
               <v-menu>
                 <template v-slot:activator="{ on, attrs }">
@@ -139,15 +139,16 @@
                   </a> -->
                 </v-col>
                 <v-col v-if="viewmode=='index' && user.list" v-for="j in studio.ilist" :key="`${n}${j}`" cols="6" sm="4"
-                md="3" lg="2">
-                  <s-studiocard :studio="j" :host="host"></s-usercard>
+                  md="3" lg="2">
+                  <s-studiocard :studio="j" :host="host">
+                    </s-usercard>
                 </v-col>
               </v-row>
             </v-container>
 
             <v-container v-if="viewmode=='sign'" id="sign">
               <v-row>
-                <template>
+                <v-col class="mx-auto" cols="12" md="6">
                   <v-card class="mx-auto pa-8 my-12" width="400">
                     <span color="accent">登录/注册</span>
                     <v-text-field label="邮箱" :rules="sign.email" hide-details="auto" class="my-2" id="email">
@@ -164,22 +165,36 @@
                     </div>
                     <!-- 当前站点为测试站点，数据定期清空，损失概不负责 -->
                   </v-card>
-                </template>
+                </v-col>
               </v-row>
             </v-container>
 
-            <v-container v-if="viewmode=='account'">
+            <v-container v-if="viewmode=='account'" id="account">
               <v-row>
-                <template>
-                  <v-card class="mx-auto pa-8 my-12" width="400">
+                <v-col class="mx-auto" cols="12" md="6">
+                  <v-card class="mx-auto pa-8 my-12">
                     <span color="accent">信息更改</span>
-                    <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0" :value="detail.nickname" maxlength="30">
+                    <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0" :value="detail.nickname"
+                      maxlength="30">
                     </v-text-field>
-                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)" block>更改昵称</v-btn>
+                    <!-- <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)" block>更改昵称</v-btn> -->
                     <v-textarea name="input-1" label="个人介绍" :value="detail.introduce" hint="支持使用markdown编写"
                       id="i-input-1" maxlength="20000" counter>
                     </v-textarea>
-                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(1)" block>更改介绍</v-btn>
+                    <!-- <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(1)" block>更改介绍</v-btn> -->
+
+                    <v-file-input :rules="rules" accept="image/png, image/jpeg, image/bmp, image/gif"
+                      label="头像(建议尺寸1:1)" id="workimg" show-size truncate-length="10">
+                    </v-file-input>
+                    <v-switch v-model="detail.darkmode" label="夜间模式(更改好后按下ctrl+r生效)" color="primary" value="1" hide-details></v-switch><br><br>
+                    <!-- <v-img :src="host.data+'/static/internalapi/asset/'+ (workview.image || detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" :aspect-ratio="1"
+                      class="ma-5 pb-2"></v-img> -->
+                    <div v-if="waitRequest.cover==1">正在上传中……</div>
+                    <div v-if="waitRequest.cover==-1">上传成功</div>
+                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.update()" block>更改信息</v-btn>
+
+                    <br>
+                    <v-divider></v-divider><br>
 
                     <v-text-field v-model="password2" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
                       :type="show1 ? 'text' : 'password'" name="input-2" label="旧密码" hide-details="auto" counter
@@ -188,16 +203,8 @@
                       :type="show2 ? 'text' : 'password'" name="input-3" label="新密码" hide-details="auto" counter
                       @click:append="show2 = !show2" id="a_npw"></v-text-field>
                     <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.n()" block>更改密码</v-btn>
-                    <v-file-input :rules="rules" accept="image/png, image/jpeg, image/bmp, image/gif"
-                      label="头像(建议尺寸1:1)" id="workimg" show-size truncate-length="10">
-                    </v-file-input>
-                    <!-- <v-img :src="host.data+'/static/internalapi/asset/'+ (workview.image || detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" :aspect-ratio="1"
-                      class="ma-5 pb-2"></v-img> -->
-                    <div v-if="waitRequest.cover==1">正在上传中</div>
-                    <div v-if="waitRequest.cover==-1">点击更改头像保存你的头像</div>
-                    <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.head()" block>更改头像</v-btn>
                   </v-card>
-                </template>
+                </v-col>
               </v-row>
             </v-container>
 
@@ -370,9 +377,9 @@
                         <v-btn rounded class="ma-2" :color="workview.studio.color || 'green'" elevation="0">
                           <span style="color:white">{{ workview.studio.name }}</span>
                         </v-btn>
-                    </a>
-                      <v-btn class="float-right" v-on:click="user.signin()"
-                        v-if="workview.id==detail.id" elevation="0" color="accent"> 签到</v-btn>
+                      </a>
+                      <v-btn class="float-right" v-on:click="user.signin()" v-if="workview.id==detail.id" elevation="0"
+                        color="accent"> 签到</v-btn>
                       <v-btn class="float-right" v-on:click="user.follow()" v-else elevation="0" color="accent"> {{
                         workview.followu ? '取消' : ''}}关注
                       </v-btn>
@@ -457,21 +464,21 @@
                               :src="host.data+'/static/internalapi/asset/'+(studio.info.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                           </v-avatar>
                           <span color="accent" class="text-h5">{{ studio.info.name }}</span>
-                          
+
                         </v-col>
                         <v-col v-if="detail && detail.id" cols="3">
                           <a v-if="studio.p>0" :href="`#page=studio_edit&id=${studio.info.id}`">
-                            <v-btn  elevation="0" color="accent" block class="my-2">编辑工作室信息</v-btn>
+                            <v-btn elevation="0" color="accent" block class="my-2">编辑工作室信息</v-btn>
                           </a>
-                          <v-btn v-if="studio.p===undefined"  elevation="0" class="py-2"
-                            v-on:click="studio.join()" color="accent" block>
+                          <v-btn v-if="studio.p===undefined" elevation="0" class="py-2" v-on:click="studio.join()"
+                            color="accent" block>
                             加入工作室 </v-btn>
-                          <v-btn v-else-if="studio.p!==3"  elevation="0"
-                            v-on:click="studio.quit()" color="accent" block class="my-2">退出工作室</v-btn>
-                            <v-btn v-if="studio.p!==undefined"  elevation="0"
-                            v-on:click="studio.main()" color="accent" block class="my-2">设为主工作室</v-btn>
-                            <v-btn v-if="studio.p!==undefined"  elevation="0"
-                            v-on:click="studio.upload()" color="accent" block class="my-2">投稿作品</v-btn>
+                          <v-btn v-else-if="studio.p!==3" elevation="0" v-on:click="studio.quit()" color="accent" block
+                            class="my-2">退出工作室</v-btn>
+                          <v-btn v-if="studio.p!==undefined" elevation="0" v-on:click="studio.main()" color="accent"
+                            block class="my-2">设为主工作室</v-btn>
+                          <v-btn v-if="studio.p!==undefined" elevation="0" v-on:click="studio.upload()" color="accent"
+                            block class="my-2">投稿作品</v-btn>
                         </v-col>
                         <span color="accent" class="text-subtitle-1 float-right text--disabled">创建时间：{{
                           date(studio.info.created_time) }}</span><br>
@@ -533,9 +540,9 @@
                   <v-card class=" pa-8 my-12" v-else>
                     <a :href="`#page=studio&id=${studio.info.id}`">{{ studio.info.name }}</a>
                     <v-text-field label="工作室名" hide-details="auto" class="my-2" name="editinfo" t="s-name"
-                      :value="studio.info.name"  maxlength="30"></v-text-field>
+                      :value="studio.info.name" maxlength="30"></v-text-field>
                     <v-textarea label="工作室介绍" hide-details="auto" class="my-2" name="editinfo" t="s-introduce"
-                      :value="studio.info.introduce"  maxlength="20000"></v-textarea>
+                      :value="studio.info.introduce" maxlength="20000"></v-textarea>
 
                     <v-checkbox v-model="studio.info.haspw" label="启用密码" value name="editinfo" t="publish">
                     </v-checkbox>
@@ -550,7 +557,7 @@
                     </v-radio-group>
 
                     <v-text-field label="工作室头衔颜色(仅支持英文，例如green)" hide-details="auto" class="mx-3" t="s-color"
-                    :value="studio.info.color" width="100px"></v-text-field>
+                      :value="studio.info.color" width="100px"></v-text-field>
 
                     <v-file-input :rules="rules" accept="image/png, image/jpeg, image/bmp, image/gif"
                       label="工作室头像(建议尺寸1:1)" id="simg" show-size truncate-length="10">
@@ -583,9 +590,8 @@
 
             <v-container v-if="viewmode=='flist'">
               <v-row>
-                <v-col  class="mx-auto">
-                  <v-col v-for="j in user.flist" cols="6" sm="4"
-                  md="3" lg="2">
+                <v-col class="mx-auto">
+                  <v-col v-for="j in user.flist" cols="6" sm="4" md="3" lg="2">
                     <s-usercard :user="j" :host="host"></s-usercard>
                   </v-col>
                 </v-col>
@@ -594,7 +600,7 @@
 
             <v-container v-if="viewmode=='404'">
               <v-row>
-                <v-col  class="mx-auto">
+                <v-col class="mx-auto">
                   <v-card class="mx-auto pa-8 my-12">
                     当前页面不存在 404 not found
                   </v-card>
@@ -604,7 +610,7 @@
 
             <v-container v-if="viewmode=='about'">
               <v-row>
-                <v-col  class="mx-auto">
+                <v-col class="mx-auto">
                   <v-card class="mx-auto pa-8 my-12">
                     <h1>关于我们：</h1>
                     40code是由网名为what的人开发的一款在线少儿编程平台，基于Scratch开发，支持手机端作品展示。
@@ -630,9 +636,9 @@
                   <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank" class="l">Q群:1071652975</a><br>
                   <!-- <a href="https://www.baidu.com/s?wd=40code%E7%A4%BE%E5%8C%BA" target="_blank" class="l">在此点击40code社区以支持我们</a><br> -->
                   <!-- <a href="//github.com/52black/sccode" target="_blank" class="l">此站点前端源代码</a><br> -->
-                    <span class="l">bug反馈/友链添加/功能建议加：</span><br>
+                  <span class="l">bug反馈/友链添加/功能建议加：</span><br>
                   <a class="l">站长QQ:3274235903</a>
-                  
+
                 </div>
 
               </span>

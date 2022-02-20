@@ -683,6 +683,27 @@ let functiona = {
                 location.href = ""
             })
         },
+        update: function () {
+            if (v.waitRequest.cover==1) {
+                alert("请选择图片并等待上传完毕后再继续操作")
+                return;
+            }
+            post({
+                url: 'user/info/update',
+                data: {
+                    data:{
+                        image:v.detail.image,
+                        darkmode:v.detail.darkmode,
+                        nickname:$('#i-input-0').val(),
+                        introduce:$('#i-input-1').val()
+                    },
+                },
+                p: 'changeinfo'
+            }, function (d) {
+                alert(d.msg)
+                // location.href = ""
+            })
+        },
     },
     comment: {
         send: function (r, id) {

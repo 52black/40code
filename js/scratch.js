@@ -65,7 +65,7 @@ $('#dlp').hide();
         $(document).text("你没有权限，当前作品未开源或未发布")
         return
     }
-    downloadurl = 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/work/' + d.id + '.json?' +atob(d.fuckyou);
+    downloadurl = 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/work/' + d.id + '.json?' + atob(d.fuckyou);
     // downloadurl = '/work/' + d.id + '.json';
     // $('body').append('<script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/lib35.min.js"></script> \
     // <script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/gui9.js"></script>')
@@ -145,10 +145,10 @@ async function saveproject(id, callback, Open) {
     $('#dlp').show();
     $('#i2').hide
     let f = function (i2) {
-        let i=i2
-        for(let j=0;j<vs.length;j++){
-            if(vs[j].assetId==i.split('.')[0]){
-                i=j;break;
+        let i = i2
+        for (let j = 0; j < vs.length; j++) {
+            if (vs[j].assetId == i.split('.')[0]) {
+                i = j; break;
             }
         }
         debugger
@@ -184,6 +184,8 @@ async function saveproject(id, callback, Open) {
                     return;
                 }
                 hy();
+                $(window).unbind('beforeunload');
+                window.onbeforeunload = null;
                 Open && (location.href = ("/#page=workinfo&publish=1&id=" + workinfo.id))
                 alert('作品保存成功')
             },
@@ -197,7 +199,7 @@ async function saveproject(id, callback, Open) {
     function upa(t) {
         // debugger;
         if (f(data2[t]).size > 5 * 1024 * 1024) {
-            console.log('尺寸过大',t,data2[t],'跳过')
+            console.log('尺寸过大', t, data2[t], '跳过')
             t++;
             upa(t);
             return;
@@ -274,7 +276,7 @@ async function saveproject(id, callback, Open) {
         console.log('fuckyou', data2)
         let list = chunk(data2, 20), filelist = [], num = 0;
         debugger;
-        if(!list.length) resolve([])
+        if (!list.length) resolve([])
         for (let i = 0; i < list.length; i++) {
             debugger;
             post({
