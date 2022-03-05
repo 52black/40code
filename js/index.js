@@ -82,7 +82,7 @@ Vue.component('s-c2', {
 Vue.component('s-workcard', {
     props: ['work', 'user', 'host', 'my'],
     template: `
-    <v-card elevation="0" class="rounded-lg">
+    <v-card elevation="0" class="rounded-lg mb-3 sd">
     <v-card :href="'#page=work&id='+work.id" elevation="0">
         <v-img :src="host.data+'/static/internalapi/asset/'+work.image" :aspect-ratio="4/3"
             class="white--text align-end" gradient="to bottom, rgba(0,0,0,0) 80%, rgba(0,0,0,.6)">
@@ -130,7 +130,7 @@ Vue.component('s-workcard', {
 Vue.component('s-usercard', {
     props: ['user', 'host'],
     template: `
-    <v-card :href="'#page=user&id='+user.id" elevation="0" class="rounded-lg py-2">
+    <v-card :href="'#page=user&id='+user.id" elevation="0" class="rounded-lg py-2 sd">
   <v-row class="pa-5">
     <v-col cols="4">
       <v-avatar size="40">
@@ -328,7 +328,8 @@ var pagecz = {
         v.user.getmessage()
     },
     'flist': (id) => {
-        v.stitle("关注列表")
+        if(getQueryString('f')) v.stitle("关注列表")
+        else v.stitle('粉丝列表')
         v.user.getlist(id)
     },
     'studio': function (id) {
@@ -844,7 +845,7 @@ let functiona = {
                 url: "user/flist",
                 data: {
                     id: id,
-                    type: v.user.flisttype
+                    type: getQueryString('f') ? 1 : 0
                 }
             }, (d) => {
                 v.user.flist = d.data

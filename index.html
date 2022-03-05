@@ -28,6 +28,11 @@
     .l2 {
       color: rgba(0, 0, 0, .6) !important;
     }
+
+    .sd{
+      -webkit-box-shadow: 0 7px 8px -4px rgba(0,0,0,.04),0 12px 17px 2px rgba(0,0,0,.028),0 5px 22px 4px rgba(0,0,0,.024)!important;
+      box-shadow: 0 7px 8px -4px rgba(0,0,0,.04),0 12px 17px 2px rgba(0,0,0,.028),0 5px 22px 4px rgba(0,0,0,.024)!important;
+    }
   </style>
   <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script>
@@ -66,20 +71,20 @@
         <v-app id="inspire">
 
           <v-app-bar app color="primary" dark>
-            <a href="#" style="color:white">40code</a>
+            <a href="#" style="color:white" target="_self">40code</a>
             <!-- <v-toolbar-title><v-btn  text></v-btn></v-toolbar-title> -->
             <v-spacer></v-spacer>
-            <v-btn icon href="#page=message">
-              <span v-if="detail && detail.msgnum">
-                <v-badge color="red" :content="detail.msgnum" overlap>
-                  <v-icon>mdi-bell</v-icon>
-                </v-badge>
-              </span>
-              <v-icon v-else>mdi-bell</v-icon>
-            </v-btn>
+
             <span v-if="detail">
 
-
+              <v-btn icon href="#page=message">
+                <span v-if="detail && detail.msgnum">
+                  <v-badge color="red" :content="detail.msgnum" overlap>
+                    <v-icon>mdi-bell</v-icon>
+                  </v-badge>
+                </span>
+                <v-icon v-else>mdi-bell</v-icon>
+              </v-btn>
               <v-menu>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn color="" dark v-bind="attrs" v-on="on">
@@ -94,12 +99,14 @@
                 </v-list>
               </v-menu>
             </span>
-            <v-toolbar-title v-else-if="detail===undefined"><a href="#page=sign">
+            <v-toolbar-title v-else-if="detail===undefined">
+              <a href="#page=sign" target="_self">
                 <v-btn>登录/注册</v-btn>
-              </a></v-toolbar-title>
+              </a>
+            </v-toolbar-title>
           </v-app-bar>
 
-          <v-main class="grey lighten-4">
+          <v-main class="grey lighten-5">
 
             <v-container v-if="viewmode=='index' || viewmode=='allwork'" id="index">
               <v-row>
@@ -113,7 +120,7 @@
                 </div>
                 <template v-for="n in rows">
                   <v-col class="mt-2" cols="12">
-                    <strong>{{ n.title }}</strong>
+                    <v-icon>{{ n.icon }}</v-icon> <strong>{{ n.title }}</strong>
                     <a class="float-right" href="#page=allwork">
                       <v-btn text>更多</v-btn>
                     </a>
@@ -124,7 +131,7 @@
 
                 </template>
                 <v-col class="mt-2" cols="12" v-if="viewmode=='index' && user.list">
-                  <strong>用户榜</strong>
+                  <v-icon>mdi-medal</v-icon> <strong>用户榜</strong>
                   <!-- <a class="float-right" href="#">
                     <v-btn text>更多</v-btn>
                   </a> -->
@@ -134,7 +141,7 @@
                   <s-usercard :user="j" :host="host"></s-usercard>
                 </v-col>
                 <v-col class="mt-2" cols="12" v-if="viewmode=='index' && studio.ilist">
-                  <strong>工作室榜</strong>
+                  <v-icon>mdi-format-list-numbered</v-icon> <strong>工作室榜</strong>
                   <!-- <a class="float-right" href="#">
                     <v-btn text>更多</v-btn>
                   </a> -->
@@ -186,8 +193,9 @@
 
                     <v-file-input :rules="rules" accept="image/png, image/jpeg, image/bmp, image/gif"
                       label="头像(建议尺寸1:1)" id="workimg" show-size truncate-length="10">
-                    </v-file-input> 
-                    <v-switch v-model="detail.darkmode" v-show="0" label="夜间模式(更改好后按下ctrl+r生效)" color="primary" value="1" hide-details></v-switch><br><br>
+                    </v-file-input>
+                    <v-switch v-model="detail.darkmode" v-show="0" label="夜间模式(更改好后按下ctrl+r生效)" color="primary"
+                      value="1" hide-details></v-switch><br><br>
                     <!-- <v-img :src="host.data+'/static/internalapi/asset/'+ (workview.image || detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" :aspect-ratio="1"
                       class="ma-5 pb-2"></v-img> -->
                     <div v-if="waitRequest.cover==1">正在上传中……</div>
@@ -386,11 +394,11 @@
                       </v-btn>
                       <br>
                       <a>
-                        <v-btn text class="text-subtitle-1 text--secondary" v-on:click="user.flisttype=0;"
-                          :href=" `#page=flist&id=`+workview.id">{{ workview.fan }} 粉丝 </v-btn>
+                        <v-btn text class="text-subtitle-1 text--secondary" :href=" `#page=flist&id=`+workview.id">{{
+                          workview.fan }} 粉丝 </v-btn>
                       </a>
-                      <a :href="`#page=flist&id=`+workview.id">
-                        <v-btn text class="text-subtitle-1 text--secondary" v-on:click="user.flisttype=1;">{{
+                      <a :href="`#page=flist&f=1&id=`+workview.id">
+                        <v-btn text class="text-subtitle-1 text--secondary">{{
                           workview.follow }} 关注</v-btn>
                       </a><br>
                       <v-tooltip bottom>
@@ -592,9 +600,11 @@
             <v-container v-if="viewmode=='flist'">
               <v-row>
                 <v-col class="mx-auto">
-                  <v-col v-for="j in user.flist" cols="6" sm="4" md="3" lg="2">
-                    <s-usercard :user="j" :host="host"></s-usercard>
-                  </v-col>
+                  <v-row>
+                    <v-col v-for="j in user.flist" cols="6" sm="4" md="3" lg="2">
+                      <s-usercard :user="j" :host="host"></s-usercard>
+                    </v-col>
+                  </v-row>
                 </v-col>
               </v-row>
             </v-container>
@@ -681,7 +691,7 @@
   <script src="https://cdn.staticfile.org/vue/2.6.9/vue.js"></script>
   <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
   <script src="/js/app.js?v=12"></script>
-  <script src="/js/index.js?v=27"></script>
+  <script src="/js/index.js?v=28"></script>
   <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
   <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
 </body>
