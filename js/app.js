@@ -88,6 +88,10 @@ function getQueryString(name) {
       headers:{'onreferer':location.pathname},
       success: function (f) {
         console.log(f)
+        if(r.redirect){
+          location.href=r.redirect;
+          return;
+        }
         if (f.cz == 'exit') {
           document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
           console.log('清除cookie')
@@ -121,6 +125,10 @@ function getQueryString(name) {
       headers:{'onreferer':location.pathname},
       success: function (f) {
         console.log(f)
+        if(r.redirect){
+          location.href=r.redirect;
+          return;
+        }
         if(f.msg || f.errmsg){
           alert(f.msg || f.errmsg)
         }

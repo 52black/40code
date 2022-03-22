@@ -299,12 +299,6 @@ var pagecz = {
     },
     'user': function (id) {
         v.stitle("用户")
-        if (id == "0") {
-            setTimeout(() => {
-                location.href = "#page=user&id=" + v.detail.id
-            }, 20)
-            return;
-        }
         v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
         get({
             url: 'user/info',
