@@ -88,8 +88,8 @@ function getQueryString(name) {
       headers:{'onreferer':location.pathname},
       success: function (f) {
         console.log(f)
-        if(r.redirect){
-          location.href=r.redirect;
+        if(f.redirect){
+          location.href=f.redirect;
           return;
         }
         if (f.cz == 'exit') {
@@ -125,8 +125,8 @@ function getQueryString(name) {
       headers:{'onreferer':location.pathname},
       success: function (f) {
         console.log(f)
-        if(r.redirect){
-          location.href=r.redirect;
+        if(f.redirect){
+          location.href=f.redirect;
           return;
         }
         if(f.msg || f.errmsg){
