@@ -298,6 +298,9 @@
                           <v-btn v-on:click="work.share()" plain text>
                             <v-icon>mdi-share</v-icon>分享
                           </v-btn>
+                          <v-btn :href="'/other/workpreview.html#id='+workview.id" plain text>
+                            <v-icon>mdi-fullscreen</v-icon>全屏
+                          </v-btn>
                         </v-col>
                         <v-col>
                           <span color="accent" class="text-h5 text--primary" cols="24">作品介绍</span><br><br>
