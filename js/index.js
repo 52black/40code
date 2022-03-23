@@ -73,7 +73,8 @@ Vue.component('s-comment', {
 Vue.component('s-c2', {
     props: ['comment', 'reply'],
     template: `<span>
-    <v-textarea :id="reply?'c-'+reply:'comment'" filled label="评论" auto-grow value="" maxlength="500" counter>
+    <v-textarea clearable v-model="comment.text[reply?'c-'+reply:'comment']"
+    clear-icon="mdi-close-circle" :id="reply?'c-'+reply:'comment'" filled label="评论" auto-grow :value="comment.text[reply?'c-'+reply:'comment']" maxlength="500" counter>
     </v-textarea>
     <v-btn class="pa-2 mx-auto text--secondary" v-on:click="comment.send(reply)"   elevation="0"  block>发送</v-btn>
 </span>
@@ -274,6 +275,10 @@ var pagecz = {
                 v.workview = d2;
                 v.comment.getcomment()
                 v.title=d2.title+' by '+d2.nickname;
+                setTimeout(()=>{
+                    $('#comment').bind('paste',v.paste);
+                },100)
+                
             } else { alert("服务器或网络错误") }
         })
     },
@@ -312,6 +317,9 @@ var pagecz = {
             v.workview.introduce2 = v.workview.introduce ? markdown.toHTML(v.workview.introduce) : '当前用户暂时没有介绍哦';
             v.comment.getcomment()
             v.user.getwork(6)
+            setTimeout(()=>{
+                $('#comment').bind('paste',v.paste);
+            },100)
         })
     },
     'account': function (id) {
@@ -341,6 +349,9 @@ var pagecz = {
             v.comment.getcomment()
             v.studio.getwork()
             v.studio.getuser()
+            setTimeout(()=>{
+                $('#comment').bind('paste',v.paste);
+            },100)
         })
     },
     'studio_edit': function (id) {
@@ -707,7 +718,6 @@ let functiona = {
                 return;
             }
             let s = $('#comment').val();
-            // $('#comment').val('')
             if (s) {
                 post({
                     url: "comment/",
@@ -719,7 +729,7 @@ let functiona = {
                     p: "comment",
 
                 }, (d) => {
-
+                    v.comment.text.comment=""
                     console.log(d);
                     alert("发送成功");
                     v.comment.getcomment();
@@ -783,16 +793,24 @@ let functiona = {
 
                 }, (d) => {
                     console.log(d);
+                    v.comment.text[s]=""
                     alert("发送成功");
                     v.comment.getcomment();
                 })
             }
         },
-        showreply: (id) => {
+        showreply: function (id){
             Vue.set(v.comment, 'replyid', id)
+            setTimeout(()=>{
+                $('#c-'+v.comment.replyid).unbind('paste');
+                $('#c-'+id).bind('paste',v.paste);
+            },10)
         },
         replyid: null,
         comment: {},
+        text:{
+
+        },
         t: { 'user': 0, 'work': 1, 'studio': 2 }
     },
     user: {
@@ -982,6 +1000,61 @@ let functiona = {
             })
         },
         chose: '0'
+    },
+    paste:(e)=>{
+        console.log(e);
+        let id=e.target.id;
+        e=e.originalEvent;
+	    var cbd = e.clipboardData;
+        
+	    var ua = window.navigator.userAgent;
+	    // 如果是 Safari 直接 return
+	    if ( !(e.clipboardData && e.clipboardData.items) ) {
+	        return ;
+	    }
+	    // Mac平台下Chrome49版本以下 复制Finder中的文件的Bug Hack掉
+	    if(cbd.items && cbd.items.length === 2 && cbd.items[0].kind === "string" && cbd.items[1].kind === "file" &&
+	        cbd.types && cbd.types.length === 2 && cbd.types[0] === "text/plain" && cbd.types[1] === "Files" &&
+	        ua.match(/Macintosh/i) && Number(ua.match(/Chrome\/(\d{2})/i)[1]) < 49){
+	        return;
+	    }
+	    for(var i = 0; i < cbd.items.length; i++) {
+	        var item = cbd.items[i];
+	        if(item.kind == "file"){
+	            var blob = item.getAsFile();
+	            if (blob.size === 0) {
+	                return;
+	            }
+				var f = new FormData();
+				function upa(data) {
+                    // v.waitRequest.cover = 1;
+                    alert('图片上传中')
+                    $.ajax({
+                        url: apihost + 'work/uploads',
+                        method: 'POST',
+                        data: data,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json',
+                        // 图片上传成功
+                        success: function (result1) {
+                            try {
+                                let k = 'https://'+result1.data[2][0][1].Location;
+                                alert("图片上传成功")
+                                v.comment.text[id] += '![]('+k+')';
+                            } catch (error) {    
+                            }
+                        },
+                        error: function () {
+                            alert("图片上传失败")
+                        }
+                    });
+                }
+                f.append("image", blob)
+                upa(f)
+	        }
+	    }
     }
 }
 let functiono = {
@@ -1075,6 +1148,7 @@ window.addEventListener('hashchange', function (event) {
 
 $(document).ready(function () {
     getuserinfo()
+    
     document.addEventListener('visibilitychange', function () {
         // 页面变为不可见时触发 
         if (document.visibilityState == 'hidden') {
