@@ -1025,10 +1025,14 @@ let functiona = {
 	            if (blob.size === 0) {
 	                return;
 	            }
+                if(blob.size > 1024*80){
+                    alert('图片大小不能大于80kb');
+                    return;
+                }
 				var f = new FormData();
 				function upa(data) {
                     // v.waitRequest.cover = 1;
-                    alert('图片上传中')
+                    alert('图片上传中',9000)
                     $.ajax({
                         url: apihost + 'work/uploads',
                         method: 'POST',
