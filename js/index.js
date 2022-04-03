@@ -24,7 +24,6 @@ Vue.component('s-comment', {
                 <span color="accent" class="text-h7 text--disabled ml-2 float-right">{{ i.time }}</span>
             </div>
 
-            <br>
             <span color="accent" class="text-h6 ml-12" v-html="i.comment">{{ i.comment }}</span>
             <v-btn class="text--secondary float-left" text 
                 v-on:click="comment.showreply(i.id)">
@@ -60,10 +59,22 @@ Vue.component('s-comment', {
                         </a>
                         <span class="text-h7 text--disabled ml-2 float-right">{{ k.time }}</span><br>
                         <span class="text-h6 ml-12" v-html="k.comment">{{ k.comment }}</span>
+                        <v-btn class="text--secondary float-left" text thin 
+                            v-on:click="comment.showreply(i.id,k.id)">
+                            <v-icon>mdi-reply</v-icon> 回复
+                        </v-btn>
+                        <v-btn class="text--secondary float-right" text v-if="detail.id==k.fromuser" thin
+                            v-on:click="comment.deletereply(k.id)">
+                            <v-icon>mdi-delete</v-icon> 删除
+                        </v-btn><br>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="text-center my-3" v-if="comment.comment.num>0">
+    <v-pagination v-model="comment.page" :length="Math.ceil(comment.comment.num/6)"
+        :total-visible="7"></v-pagination>
     </div>
 </div>
 <div v-else>
@@ -236,6 +247,9 @@ var pagecz = {
         Vue.set(v.search,'work',{})
         Vue.set(v.search,'studio',{})
         Vue.set(v.search,'user',{})
+        Vue.set(v.search,'s2',getQueryString('s'))
+        Vue.set(v.search,'name',getQueryString('name'))
+        Vue.set(v.search,'author',getQueryString('author'))
         post({
             url:"/search/",
             data:{
@@ -765,9 +779,15 @@ let functiona = {
                 data: {
                     id: v.comment.t[v.viewmode] == 2 ? v.studio.info.id : v.workview.id,
                     type: v.comment.t[v.viewmode],
+                    l:6,
+                    o:(v.comment.page-1)*6
                 }
             }, (d) => {
+               
                 let d2 = d.data;
+                if(Math.ceil(d2.num/6)<v.comment.page && d2.num!=0){
+                    v.comment.page=Math.ceil(d2.num/6);
+                }
                 for (let i in d2.comment) {
                     d2.comment[i].comment = markdown.toHTML(d2.comment[i].comment)
                     d2.comment[i].time = other.date(d2.comment[i].time);
@@ -779,6 +799,7 @@ let functiona = {
                     }
                 }
                 Vue.set(v.comment, 'comment', d2)
+                
                 console.log('获取评论', d)
             })
         },
@@ -788,6 +809,23 @@ let functiona = {
             }
             post({
                 url: "comment/delete",
+                data: {
+                    id: id,
+                    type: v.comment.t[v.viewmode]
+                },
+                p: "commentdelete"
+            }, (d) => {
+                console.log(d);
+                alert("删除成功");
+                v.comment.getcomment();
+            })
+        },
+        deletereply: async function (id) {
+            if (!confirm("你确定要删除此评论吗")) {
+                return;
+            }
+            post({
+                url: "comment/reply/delete",
                 data: {
                     id: id,
                     type: v.comment.t[v.viewmode]
@@ -810,6 +848,7 @@ let functiona = {
                         comment: s2,
                         toid: r,
                         type: v.comment.t[v.viewmode],
+                        torid:v.comment.rid
                     },
                     p: "comment" + r,
 
@@ -821,8 +860,10 @@ let functiona = {
                 })
             }
         },
-        showreply: function (id){
+        showreply: function (id,rid){
             Vue.set(v.comment, 'replyid', id)
+            if(rid) v.comment.rid=rid
+            else v.comment.rid=null;
             setTimeout(()=>{
                 $('#c-'+v.comment.replyid).unbind('paste');
                 $('#c-'+id).bind('paste',v.paste);
@@ -833,6 +874,8 @@ let functiona = {
         text:{
 
         },
+        page:1,
+        rid:null,
         t: { 'user': 0, 'work': 1, 'studio': 2 }
     },
     user: {
@@ -852,6 +895,8 @@ let functiona = {
             get({
                 url: "user/message",
                 data: {
+                    l:20,
+                    o:(v.user.msgpage-1)*20
                 }
             }, (d) => {
                 let d2 = d.data
@@ -859,6 +904,7 @@ let functiona = {
                     d2[i].time = other.date(d2[i].time);
                 }
                 v.user.message = d2
+                Vue.set(v.user, 'msgtotal', d.num)
                 console.log('获取消息', d)
                 v.detail.msgnum = 0;
             })
@@ -896,7 +942,19 @@ let functiona = {
         flist: [],
         list: [],
         message: {},
+        msgpage:1,
+        msgtotal:0,
         flisttype: !!getQueryString('type') - 0,
+        delmsg:(id)=>{
+            post({
+                url:'/user/message/delete',
+                data:{
+                    id:id
+                }
+            },()=>{
+                v.user.getmessage()
+            })
+        }
     },
     studio: {
         new: function () {
@@ -1085,10 +1143,9 @@ let functiona = {
     search:{
         search:()=>{
             setTimeout(()=>{
-                let s=v.search.s[v.search.type].indexOf(v.search.select[v.search.type]);
-                if(s==-1) s=0;
+                if(v.search.s2==-1) v.search.s2=0;
                 location.href="#page=search&name="+($('#sname').val() || '')+"&author="+($('#sauthor').val() || '')+"&type="+v.search.type
-                +'&p='+v.search.page+'&s='+s;
+                +'&p='+v.search.page+'&s='+v.search.s2;
             },1)
         },
         work:{},
@@ -1109,15 +1166,16 @@ let functiona = {
             [
                 '最多金币',
                 '最新注册',
-                '最晚注册',
+                '最早注册',
             ],
             [
                 '最多成员',
                 '最多作品',
+                '最早创建',
                 '最新创建',
-                '最晚创建',
             ],
         ],
+        isfirst:1,
         select:[
             '最新发布',
             '最多金币',
@@ -1212,10 +1270,27 @@ var v = new Vue({
             v.search.search()
         },
         'search.type':()=>{
-            v.search.page=1;
-            v.search.author='';
-            v.search.name='';
-            v.search.search()
+            
+            if(v.search.isfirst){
+                v.search.isfirst=0
+            }else{
+                v.search.page=1;
+                v.search.author='';
+                v.search.name='';
+                v.search.search()
+            }
+        },
+        'comment.page':()=>{
+            v.comment.getcomment()
+        },
+        'user.msgpage':()=>{
+            setTimeout(() => {
+                v.user.getmessage()
+            }, 1);
+            
+        },
+        'search.select':()=>{
+            v.search.s2=v.search.s[v.search.type].indexOf(v.search.select[v.search.type]);
         }
     }
 })
