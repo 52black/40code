@@ -242,6 +242,7 @@ var pagecz = {
                 name:getQueryString('name'),
                 author:getQueryString('author'),
                 type:getQueryString('type'),
+                s:getQueryString('s')||0,
                 page:v.search.page
             }
         },function(d){
@@ -249,7 +250,7 @@ var pagecz = {
             Vue.set(v.search,t[+getQueryString('type')],d.data)
             Vue.set(v.search,'num',d.data.num)
             Vue.set(v.search,'time',d.data.time)
-            if(Math.ceil(v.search.num/12)<v.search.page){
+            if(Math.ceil(v.search.num/12)<v.search.page && v.search.num!=0){
                 v.search.page=Math.ceil(v.search.num/12);
             }
         })
@@ -1084,8 +1085,10 @@ let functiona = {
     search:{
         search:()=>{
             setTimeout(()=>{
+                let s=v.search.s[v.search.type].indexOf(v.search.select[v.search.type]);
+                if(s==-1) s=0;
                 location.href="#page=search&name="+($('#sname').val() || '')+"&author="+($('#sauthor').val() || '')+"&type="+v.search.type
-                +'&p='+v.search.page
+                +'&p='+v.search.page+'&s='+s;
             },1)
         },
         work:{},
@@ -1093,7 +1096,34 @@ let functiona = {
         user:[],
         page:1,
         num:0,
-        time:0
+        time:0,
+        s:[
+            [
+                '最早创建',
+                '最早发布',
+                '最近更新',
+                '最近发布',
+                '最近更新',
+                '最多点赞',
+                '最多浏览'
+            ],
+            [
+                '最多金币',
+                '最新注册',
+                '最晚注册',
+            ],
+            [
+                '最多成员',
+                '最多作品',
+                '最新创建',
+                '最晚创建',
+            ],
+        ],
+        select:[
+            '最新发布',
+            '最多金币',
+            '最多成员'
+        ]
     }
 }
 let functiono = {
@@ -1183,6 +1213,9 @@ var v = new Vue({
             v.search.search()
         },
         'search.type':()=>{
+            v.search.page=1;
+            v.search.author='';
+            v.search.name='';
             v.search.search()
         }
     }
