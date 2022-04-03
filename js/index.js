@@ -73,7 +73,7 @@ Vue.component('s-comment', {
 Vue.component('s-c2', {
     props: ['comment', 'reply'],
     template: `<span>
-    <v-textarea clearable v-model="comment.text[reply?'c-'+reply:'comment']"
+    <v-textarea clearable v-model="comment.text[reply?''+reply:'comment']"
     clear-icon="mdi-close-circle" :id="reply?'c-'+reply:'comment'" filled label="评论" auto-grow :value="comment.text[reply?'c-'+reply:'comment']" maxlength="500" counter>
     </v-textarea>
     <v-btn class="pa-2 mx-auto text--secondary" v-on:click="comment.send(reply)"   elevation="0"  block>发送</v-btn>
@@ -229,9 +229,30 @@ var pagecz = {
             v.studio.ilist = d.data
         })
     },
-    allwork: (a) => {
-        v.stitle("作品搜索")
-        v.work.all(a);
+    "search":(id)=>{
+        Vue.set(v.search,'type',getQueryString('type'))
+        v.search.page= (+getQueryString('p') || 1)
+        v.search.type= ((+getQueryString('type'))+1 ? +getQueryString('type') :0)
+        Vue.set(v.search,'work',{})
+        Vue.set(v.search,'studio',{})
+        Vue.set(v.search,'user',{})
+        post({
+            url:"/search/",
+            data:{
+                name:getQueryString('name'),
+                author:getQueryString('author'),
+                type:getQueryString('type'),
+                page:v.search.page
+            }
+        },function(d){
+            let t=['work','user','studio']
+            Vue.set(v.search,t[+getQueryString('type')],d.data)
+            Vue.set(v.search,'num',d.data.num)
+            Vue.set(v.search,'time',d.data.time)
+            if(Math.ceil(v.search.num/12)<v.search.page){
+                v.search.page=Math.ceil(v.search.num/12);
+            }
+        })
     },
     'sign': () => {
         v.stitle("登录注册")
@@ -793,7 +814,7 @@ let functiona = {
 
                 }, (d) => {
                     console.log(d);
-                    v.comment.text[s]=""
+                    v.comment.text[r]=""
                     alert("发送成功");
                     v.comment.getcomment();
                 })
@@ -1059,6 +1080,20 @@ let functiona = {
                 upa(f)
 	        }
 	    }
+    },
+    search:{
+        search:()=>{
+            setTimeout(()=>{
+                location.href="#page=search&name="+($('#sname').val() || '')+"&author="+($('#sauthor').val() || '')+"&type="+v.search.type
+                +'&p='+v.search.page
+            },1)
+        },
+        work:{},
+        studio:[],
+        user:[],
+        page:1,
+        num:0,
+        time:0
     }
 }
 let functiono = {
@@ -1075,7 +1110,7 @@ let functiono = {
         pagecz[a] && pagecz[a](id);
     },
     qh2: () => {
-        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'allwork', 'flist', 'mystudio', 'studio', 'studio_edit','about'], q = getQueryString('page');
+        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'search', 'flist', 'mystudio', 'studio', 'studio_edit','about'], q = getQueryString('page');
         if (!q) {
             q = 'index'
         } else if (d.indexOf(q) != -1) {
@@ -1104,6 +1139,7 @@ let functiono = {
     waitRequest: { cover: 0 },
     worklist: 0,
     title:'40code少儿编程社区',
+    getQueryString:getQueryString,
     stitle:(s)=>{
         document.title=(s || v.title)+'  -40code';
         s && (v.title=s)
@@ -1142,6 +1178,14 @@ var v = new Vue({
             },
         }
     }),
+    watch:{
+        'search.page':()=>{
+            v.search.search()
+        },
+        'search.type':()=>{
+            v.search.search()
+        }
+    }
 })
 
 v.qh2();
