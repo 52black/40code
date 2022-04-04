@@ -675,6 +675,9 @@ let functiona = {
         data: {
             email: '',
             pw: ''
+        },
+        go:()=>{
+            location.href="#page=sign&url="+btoa(location.href)
         }
     },
     account: {
