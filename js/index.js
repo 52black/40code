@@ -660,7 +660,7 @@ let functiona = {
                     pagecz.sign()
                     if (data.code == 1) {
                         if (n == 0) {
-                            location.href = decode(getQueryString('url'))||"#"
+                            location.href = getQueryString('url')?atob(getQueryString('url')):"#"
                             alert(data.msg)
                             setCookie('token', data.token, 30)
                             getuserinfo()
