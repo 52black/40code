@@ -660,9 +660,9 @@ let functiona = {
                     pagecz.sign()
                     if (data.code == 1) {
                         if (n == 0) {
-                            location.href = "#"
+                            location.href = decode(getQueryString('url'))||"#"
                             alert(data.msg)
-                            setCookie('token', data.token, 3)
+                            setCookie('token', data.token, 30)
                             getuserinfo()
                         } else {
                             alert(data.msg)
