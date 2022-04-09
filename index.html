@@ -6,6 +6,7 @@
     <link href="/mdi/css/materialdesignicons.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://unpkg.com/vuetify-dialog@2.0.17/dist/vuetify-dialog.min.css"> -->
     <link href="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.css" rel="stylesheet">
+    
     <link rel="shortcut icon" href="/other/favicon.ico" />
     <link rel="bookmark" href="/other/favicon.ico" />
     <base target="_blank" />
@@ -36,10 +37,11 @@
         }
     </style>
     <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script>
+    <!-- <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script> -->
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
     <script src="https://cdn.dingxiang-inc.com/ctu-group/captcha-ui/index.js"></script>
-
+    <script src="https://cdn.bootcdn.net/ajax/libs/dompurify/2.3.6/purify.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww==" src="https://lib.baomitu.com/marked/4.0.2/marked.min.js"></script>
     <script>
         (() => {
             let time = (new Date());
@@ -494,13 +496,30 @@
                                                 <img
                                                     :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                                             </v-avatar>
-                                            <span color="accent" class="text-h5">{{ workview.nickname }}</span>
-                                            <a :href="`#page=studio&id=${workview.studio.id}`" v-if="workview.studio">
-                                                <v-btn rounded class="ma-2" :color="workview.studio.color || 'green'"
-                                                    elevation="0">
-                                                    <span style="color:white">{{ workview.studio.name }}</span>
-                                                </v-btn>
-                                            </a>
+                                            
+                                                <span color="accent" class="text-h5" v-if="workview.id!=detail.id || user.edit!=1">{{ workview.nickname }}</span>
+                                                <v-col
+                                                cols="12"
+                                                sm="6"
+                                                md="3"
+                                                v-else
+                                              >
+                                                <v-text-field
+                                                  label="昵称" :value="detail.nickname" id="nnedit"
+                                                ></v-text-field>
+                                              </v-col>
+                                                <v-btn  v-on:click="user.edit==1?(user.edit=0):(user.edit=1)"
+                                                    v-if="workview.id==detail.id" elevation="0">
+                                                    <span style="color:#888"><v-icon>mdi-edit</v-icon><span v-if="user.edit==1">取消</span>编辑</span></v-btn>
+                                                <v-btn v-on:click="account.edits(1)" v-if="workview.id==detail.id && user.edit==1" elevation="0">保存</v-btn>
+                                            
+                                                <a :href="`#page=studio&id=${workview.studio.id}`" v-if="workview.studio">
+                                                    <v-btn rounded class="ma-2" :color="workview.studio.color || 'green'"
+                                                        elevation="0">
+                                                        <span style="color:white">{{ workview.studio.name }}</span>
+                                                    </v-btn>
+                                                </a>
+                                            
                                             <v-btn class="float-right" v-on:click="user.signin()"
                                                 v-if="workview.id==detail.id" elevation="0" color="accent">
                                                 签到</v-btn>
@@ -542,13 +561,31 @@
                                             <span color="accent"
                                                 class="text-subtitle-1 float-right text--disabled">加入时间：{{
                                                 date(workview.signtime) }}</span><br>
+                                                <span color="accent"
+                                                class="text-subtitle-1 float-right text--disabled">最后活跃时间：{{
+                                                date(workview.last_active) }}</span>
+                                                <br>
                                         </v-card>
                                     </v-col>
                                     <v-col cols="12">
                                         <v-card class="pa-5" elevation="0" class="br2">
                                             <span color="accent" class="text-h5 text--primary"
-                                                cols="24">用户介绍</span><br><br>
-                                            <span class="text--secondary" v-html="workview.introduce2"></span>
+                                                cols="24">用户介绍</span>                                                
+                                                <v-btn  v-on:click="user.edit==2?(user.edit=0):(user.edit=2)"
+                                                v-if="workview.id==detail.id" elevation="0">
+                                                <span style="color:#888"><v-icon>mdi-edit</v-icon><span v-if="user.edit==2">取消</span>编辑</span></v-btn>
+                                            <v-btn v-on:click="account.edits(2)" v-if="workview.id==detail.id && user.edit==2" elevation="0">保存</v-btn>
+                                            <br><br>
+
+                                            <span class="text--secondary" v-html="workview.introduce2" v-if="workview.id!=detail.id || user.edit!=2"></span>
+                                            <span v-else>
+                                                <v-textarea
+                                                label="介绍"
+                                                :value="workview.introduce"
+                                                hint="支持markdown，您可以拖动输入框右下角的三条斜线以拉大输入框"
+                                                id="iedit"
+                                                ></v-textarea>
+                                            </span>
                                         </v-card>
                                     </v-col>
 
@@ -814,7 +851,7 @@
 
                     <template v-slot:action="{ attrs }">
                         <v-btn color="blue" text v-bind="attrs" @click="sb.show = false">
-                            Close
+                            关闭
                         </v-btn>
                     </template>
                 </v-snackbar>
@@ -843,7 +880,7 @@
 <script src="https://cdn.staticfile.org/vue/2.6.9/vue.js"></script>
 <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
 <script src="/js/app.js?v=15"></script>
-<script src="/js/index.js?v=36"></script>
+<script src="/js/index.js?v=37"></script>
 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
 <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
 </body>

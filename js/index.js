@@ -221,6 +221,9 @@ window.dialog = (text) => {
     v.sb2.text = text;
     v.sb2.show = 1;
 }
+var markdownToHtml=(text)=>{
+    return marked.parse(DOMPurify.sanitize(text));
+}
 var pagecz = {
     'index': function () {
         v.stitle("40code少儿编程社区")
@@ -307,7 +310,7 @@ var pagecz = {
         }, function (d) {
             let d2 = d.data
             if (d2) {
-                d2.introduce2 = markdown.toHTML(d2.introduce);
+                d2.introduce2 = markdownToHtml(d2.introduce);
                 v.workview = d2;
                 v.comment.getcomment()
                 v.title=d2.title+' by '+d2.nickname;
@@ -339,7 +342,8 @@ var pagecz = {
         })
     },
     'user': function (id) {
-        v.stitle("用户")
+        v.stitle("用户");
+        v.user.edit=0;
         v.$data.workview = { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" };
         get({
             url: 'user/info',
@@ -350,7 +354,7 @@ var pagecz = {
             v.stitle(d.data[0] && d.data[0].nickname);
             (v.$data.workview = d.data[0])
             // location.href = "#page=user&id=" + id;
-            v.workview.introduce2 = v.workview.introduce ? markdown.toHTML(v.workview.introduce) : '当前用户暂时没有介绍哦';
+            v.workview.introduce2 = v.workview.introduce ? markdownToHtml(v.workview.introduce) : '当前用户暂时没有介绍哦';
             v.comment.getcomment()
             v.user.getwork(6)
             setTimeout(()=>{
@@ -359,6 +363,7 @@ var pagecz = {
         })
     },
     'account': function (id) {
+        getuserinfo()
         v.stitle("账号设置")
     },
     'message': (id) => {
@@ -380,7 +385,7 @@ var pagecz = {
         }, function (d) {
             if (!d.data) return;
             Vue.set(v.studio, 'info', d.data)
-            v.studio.info.introduce2 = v.studio.info.introduce ? markdown.toHTML(v.studio.info.introduce) : '当前工作室暂时没有介绍哦';
+            v.studio.info.introduce2 = v.studio.info.introduce ? markdownToHtml(v.studio.info.introduce) : '当前工作室暂时没有介绍哦';
             v.studio.chose = v.studio.chose.toString();
             v.comment.getcomment()
             v.studio.getwork()
@@ -749,6 +754,22 @@ let functiona = {
                 // location.href = ""
             })
         },
+        edits:(type)=>{
+            let data={};
+            let t=['','nickname','introduce'],t2=['','nnedit','iedit'];
+            data[t[type]]=$('#'+t2[type]).val();
+            post({
+                url: 'user/info/update',
+                data: {
+                    data:data,
+                },
+                p: 'changeinfo'
+            }, function (d) {
+                alert(d.msg)
+                getuserinfo()
+                location.href+='&time='+new Date/1
+            })
+        }
     },
     comment: {
         send: function (r, id) {
@@ -792,12 +813,12 @@ let functiona = {
                     v.comment.page=Math.ceil(d2.num/6);
                 }
                 for (let i in d2.comment) {
-                    d2.comment[i].comment = markdown.toHTML(d2.comment[i].comment)
+                    d2.comment[i].comment = markdownToHtml(d2.comment[i].comment)
                     d2.comment[i].time = other.date(d2.comment[i].time);
                 }
                 for (let i in d2.reply) {
                     for (let j in d2.reply[i]) {
-                        d2.reply[i][j].comment = d2.reply[i][j].comment ? markdown.toHTML(d2.reply[i][j].comment) : ''
+                        d2.reply[i][j].comment = d2.reply[i][j].comment ? markdownToHtml(d2.reply[i][j].comment) : ''
                         d2.reply[i][j].time = other.date(d2.reply[i][j].time);
                     }
                 }
@@ -957,7 +978,8 @@ let functiona = {
             },()=>{
                 v.user.getmessage()
             })
-        }
+        },
+        edit:0
     },
     studio: {
         new: function () {
