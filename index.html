@@ -14,33 +14,7 @@
     <meta content="40code,40code少儿编程社区,少儿编程社区,图形化编程社区,编程创作学习,scratch社区" name="keywords" />
     <meta content="40code是一个公益性质的scratch社区，没有太多的规定，拥有3D扩展、云数据扩展、懒加载音乐扩展。用40code，你能轻松做出让人惊叹的3D作品和音游。"
         name="description" />
-    <style>
-        a {
-            text-decoration: none
-        }
-
-        .tg {
-            color: #888 !important
-        }
-
-        .br {
-            border-radius: 8px
-        }
-
-        .l {
-            color: rgba(0, 0, 0, 0.5) !important;
-        }
-
-        .l2 {
-            color: rgba(0, 0, 0, 0.6) !important;
-        }
-
-        .sd {
-            border-radius: 12px !important;
-            -webkit-box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.02), 0 12px 17px 2px rgba(0, 0, 0, 0.014), 0 5px 22px 4px rgba(0, 0, 0, 0.012) !important;
-            box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.02), 0 12px 17px 2px rgba(0, 0, 0, 0.014), 0 5px 22px 4px rgba(0, 0, 0, 0.012) !important;
-        }
-    </style>
+    <link href="/other/index.css" rel="stylesheet">
     <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
     <!-- <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script> -->
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
@@ -506,15 +480,15 @@
                                     <v-col cols="12">
                                         <v-card class="pa-5 sd">
                                             <v-row>
-                                                <v-col cols="6">
+                                                <v-col cols="12" sm="8" md="6">
                                                     <v-row>
-                                                        <v-col cols="6" sm="4" md="3" lg="3">
+                                                        <v-col cols="4" sm="4" md="4" lg="3">
                                                             <v-avatar size="120">
                                                                 <img
                                                                     :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                                                             </v-avatar>
                                                         </v-col>
-                                                        <v-col cols="6" sm="5" md="9" lg="9">
+                                                        <v-col cols="6" sm="6" md="6" lg="6">
                                                             <v-row no-gutters>
                                                                 <v-col cols="12">
                                                                     <span color="accent" class="text-h5"
@@ -552,7 +526,7 @@
                                                                     {{date(workview.signtime) }} 加入
                                                                 </v-col>
                                                                 <v-col cols="12" style="color:#888;font-size: 6px;">
-                                                                    {{date(workview.signtime) }} 最后活跃
+                                                                    {{date(workview.last_active) }} 最后活跃
                                                                 </v-col>
                                                                 <v-col cols="12" class="mt-2">
                                                                     <v-btn class="sd tg" v-on:click="user.signin()"
