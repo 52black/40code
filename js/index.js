@@ -94,7 +94,7 @@ Vue.component('s-c2', {
 Vue.component('s-workcard', {
     props: ['work', 'user', 'host', 'my'],
     template: `
-    <v-card elevation="0" class="rounded-lg mb-3 sd">
+    <v-card class=" mb-3 sd">
     <v-card :href="'#page=work&id='+work.id" elevation="0">
         <v-img :src="host.data+'/static/internalapi/asset/'+work.image" :aspect-ratio="4/3"
             class="white--text align-end" gradient="to bottom, rgba(0,0,0,0) 80%, rgba(0,0,0,.6)">
@@ -142,7 +142,7 @@ Vue.component('s-workcard', {
 Vue.component('s-usercard', {
     props: ['user', 'host'],
     template: `
-    <v-card :href="'#page=user&id='+user.id" elevation="0" class="rounded-lg py-2 sd">
+    <v-card :href="'#page=user&id='+user.id" class="py-2 sd">
   <v-row class="pa-5">
     <v-col cols="4">
       <v-avatar size="40">
@@ -180,7 +180,7 @@ Vue.component('s-usercard', {
 Vue.component('s-studiocard', {
     props: ['studio', 'host'],
     template: `
-    <v-card :href="'#page=studio&id='+studio.id" elevation="0" class="rounded-lg py-2">
+    <v-card :href="'#page=studio&id='+studio.id" class="rounded-lg py-2 sd">
 
     <v-row class="pa-5">
         <v-col cols="4">
