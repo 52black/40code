@@ -3,7 +3,7 @@
 
 <head>
     <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
-    <link href="/mdi/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/6.6.96/css/materialdesignicons.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://unpkg.com/vuetify-dialog@2.0.17/dist/vuetify-dialog.min.css"> -->
     <link href="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.css" rel="stylesheet">
 
@@ -84,7 +84,7 @@
                                     <v-btn color="rgb(52,130,207)" dark v-bind="attrs" v-on="on" class="sd" style="text-transform: none!important;">
                                         <v-avatar size="20" class="mr-2">
                                             <img
-                                                :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                                                :src="host.data+'/static/internalapi/asset/'+(detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                                         </v-avatar>
                                         {{ detail.nickname }}
                                     </v-btn>
