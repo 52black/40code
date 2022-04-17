@@ -23,7 +23,7 @@ Vue.component('s-comment', {
                                 </a>
                                 <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`"
                                     v-if="comment.comment.studio[j.studio]">
-                                    <v-btn 
+                                    <v-btn  style="text-transform: none!important;"
                                         :color="comment.comment.studio[j.studio].color || 'green'" class="sd tg" small>
                                         <span style="color:white">{{ comment.comment.studio[j.studio].name }}</span>
                                     </v-btn>
@@ -31,10 +31,10 @@ Vue.component('s-comment', {
                             </v-col>
                             <v-col cols="12">
                                 <span color="accent" class="" v-html="i.comment"></span>
-                                <v-btn class="text--secondary float-left" text small v-on:click="comment.showreply(i.id)">
+                                <v-btn class="text--secondary float-left" text small v-on:click="comment.showreply(i.id)" style="margin-top: -15px;">
                                     <v-icon>mdi-reply</v-icon> 回复
                                 </v-btn>
-                                <v-btn class="text--secondary float-right" text small
+                                <v-btn class="text--secondary float-right" text small style="margin-top: -15px;"
                                     v-if="detail.id==i.touser || detail.id==i.fromuser"
                                     v-on:click="comment.delete(i.id)">
                                     <v-icon>mdi-delete</v-icon> 删除
@@ -76,7 +76,7 @@ Vue.component('s-comment', {
                                         </a>
                                         <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`"
                                             v-if="comment.comment.studio[j.studio]">
-                                            <v-btn 
+                                            <v-btn  style="text-transform: none!important;"
                                                 :color="comment.comment.studio[j.studio].color || 'green'" class="sd tg" small>
                                                 <span style="color:white">{{ comment.comment.studio[j.studio].name }}</span>
                                             </v-btn>
@@ -84,11 +84,11 @@ Vue.component('s-comment', {
                                     </v-col>
                                     <v-col cols="12">
                                         <span color="accent" class="" v-html="k.comment"></span>
-                                        <v-btn class="text--secondary float-left" text small v-on:click="comment.showreply(i.id,k.id)">
+                                        <v-btn class="text--secondary float-left" text small v-on:click="comment.showreply(i.id,k.id)" style="margin-top: -15px;">
                                             <v-icon>mdi-reply</v-icon> 回复
                                         </v-btn>
                                         <v-btn class="text--secondary float-right" text small
-                                            v-if="detail.id==k.fromuser"
+                                            v-if="detail.id==k.fromuser" style="margin-top: -15px;"
                                             v-on:click="comment.deletereply(k.id)">
                                             <v-icon>mdi-delete</v-icon> 删除
                                         </v-btn>

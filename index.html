@@ -14,7 +14,7 @@
     <meta content="40code,40code少儿编程社区,少儿编程社区,图形化编程社区,编程创作学习,scratch社区" name="keywords" />
     <meta content="40code是一个公益性质的scratch社区，没有太多的规定，拥有3D扩展、云数据扩展、懒加载音乐扩展。用40code，你能轻松做出让人惊叹的3D作品和音游。"
         name="description" />
-    <link href="/other/index.css" rel="stylesheet">
+    <link href="/other/index.css?v=2" rel="stylesheet">
     <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
     <!-- <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script> -->
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
@@ -58,7 +58,7 @@
             <template>
                 <v-app id="inspire">
 
-                    <v-app-bar app color="primary" dark>
+                    <v-app-bar app color="primary" dark style="box-shadow: 0 2px 4px -1px rgb(0 0 0 / 5%), 0 4px 5px 0 rgb(0 0 0 / 3%), 0 1px 10px 0 rgb(0 0 0 / 3%)!important">
                         <a href="#" style="color:white;font-size:20px" target="_self">40code</a>
                         <span class="d-none d-sm-flex">
                             <a href="#page=search&name=&author=&type=0&p=1&s=4" style="color:white;font-size:10px"
@@ -81,13 +81,17 @@
                             </v-btn>
                             <v-menu>
                                 <template v-slot:activator="{ on, attrs }">
-                                    <v-btn color="" dark v-bind="attrs" v-on="on">
+                                    <v-btn color="rgb(52,130,207)" dark v-bind="attrs" v-on="on" class="sd" style="text-transform: none!important;">
+                                        <v-avatar size="20" class="mr-2">
+                                            <img
+                                                :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                                        </v-avatar>
                                         {{ detail.nickname }}
                                     </v-btn>
                                 </template>
 
                                 <v-list>
-                                    <v-list-item v-for="(item, index) in items" :key="index" @click="() => {}"
+                                    <v-list-item v-for="(item, index) in items"  :key="index" @click="() => {}"
                                         v-on:click="item.c()">
                                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                                     </v-list-item>
@@ -95,8 +99,8 @@
                             </v-menu>
                         </span>
                         <v-toolbar-title v-else-if="detail===undefined">
-                            <a v-on:click="sign.go()" target="_self">
-                                <v-btn>登录/注册</v-btn>
+                            <a v-on:click="sign.go()" target="_self" >
+                                <v-btn color="rgb(52,130,207)" class="sd">登录/注册</v-btn>
                             </a>
                         </v-toolbar-title>
                     </v-app-bar>
@@ -514,7 +518,7 @@
 
                                                                     <a :href="`#page=studio&id=${workview.studio.id}`"
                                                                         v-if="workview.studio">
-                                                                        <v-btn
+                                                                        <v-btn  style="text-transform: none!important;"
                                                                             :color="workview.studio.color || 'green'"
                                                                             class="sd tg" small>
                                                                             <span style="color:white">{{
@@ -585,7 +589,7 @@
                                         <v-card class="pa-5 sd">
                                             <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span>
                                             <v-btn v-on:click="user.edit==2?(user.edit=0):(user.edit=2)"
-                                                v-if="workview.id==detail.id" elevation="0">
+                                                v-if="workview.id==detail.id" class="sd tg">
                                                 <span style="color:#888">
                                                     <v-icon>mdi-edit</v-icon><span v-if="user.edit==2">取消</span>编辑
                                                 </span>
@@ -594,7 +598,7 @@
                                                 v-if="workview.id==detail.id && user.edit==2" elevation="0">保存</v-btn>
                                             <br><br>
 
-                                            <span class="text--secondary" v-html="workview.introduce2"
+                                            <span v-html="workview.introduce2"
                                                 v-if="workview.id!=detail.id || user.edit!=2"></span>
                                             <span v-else>
                                                 <v-textarea label="介绍" :value="workview.introduce"
@@ -902,7 +906,7 @@
 <script src="https://cdn.staticfile.org/vue/2.6.9/vue.js"></script>
 <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
 <script src="/js/app.js?v=15"></script>
-<script src="/js/index.js?v=38"></script>
+<script src="/js/index.js?v=39"></script>
 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
 <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
 </body>
