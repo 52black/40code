@@ -58,7 +58,7 @@ Vue.component('s-comment', {
                     <div v-for="j in comment.comment.user[k.fromuser.toString()]" class="mt-2">
 
                         <v-row no-gutters>
-                            <span style="flex: 0 0 15px;"></span>
+                            <span style="flex: 0 0 35px;"></span>
                             <span style="flex: 0 0 10px;" class="mt-1">
                                 <a :href="'#page=user&id='+i.fromuser">
                                     <v-avatar size=40 class="">
@@ -68,7 +68,7 @@ Vue.component('s-comment', {
                                 </a>
                             </span>
                             <span style="flex: 0 0 15px;"></span>
-                            <span style="flex:0 0 calc( 100% - 75px )">
+                            <span style="flex:0 0 calc( 100% - 95px )">
                                 <v-row no-gutters>
                                     <v-col cols="12">
                                         <a :href="'#page=user&id='+k.fromuser">
@@ -150,7 +150,7 @@ Vue.component('s-c2', {
     <v-textarea clearable v-model="comment.text[reply?''+reply:'comment']"
     clear-icon="mdi-close-circle" :id="reply?'c-'+reply:'comment'" filled label="评论" auto-grow :value="comment.text[reply?'c-'+reply:'comment']" maxlength="500" counter>
     </v-textarea>
-    <v-btn class="pa-2 mx-auto text--secondary" v-on:click="comment.send(reply)"   elevation="0"  block>发送</v-btn>
+    <v-btn class="pa-2 mx-auto sd" v-on:click="comment.send(reply)"  color="accent"  block>发送</v-btn>
 </span>
 `
 })
@@ -470,6 +470,12 @@ var pagecz = {
         })
 
     },
+    'forum':()=>{
+        v.forum.getlist()
+    },
+    'post':()=>{
+        v.forum.post.get()
+    }
 };
 
 let functiona = {
@@ -639,6 +645,10 @@ let functiona = {
             )
         }
     },
+    lb:[{
+        href:"#page=post&id=5",
+        src:'https://s1.ax1x.com/2022/05/01/OpXZoq.png'
+    }],
     items: [
 
         {
@@ -801,6 +811,7 @@ let functiona = {
                 alert("请选择图片并等待上传完毕后再继续操作")
                 return;
             }
+            setCookie('newpage',v.account.newpage,999);
             post({
                 url: 'user/info/update',
                 data: {
@@ -832,7 +843,8 @@ let functiona = {
                 getuserinfo()
                 location.href+='&time='+new Date/1
             })
-        }
+        },
+        newpage:getCookie('newpage')
     },
     comment: {
         send: function (r, id) {
@@ -846,7 +858,7 @@ let functiona = {
                     url: "comment/",
                     data: {
                         comment: s,
-                        touser: v.comment.t[v.viewmode] == 2 ? v.studio.info.id : v.workview.id,
+                        touser:v.comment.t[v.viewmode] == 2 ? v.studio.info.id : (v.comment.t[v.viewmode] == 3 ?v.forum.post.text.id: v.workview.id),
                         type: v.comment.t[v.viewmode],
                     },
                     p: "comment",
@@ -864,7 +876,7 @@ let functiona = {
             get({
                 url: "comment/",
                 data: {
-                    id: v.comment.t[v.viewmode] == 2 ? v.studio.info.id : v.workview.id,
+                    id:v.comment.t[v.viewmode] == 2 ? v.studio.info.id : (v.comment.t[v.viewmode] == 3 ?v.forum.post.text.id: v.workview.id),
                     type: v.comment.t[v.viewmode],
                     l:6,
                     o:(v.comment.page-1)*6
@@ -963,7 +975,7 @@ let functiona = {
         },
         page:1,
         rid:null,
-        t: { 'user': 0, 'work': 1, 'studio': 2 }
+        t: { 'user': 0, 'work': 1, 'studio': 2,'post':3 }
     },
     user: {
         getwork: (l) => {
@@ -1057,7 +1069,7 @@ let functiona = {
                     alert(d.msg);
                     return;
                 }
-                location.href = "/#page=studio&id" + d.id;
+                location.href = "/#page=studio&id=" + d.id;
             })
         },
         my: [],
@@ -1269,6 +1281,82 @@ let functiona = {
             '最多金币',
             '最多成员'
         ]
+    },
+    forum:{
+        list:[],
+        studio:{},
+        sending:0,
+        getlist:()=>{
+            get({
+                url:'forum/list',
+                data:{
+                    sid:getQueryString('sid'),
+                    page:getQueryString('page') || 1
+                }
+            }, (d)=>{
+                if(d.code==-1){
+                    dialog(d.msg)
+                    return;
+                }
+                v.forum.list=d.data.list;
+                v.forum.studio=d.data.studio;
+                v.forum.user=d.data.user;
+            })
+        },
+        get:()=>{
+            get({
+                url:'forum/post',
+                data:{
+                    sid:getQueryString('sid'),
+                    page:getQueryString('page') || 1
+                }
+            }, (d)=>{
+                if(d.code==-1){
+                    dialog(d.msg)
+                    return;
+                }
+                
+            })
+        },
+        send:()=>{
+            if($('#ftitle').val().length<3 || $('#fcontext').val().length<3){
+                alert('标题和正文必须大于2个字')
+                return;
+            }
+            v.forum.sending=1;
+            post({
+                url:'forum/new',
+                data:{
+                    title:$('#ftitle').val(),
+                    context:$('#fcontext').val(),
+                    sid:getQueryString('sid')
+                }
+            },function(d){
+                v.forum.sending=0;
+                v.forum.dialog = false;
+                location.href += '&t'
+                alert(d.msg)
+            })
+        },
+        post:{
+            text:{},
+            studio:{},
+            author:{},
+            get:()=>{
+                get({
+                    url:'forum/post',
+                    data:{
+                        id:getQueryString('id')
+                    }
+                },function(d){
+                    v.forum.post.text=d.data.text;
+                    v.forum.post.text.context2=markdownToHtml(v.forum.post.text.context)
+                    v.forum.post.studio=d.data.studio;
+                    v.forum.post.author=d.data.author;
+                    v.comment.getcomment()
+                })
+            }
+        }
     }
 }
 let functiono = {
@@ -1285,7 +1373,7 @@ let functiono = {
         pagecz[a] && pagecz[a](id);
     },
     qh2: () => {
-        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'search', 'flist', 'mystudio', 'studio', 'studio_edit','about'], q = getQueryString('page');
+        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'search', 'flist', 'mystudio', 'studio', 'studio_edit','about','forum','post'], q = getQueryString('page');
         if (!q) {
             q = 'index'
         } else if (d.indexOf(q) != -1) {
@@ -1325,6 +1413,9 @@ var other = {
     date: (d) => {
         function p(num) {
             return (Array(2).join('0') + num).slice(-2);
+        }
+        if(!d){
+            return '未统计'
         }
         let date = "", st = new Date(d * 1000), et = new Date();
         if (st.getYear() == et.getYear()) {

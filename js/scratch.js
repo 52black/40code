@@ -69,10 +69,8 @@ $('#dlp').hide();
     // downloadurl = '/work/' + d.id + '.json';
     // $('body').append('<script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/lib35.min.js"></script> \
     // <script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/gui9.js"></script>')
-    $('body').append(`
-    <script src="/other/scratch/lib.min.js?v=3" id="script"></script>
-    <script src="/other/scratch/gui.js?v=2"></script>
-    `);
+    $('body').append(`<script src="/other/scratch/i.php?type=lib.min.js"></script>
+<script src="/other/scratch/i.php?type=gui.js"></script>`)
 })()
 var scratch2 = () => { }, temp2 = {};
 function downloadFileByBlob(blob, fileName = "file") {
@@ -515,7 +513,7 @@ window.scratchConfig = {
         })
     },
     //默认项目地址,不需要修请删除本配置项
-    defaultProjectURL: "https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/unreleased/scratch/8050135381552279031529",
+    defaultProjectURL: '/other/static/project.sb3',//"https://cdn.jsdelivr.net/gh/52black/xiaoyu@master/public/unreleased/scratch/8050135381552279031529",
     //若使用官方素材库请删除本配置项, 默认为/static下的素材库
     assetCDN: scratchhost + '/static'
 }

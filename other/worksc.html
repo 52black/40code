@@ -9,6 +9,10 @@
   <link href="https://cdn.staticfile.org/mdui/1.0.2/css/mdui.min.css" rel="stylesheet">
   <title>EasyScratch 3.0: Player Example</title>
   <script src="https://cdn.staticfile.org/mdui/1.0.2/js/mdui.min.js"></script>
+  <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    var $$=$;
+  </script>
   <script src="/js/worksc.js?v=8"></script>
 </head>
 
@@ -21,12 +25,10 @@
         <br> 首次加载时间可能较长(1分钟左右)，请耐心等待</span>
     </p>
   </div>
-  
-<script src="/other/scratch/lib.min.js?v=3"></script>
-<script src="/other/scratch/player.js?v=2"></script>
+  <script>
+    $$('body').append('\x3Cscript src="/other/scratch/i.php?type=lib.min.js">\x3C/script>\x3Cscript src="/other/scratch/i.php?type=player.js">\x3C/script>');
+  </script>
 </body>
-<script>
 
-</script>
 
 </html>

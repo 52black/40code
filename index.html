@@ -3,13 +3,16 @@
 
 <head>
     <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
-    <link href="https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/6.6.96/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/MaterialDesign-Webfont/6.6.96/css/materialdesignicons.min.css"
+        rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://unpkg.com/vuetify-dialog@2.0.17/dist/vuetify-dialog.min.css"> -->
     <link href="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/viewerjs/1.10.5/viewer.min.css" rel="stylesheet">
+
 
     <link rel="shortcut icon" href="/other/favicon.ico" />
     <link rel="bookmark" href="/other/favicon.ico" />
-    <base target="_blank" />
+
     <title>40code少儿编程社区</title>
     <meta content="40code,40code少儿编程社区,少儿编程社区,图形化编程社区,编程创作学习,scratch社区" name="keywords" />
     <meta content="40code是一个公益性质的scratch社区，没有太多的规定，拥有3D扩展、云数据扩展、懒加载音乐扩展。用40code，你能轻松做出让人惊叹的3D作品和音游。"
@@ -19,11 +22,16 @@
     <!-- <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script> -->
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
     <script src="https://cdn.dingxiang-inc.com/ctu-group/captcha-ui/index.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/dompurify/2.3.6/purify.min.js"></script>
+    <script src="https://lib.baomitu.com/dompurify/2.3.6/purify.min.js"></script>
     <script crossorigin="anonymous"
         integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww=="
         src="https://lib.baomitu.com/marked/4.0.2/marked.min.js"></script>
+    <script src="https://cdn.staticfile.org/viewerjs/1.10.5/viewer.min.js"></script>
     <script>
+        // var normalizedDomain = "www.40code.com";
+        // if (window.location.host != "localhost" && window.location.host != normalizedDomain) {
+        //     window.location.href = "https://" + normalizedDomain + window.location.pathname + window.location.search + window.location.hash;
+        // }
         (() => {
             let time = (new Date());
             let d = [
@@ -47,6 +55,35 @@
                 }
             }
         })()
+
+        function getCookie(cname) {
+
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i].trim();
+                if (c.indexOf(name) == 0) {
+                    let d = c.substring(name.length, c.length);
+                    if (cname == 'token') {
+                        try {
+                            v.$data.token = d
+                        } catch (error) { }
+                    }
+                    return d
+                }
+            }
+            return "";
+        }
+        function IsPC() {
+            var userAgentInfo = navigator.userAgent;
+            var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+            var flag = true;
+            for (var v = 0; v < Agents.length; v++) {
+                if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; }
+            }
+            return flag;
+        }
+        if (IsPC() && getCookie('newpage') != '1') document.write('<base target="_blank" />')
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
@@ -58,13 +95,16 @@
             <template>
                 <v-app id="inspire">
 
-                    <v-app-bar app color="primary" dark style="box-shadow: 0 2px 4px -1px rgb(0 0 0 / 5%), 0 4px 5px 0 rgb(0 0 0 / 3%), 0 1px 10px 0 rgb(0 0 0 / 3%)!important">
+                    <v-app-bar app color="primary" dark
+                        style="box-shadow: 0 2px 4px -1px rgb(0 0 0 / 5%), 0 4px 5px 0 rgb(0 0 0 / 3%), 0 1px 10px 0 rgb(0 0 0 / 3%)!important">
                         <a href="#" style="color:white;font-size:20px" target="_self">40code</a>
                         <span class="d-none d-sm-flex">
                             <a href="#page=search&name=&author=&type=0&p=1&s=4" style="color:white;font-size:10px"
                                 target="_self" class="ml-5">发现作品</a>
                             <a href="#page=search&name=&author=&type=2&p=1&s=1" style="color:white;font-size:10px"
                                 target="_self" class="ml-5">工作室</a>
+                            <a href="#page=post&id=5" style="color:white;font-size:10px" target="_self"
+                                class="ml-5">论坛</a>
                         </span>
 
                         <v-spacer></v-spacer>
@@ -81,7 +121,8 @@
                             </v-btn>
                             <v-menu>
                                 <template v-slot:activator="{ on, attrs }">
-                                    <v-btn color="rgb(52,130,207)" dark v-bind="attrs" v-on="on" class="sd" style="text-transform: none!important;">
+                                    <v-btn color="rgb(52,130,207)" dark v-bind="attrs" v-on="on" class="sd"
+                                        style="text-transform: none!important;">
                                         <v-avatar size="20" class="mr-2">
                                             <img
                                                 :src="host.data+'/static/internalapi/asset/'+(detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
@@ -91,7 +132,7 @@
                                 </template>
 
                                 <v-list>
-                                    <v-list-item v-for="(item, index) in items"  :key="index" @click="() => {}"
+                                    <v-list-item v-for="(item, index) in items" :key="index" @click="() => {}"
                                         v-on:click="item.c()">
                                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                                     </v-list-item>
@@ -99,7 +140,7 @@
                             </v-menu>
                         </span>
                         <v-toolbar-title v-else-if="detail===undefined">
-                            <a v-on:click="sign.go()" target="_self" >
+                            <a v-on:click="sign.go()" target="_self">
                                 <v-btn color="rgb(52,130,207)" class="sd">登录/注册</v-btn>
                             </a>
                         </v-toolbar-title>
@@ -109,6 +150,15 @@
 
                         <v-container v-if="viewmode=='index'" id="index">
                             <v-row>
+                                <v-col cols="12">
+                                    <div >
+                                        <v-carousel height='auto'>
+                                            <v-carousel-item v-for="i in lb"  height='auto' :href="i.href">
+                                                <v-img :src="i.src"></v-img>
+                                            </v-carousel-item>
+                                        </v-carousel>
+                                    </div>           
+                                </v-col>
                                 <template v-for="n in rows">
                                     <v-col class="mt-2" cols="12">
                                         <v-icon>{{ n.icon }}</v-icon>
@@ -272,13 +322,16 @@
                                         <v-file-input :rules="rules"
                                             accept="image/png, image/jpeg, image/bmp, image/gif" label="头像(建议尺寸1:1)"
                                             id="workimg" show-size truncate-length="10"></v-file-input>
-                                        <v-switch v-model="detail.darkmode" v-show="0" label="夜间模式(更改好后按下ctrl+r生效)"
+                                        <v-switch v-model="account.newpage" label="不在新窗口打开页面(访问速度会更快。点更改信息后，按下f5生效)"
+                                            color="primary" value="1" hide-details></v-switch>
+                                        <v-switch v-model="detail.darkmode" v-show="0" label="夜间模式(点更改信息后，按下ctrl+r生效)"
                                             color="primary" value="1" hide-details></v-switch><br><br>
                                         <!-- <v-img :src="host.data+'/static/internalapi/asset/'+ (workview.image || detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" :aspect-ratio="1"
                                                                                                                                                                                                                                                   class="ma-5 pb-2"></v-img> -->
                                         <div v-if="waitRequest.cover==1">正在上传中……</div>
                                         <div v-if="waitRequest.cover==-1">上传成功</div>
-                                        <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.update()" block>
+                                        <v-btn color="accent" class="pa-2 mx-auto sd" v-on:click="account.update()"
+                                            block>
                                             更改信息</v-btn>
 
                                         <br>
@@ -294,7 +347,8 @@
                                             :type="show2 ? 'text' : 'password'" name="input-3" label="新密码"
                                             hide-details="auto" counter @click:append="show2 = !show2" id="a_npw">
                                         </v-text-field>
-                                        <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.n()" block>更改密码
+                                        <v-btn color="accent" class="pa-2 mx-auto sd" v-on:click="account.n()" block>
+                                            更改密码
                                         </v-btn>
                                     </v-card>
                                 </v-col>
@@ -384,10 +438,17 @@
 
                                                 <v-col cols="12" md="7">
                                                     <v-responsive :aspect-ratio="51/44">
-                                                        <iframe
+                                                        <!-- <iframe
                                                             :src="(workview.id) ? ( (workview.isauthor || (workview.publish)) ? ('/other/worksc.html') : '/noqx.html') : '/d.html'"
                                                             scrolling="no" frameborder="0"
+                                                            style="width:100%;height:100%"></iframe> -->
+                                                        <iframe
+                                                            v-if="workview.id && (workview.isauthor || (workview.publish))"
+                                                            src="/other/worksc.html" scrolling="no" frameborder="0"
                                                             style="width:100%;height:100%"></iframe>
+                                                        <span v-else>
+                                                            无权限访问此作品
+                                                        </span>
                                                     </v-responsive>
                                                     <v-btn v-on:click="work.like()"
                                                         :color="workview.islike ? 'red' : ''" plain text>
@@ -402,20 +463,32 @@
                                                     </v-btn>
                                                 </v-col>
                                                 <v-col>
-                                                    <span color="accent" class="text-h5 text--primary"
-                                                        cols="24">作品介绍</span><br><br>
-                                                    <span class="text--secondary" v-html="workview.introduce2"></span>
-                                                    <br><br>
+                                                    <v-row>
+                                                        <v-col cols="12" style="overflow:auto;height:400px">
+                                                            <span color="accent" class="text-h5 text--primary"
+                                                                cols="24">作品介绍</span><br><br>
+
+                                                            <span class="text--secondary pm"
+                                                                v-html="workview.introduce2"></span>
+
+                                                            <br><br>
+                                                        </v-col cols="12">
+                                                        <v-col>
+                                                            <v-btn color="accent" class="ma-2"
+                                                                :href="'/other/scratch.html#id='+workview.id"
+                                                                target="_blank"
+                                                                v-bind:disabled="!(workview.isauthor || workview.opensource) || !workview.issign">
+                                                                转到创作页
+                                                            </v-btn>
+                                                            <v-btn color="accent" class="ma-2"
+                                                                :href="'#page=workinfo&id='+workview.id"
+                                                                v-if="workview.isauthor">编辑作品信息</v-btn>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <!--                                                     
                                                     <v-divider class=""></v-divider>
-                                                    <br><br>
-                                                    <v-btn color="accent" class="ma-2"
-                                                        :href="'/other/scratch.html#id='+workview.id" target="_blank"
-                                                        v-bind:disabled="!(workview.isauthor || workview.opensource) || !workview.issign">
-                                                        转到创作页
-                                                    </v-btn>
-                                                    <v-btn color="accent" class="ma-2"
-                                                        :href="'#page=workinfo&id='+workview.id"
-                                                        v-if="workview.isauthor">编辑作品信息</v-btn>
+                                                    <br><br> -->
+
                                                 </v-col>
                                             </v-row>
 
@@ -486,13 +559,13 @@
                                             <v-row>
                                                 <v-col cols="12" sm="8" md="6">
                                                     <v-row>
-                                                        <v-col cols="4" sm="4" md="4" lg="3">
+                                                        <span style="flex:0 0 140px">
                                                             <v-avatar size="120">
                                                                 <img
                                                                     :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                                                             </v-avatar>
-                                                        </v-col>
-                                                        <v-col cols="6" sm="6" md="6" lg="6">
+                                                        </span>
+                                                        <span style="flex:0 0 calc( 100% - 150px ) ">
                                                             <v-row no-gutters>
                                                                 <v-col cols="12">
                                                                     <span color="accent" class="text-h5"
@@ -505,20 +578,21 @@
 
                                                                     <v-btn small class="sd tg"
                                                                         v-on:click="user.edit==1?(user.edit=0):(user.edit=1)"
-                                                                        v-if="workview.id==detail.id">
+                                                                        v-if="workview.id==detail.id"
+                                                                        :style="(workview.id==detail.id && user.edit==1)?'margin-top: -25px;':''">
                                                                         <span>
                                                                             <v-icon>mdi-edit</v-icon><span
                                                                                 v-if="user.edit==1">取消</span>编辑
                                                                         </span>
                                                                     </v-btn>
-                                                                    <v-btn v-on:click="account.edits(1)"
+                                                                    <v-btn color="accent" v-on:click="account.edits(1)"
                                                                         v-if="workview.id==detail.id && user.edit==1"
-                                                                        class="sd tg" small>保存
+                                                                        class="sd" style="margin-top: -25px;" small>保存
                                                                     </v-btn>
 
                                                                     <a :href="`#page=studio&id=${workview.studio.id}`"
                                                                         v-if="workview.studio">
-                                                                        <v-btn  style="text-transform: none!important;"
+                                                                        <v-btn style="text-transform: none!important;"
                                                                             :color="workview.studio.color || 'green'"
                                                                             class="sd tg" small>
                                                                             <span style="color:white">{{
@@ -526,76 +600,71 @@
                                                                         </v-btn>
                                                                     </a>
                                                                 </v-col>
-                                                                <v-col cols="12"  style="color:#888;font-size: 6px;">
+                                                                <v-col cols="12" style="color:#888;font-size: 6px;">
                                                                     {{date(workview.signtime) }} 加入
                                                                 </v-col>
                                                                 <v-col cols="12" style="color:#888;font-size: 6px;">
                                                                     {{date(workview.last_active) }} 最后活跃
                                                                 </v-col>
                                                                 <v-col cols="12" class="mt-2">
-                                                                    <v-btn class="sd tg" v-on:click="user.signin()"
-                                                                        v-if="workview.id==detail.id">
+                                                                    <v-btn class="sd" v-on:click="user.signin()"
+                                                                        color="accent" v-if="workview.id==detail.id">
                                                                         签到</v-btn>
-                                                                    <v-btn class="sd tg" v-on:click="user.follow()"
-                                                                        v-else>
+                                                                    <v-btn class="sd" color="accent"
+                                                                        v-on:click="user.follow()" v-else>
                                                                         {{
                                                                         workview.followu ? '取消' : ''}}关注
                                                                     </v-btn>
                                                                 </v-col>
                                                             </v-row>
-                                                        </v-col>
+                                                        </span>
                                                     </v-row>
 
                                                 </v-col>
-                                                    <v-col>
-                                                        <a>
-                                                            <v-btn text
-                                                                class="text-subtitle-1 text--secondary sd tg"
-                                                                :href=" `#page=flist&id=`+workview.id">{{
+                                                <v-col>
+                                                    <a>
+                                                        <v-btn text class="text-subtitle-1 text--secondary sd tg"
+                                                            :href=" `#page=flist&id=`+workview.id">{{
                                                                 workview.fan }}
-                                                                粉丝
-                                                            </v-btn>
-                                                        </a>
-                                                        <a :href="`#page=flist&f=1&id=`+workview.id">
-                                                            <v-btn text
-                                                                class="text-subtitle-1 text--secondary sd tg">{{
+                                                            粉丝
+                                                        </v-btn>
+                                                    </a>
+                                                    <a :href="`#page=flist&f=1&id=`+workview.id">
+                                                        <v-btn text class="text-subtitle-1 text--secondary sd tg">{{
                                                                 workview.follow }}
-                                                                关注</v-btn>
-                                                        </a><br>
-                                                        <v-tooltip bottom>
-                                                            <template v-slot:activator="{ on, attrs }">
-                                                                <span color="accent" class="text-subtitle-1 "
-                                                                    v-bind="attrs" v-on="on">
-                                                                    <span class="text--disabled">金币：</span>
-                                                                    <span style="color:#FF9800;">{{ workview.coins
+                                                            关注</v-btn>
+                                                    </a><br>
+                                                    <v-tooltip bottom>
+                                                        <template v-slot:activator="{ on, attrs }">
+                                                            <span color="accent" class="text-subtitle-1 " v-bind="attrs"
+                                                                v-on="on">
+                                                                <span class="text--disabled">金币：</span>
+                                                                <span style="color:#FF9800;">{{ workview.coins
                                                                         }}</span>
-                                                                </span>
-                                                            </template>
-                                                            <span>获取方式：<br>
-                                                                1.签到(每次所得金币数是四舍五入(当月连续签到天数+4)<br>
-                                                                2.分享作品，点击作品展示页下方的分享，按照上面的提示做<br>
-                                                                3.点赞作品，点赞1作品金币+3<br>
-                                                                4.被点赞作品，被点赞1次金币+4<br>
                                                             </span>
-                                                        </v-tooltip>
-                                                    </v-col>
+                                                        </template>
+                                                        <span>获取方式：<br>
+                                                            1.签到(每次所得金币数是四舍五入(当月连续签到天数+4)<br>
+                                                            2.分享作品，点击作品展示页下方的分享，按照上面的提示做<br>
+                                                            3.点赞作品，点赞1作品金币+3<br>
+                                                            4.被点赞作品，被点赞1次金币+4<br>
+                                                        </span>
+                                                    </v-tooltip>
+                                                </v-col>
                                             </v-row>
-
-
-
                                         </v-card>
                                     </v-col>
                                     <v-col cols="12">
-                                        <v-card class="pa-5 sd">
+                                        <v-card class="pa-5 sd pm">
                                             <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span>
                                             <v-btn v-on:click="user.edit==2?(user.edit=0):(user.edit=2)"
-                                                v-if="workview.id==detail.id" class="sd tg">
-                                                <span style="color:#888">
-                                                    <v-icon>mdi-edit</v-icon><span v-if="user.edit==2">取消</span>编辑
-                                                </span>
+                                                v-if="workview.id==detail.id" :class="'sd '+(user.edit!=2?null:'tg')"
+                                                :color="user.edit==2?null:'accent'">
+                                                <v-icon>mdi-edit</v-icon><span v-if="user.edit==2">取消</span>编辑
                                             </v-btn>
                                             <v-btn v-on:click="account.edits(2)"
-                                                v-if="workview.id==detail.id && user.edit==2" elevation="0">保存</v-btn>
+                                                v-if="workview.id==detail.id && user.edit==2" color="accent" class="sd">
+                                                保存</v-btn>
                                             <br><br>
 
                                             <span v-html="workview.introduce2"
@@ -650,36 +719,40 @@
                                     <v-col cols="12">
                                         <v-card class="pa-5 sd">
                                             <v-row>
-                                                <v-col>
-                                                    <v-avatar size="100">
+                                                <span style="flex:0 0 140px">
+                                                    <v-avatar size="120">
                                                         <img
                                                             :src="host.data+'/static/internalapi/asset/'+(studio.info.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                                                     </v-avatar>
-                                                    <span color="accent" class="text-h5">{{ studio.info.name }}</span>
 
-                                                </v-col>
-                                                <v-col v-if="detail && detail.id" cols="3">
-                                                    <a v-if="studio.p>0"
-                                                        :href="`#page=studio_edit&id=${studio.info.id}`">
-                                                        <v-btn elevation="0" color="accent" block class="my-2">编辑工作室信息
+                                                </span>
+                                                <span v-if="detail && detail.id" style="flex:0 0 140px">
+                                                    <span color="accent"
+                                                        class="text-h5">{{ studio.info.name }}</span><br>
+                                                    <a :href="`#page=forum&sid=${studio.info.id}`">
+                                                        <v-btn color="accent" class="my-2 sd">论坛
                                                         </v-btn>
                                                     </a>
-                                                    <v-btn v-if="studio.p===undefined" elevation="0" class="py-2"
-                                                        v-on:click="studio.join()" color="accent" block>
-                                                        加入工作室
+                                                    <a v-if="studio.p>0"
+                                                        :href="`#page=studio_edit&id=${studio.info.id}`">
+                                                        <v-btn color="accent" class="my-2 sd">编辑信息
+                                                        </v-btn>
+                                                    </a>
+                                                    <v-btn v-if="studio.p===undefined" class="py-2 sd"
+                                                        v-on:click="studio.join()" color="accent">
+                                                        加入
                                                     </v-btn>
-                                                    <v-btn v-else-if="studio.p!==3" elevation="0"
-                                                        v-on:click="studio.quit()" color="accent" block class="my-2">
-                                                        退出工作室</v-btn>
-                                                    <v-btn v-if="studio.p!==undefined" elevation="0"
-                                                        v-on:click="studio.main()" color="accent" block class="my-2">
-                                                        设为主工作室</v-btn>
-                                                    <v-btn v-if="studio.p!==undefined" elevation="0"
-                                                        v-on:click="studio.upload()" color="accent" block class="my-2">
+                                                    <v-btn v-else-if="studio.p!==3" v-on:click="studio.quit()"
+                                                        color="accent" class="my-2 sd">
+                                                        退出</v-btn>
+                                                    <v-btn v-if="studio.p!==undefined" v-on:click="studio.main()"
+                                                        color="accent" class="my-2 sd">
+                                                        设为主室</v-btn>
+                                                    <v-btn v-if="studio.p!==undefined" v-on:click="studio.upload()"
+                                                        color="accent" class="my-2 sd">
                                                         投稿作品</v-btn>
-                                                </v-col>
-                                                <span color="accent"
-                                                    class="text-subtitle-1 float-right text--disabled">创建时间：{{
+                                                </span>
+                                                <span color="accent" class="text-subtitle-1 float-right text--disabled">创建时间：{{
                                                     date(studio.info.created_time) }}</span><br>
                                             </v-row>
                                         </v-card>
@@ -688,7 +761,7 @@
                                         <v-card class="pa-5 sd">
                                             <span color="accent" class="text-h5 text--primary"
                                                 cols="24">工作室介绍</span><br><br>
-                                            <span class="text--secondary" v-html="studio.info.introduce2"></span>
+                                            <span class="text--secondary pm" v-html="studio.info.introduce2"></span>
                                         </v-card>
                                     </v-col>
 
@@ -721,7 +794,7 @@
                                     </template>
                                     <span v-else>当前工作室无成员</span>
                                     <v-col cols="12">
-                                        <v-card class=" pa-5" elevation="0" class="br2">
+                                        <v-card class=" pa-5 sd">
                                             <span color="accent" class="text-h5 text--primary"
                                                 cols="24">评论</span><br><br>
                                             <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
@@ -783,7 +856,7 @@
                         <v-container v-if="viewmode=='message'">
                             <v-row>
                                 <v-col cols="12" sm="10" md="9" lg="7" class="mx-auto">
-                                    <v-card class="sd pa-8 my-12" v-if="user.message" elevation="0">
+                                    <v-card class="sd pa-8 my-12" v-if="user.message">
                                         <span v-for="i in user.message">
                                             <span v-html="i.message"></span>
                                             <v-btn icon class=" ml-2 float-right" v-on:click="user.delmsg(i.id)">
@@ -831,6 +904,95 @@
                                     <v-card class="mx-auto pa-8 my-12">
                                         <h1>关于我们：</h1>
                                         40code是由网名为what的人开发的一款在线少儿编程平台，基于Scratch开发，支持手机端作品展示。
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+
+                        <v-container v-if="viewmode=='post'">
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-breadcrumbs
+                                        :items="[{text:forum.post.studio.name,href:'#page=studio&id='+forum.post.studio.id},{text:'论坛',href:'#page=forum&sid='+forum.post.studio.id},{text:forum.post.text.title}]"
+                                        divider=">"></v-breadcrumbs>
+                                </v-col>
+                                <v-col class="mx-auto">
+                                    <v-card class="mx-auto pa-8 my-2">
+                                        <div class="text-h5">{{ forum.post.text.title }}<span style="color:#aaa"
+                                                class="pl-4">#{{forum.post.text.id}}</span></div><br>
+                                        <div><a :href="'#page=user&id='+forum.post.author.id" class="text-h6">
+                                                <v-avatar size="20">
+                                                    <img
+                                                        :src="host.data+'/static/internalapi/asset/'+(forum.post.author.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                                                </v-avatar>
+                                                {{ forum.post.author.nickname }}
+                                                <span style="color:#888;font-size: 6px;" class="pl-4">
+                                                    {{date(forum.post.text.new_time) }}
+                                                </span>
+                                            </a></div><br>
+                                        <div v-html="forum.post.text.context2" class="pm"></div>
+                                    </v-card>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-card class=" pa-5 sd">
+                                        <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
+                                        <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
+                                        <s-comment :comment="comment" :host="host" :detail="detail" type="3">
+                                        </s-comment>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+
+                        <v-container v-if="viewmode=='forum'">
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-dialog v-model="forum.dialog" width="500">
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-breadcrumbs
+                                                :items="[{text:forum.studio.name,href:'#page=studio&id='+forum.studio.id},{text:'论坛',href:'#page=forum&sid='+forum.studio.id}]"
+                                                divider=">"></v-breadcrumbs>
+                                            <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+                                                发布帖子
+                                            </v-btn>
+                                        </template>
+
+                                        <v-card class="px-3">
+                                            <v-card-title class="text-h5 grey lighten-2">
+                                                帖子发出
+                                            </v-card-title>
+
+                                            <v-text-field label="标题" id="ftitle"></v-text-field>
+                                            <v-textarea label="帖子内容" value="发点什么吧" id="fcontext"></v-textarea>
+
+                                            <v-divider></v-divider>
+
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn color="primary" text @click="forum.send();"
+                                                    :disable="forum.sending">
+                                                    发布
+                                                </v-btn>
+                                                <v-btn color="primary" text @click="forum.dialog = false">
+                                                    取消
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
+                                </v-col>
+                                <v-col cols="12" color="white">
+                                    <v-card class="pa-6">
+                                        <div v-for="i in forum.list" :key="i" class="my-4">
+                                            <a :href="'#page=post&id='+i.id" class="h6" v-text="i.title"></a><span
+                                                style="color:#aaa" class="pl-4">#{{i.id}}</span><br>
+                                            <a :href="'#page=user&id='+i.author">
+                                                <v-avatar size="20">
+                                                    <img
+                                                        :src="host.data+'/static/internalapi/asset/'+(forum.user[i.author][0].head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                                                </v-avatar>{{forum.user[i.author][0].nickname}}
+                                                <span style="color:#aaa" class="pl-4">{{date(i.new_time)}}</span>
+                                            </a>
+                                        </div>
                                     </v-card>
                                 </v-col>
                             </v-row>
