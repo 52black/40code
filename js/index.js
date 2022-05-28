@@ -30,7 +30,7 @@ Vue.component('s-comment', {
                                 </a>
                             </v-col>
                             <v-col cols="12">
-                                <span color="accent" class="" v-html="i.comment"></span>
+                                <span color="accent" class="pm" v-html="i.comment"></span>
                                 <v-btn class="text--secondary float-left" text small v-on:click="comment.showreply(i.id)" style="margin-top: -15px;">
                                     <v-icon>mdi-reply</v-icon> 回复
                                 </v-btn>
@@ -83,7 +83,7 @@ Vue.component('s-comment', {
                                         </a>
                                     </v-col>
                                     <v-col cols="12">
-                                        <span color="accent" class="" v-html="k.comment"></span>
+                                        <span color="accent" class="pm" v-html="k.comment"></span>
                                         <v-btn class="text--secondary float-left" text small v-on:click="comment.showreply(i.id,k.id)" style="margin-top: -15px;">
                                             <v-icon>mdi-reply</v-icon> 回复
                                         </v-btn>
@@ -98,38 +98,6 @@ Vue.component('s-comment', {
                             
                             
                         </v-row>
-                                <!-- <br>
-                        <a :href="'#page=user&id='+k.fromuser">
-                            <v-avatar size=40 class="">
-                                <img
-                                    :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                            </v-avatar>
-                        </a>
-                        <a :href="'#page=user&id='+k.fromuser">
-                            <v-btn text class="text-h6 ml-2 text--secondary" style="height: 100%">{{
-                                j.nickname }}
-                            </v-btn>
-                        </a>
-                        <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`"
-                            v-if="comment.comment.studio[j.studio]">
-                            <v-btn rounded class="ma-2"
-                                :color="comment.comment.studio[j.studio].color || 'green'"
-                                elevation="0">
-                                <span style="color:white">{{ comment.comment.studio[j.studio].name
-                                    }}</span>
-                            </v-btn>
-                        </a>
-                        <span class="text-h7 text--disabled ml-2 float-right">{{ k.time
-                            }}</span><br>
-                        <span class="text-h6 ml-12" v-html="k.comment">{{ k.comment }}</span>
-                        <v-btn class="text--secondary float-left" text thin
-                            v-on:click="comment.showreply(i.id,k.id)">
-                            <v-icon>mdi-reply</v-icon> 回复
-                        </v-btn>
-                        <v-btn class="text--secondary float-right" text v-if="detail.id==k.fromuser"
-                            thin v-on:click="comment.deletereply(k.id)">
-                            <v-icon>mdi-delete</v-icon> 删除
-                        </v-btn><br> -->
                     </div>
                 </div>
             </div>
@@ -147,7 +115,7 @@ Vue.component('s-comment', {
 Vue.component('s-c2', {
     props: ['comment', 'reply'],
     template: `<span>
-    <v-textarea clearable v-model="comment.text[reply?''+reply:'comment']"
+    <v-textarea clearable v-model="comment.text[reply?'c-'+reply:'comment']"
     clear-icon="mdi-close-circle" :id="reply?'c-'+reply:'comment'" filled label="评论" auto-grow :value="comment.text[reply?'c-'+reply:'comment']" maxlength="500" counter>
     </v-textarea>
     <v-btn class="pa-2 mx-auto sd" v-on:click="comment.send(reply)"  color="accent"  block>发送</v-btn>
@@ -898,7 +866,14 @@ let functiona = {
                     }
                 }
                 Vue.set(v.comment, 'comment', d2)
-                
+                setTimeout(()=>{
+                    viewer.update();
+                    scratchblocks.renderMatching('code.language-scratch3,code.language-scratch-blocks', {
+                        style:     'scratch3',   // Optional, defaults to 'scratch2'.
+                        languages: ['en'], // Optional, defaults to ['en'].
+                        scale: 1,                // Optional, defaults to 1
+                      });
+                },300)
                 console.log('获取评论', d)
             })
         },
@@ -1214,7 +1189,7 @@ let functiona = {
                     // v.waitRequest.cover = 1;
                     alert('图片上传中',9000)
                     $.ajax({
-                        url: apihost + 'work/uploads',
+                        url: 'https://www.hualigs.cn/api/upload?token=cae93a8b4292f11486c738c9c25e5d68&apiType=ai58',
                         method: 'POST',
                         data: data,
                         cache: false,
@@ -1222,9 +1197,9 @@ let functiona = {
                         processData: false,
                         dataType: 'json',
                         // 图片上传成功
-                        success: function (result1) {
+                        success: function (res) {
                             try {
-                                let k = 'https://'+result1.data[2][0][1].Location;
+                                let k = ''+res.data.url.ai58;
                                 alert("图片上传成功")
                                 v.comment.text[id] += '![]('+k+')';
                             } catch (error) {    
@@ -1479,10 +1454,18 @@ window.addEventListener('hashchange', function (event) {
     console.log(event);
     v.qh2();
 })
-
+var viewer;
 $(document).ready(function () {
     getuserinfo()
-    
+    viewer=new Viewer(document.body, {
+        filter: function(img) {
+            let pm=$('.pm')
+            for(let i=0;i<pm.length;i++){
+                if(pm[i].contains(img)) return true;
+            }
+            return false;
+        }
+      })
     document.addEventListener('visibilitychange', function () {
         // 页面变为不可见时触发 
         if (document.visibilityState == 'hidden') {
