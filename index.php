@@ -1,3 +1,22 @@
+<?php
+date_default_timezone_set( 'Asia/Shanghai' );
+function _addEtag($file) {
+    $last_modified_time = filemtime($file);
+    $etag = md5_file($file);
+    // always send headers
+    header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
+    header("Etag: $etag");
+    // exit if not modified
+    if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
+        @trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+        header("HTTP/1.1 304 Not Modified");
+        exit;
+    }
+};
+_addEtag(__FILE__)
+?>
+
+
 <!DOCTYPE html>
 <html>
 
@@ -17,7 +36,7 @@
     <meta content="40code,40code少儿编程社区,少儿编程社区,图形化编程社区,编程创作学习,scratch社区" name="keywords" />
     <meta content="40code是一个公益性质的scratch社区，没有太多的规定，拥有3D扩展、云数据扩展、懒加载音乐扩展。用40code，你能轻松做出让人惊叹的3D作品和音游。"
         name="description" />
-    <link href="/other/index.css?v=2" rel="stylesheet">
+    <link href="/file.php/other/index.css" rel="stylesheet">
     <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
     <!-- <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script> -->
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
@@ -152,13 +171,13 @@
                         <v-container v-if="viewmode=='index'" id="index">
                             <v-row>
                                 <v-col cols="12">
-                                    <div >
+                                    <div>
                                         <v-carousel height='auto'>
-                                            <v-carousel-item v-for="i in lb"  height='auto' :href="i.href">
+                                            <v-carousel-item v-for="i in lb" height='auto' :href="i.href">
                                                 <v-img :src="i.src"></v-img>
                                             </v-carousel-item>
                                         </v-carousel>
-                                    </div>           
+                                    </div>
                                 </v-col>
                                 <template v-for="n in rows">
                                     <v-col class="mt-2" cols="12">
@@ -983,79 +1002,87 @@
                                 </v-col>
                                 <v-col cols="12" color="white">
                                     <v-card class="pa-6">
-                                        <div v-for="i in forum.list" :key="i" class="my-4">
-                                            <a :href="'#page=post&id='+i.id" class="h6" v-text="i.title"></a><span
-                                                style="color:#aaa" class="pl-4">#{{i.id}}</span><br>
-                                            <a :href="'#page=user&id='+i.author">
-                                                <v-avatar size="20">
-                                                    <img
-                                                        :src="host.data+'/static/internalapi/asset/'+(forum.user[i.author][0].head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
-                                                </v-avatar>{{forum.user[i.author][0].nickname}}
-                                                <span style="color:#aaa" class="pl-4">{{date(i.new_time)}}</span>
-                                            </a>
+                                        <div v-for="i in forum.list" :key="i">
+                                            <div class="my-7">
+                                                <a :href="'#page=post&id='+i.id" class="text-h6"
+                                                    v-text="i.title"></a><span style="color:#aaa"
+                                                    class="pl-4">#{{i.id}}</span><br>
+                                                <div class="mt-1">
+                                                    <a :href="'#page=user&id='+i.author">
+                                                        <v-avatar size="20">
+                                                            <img
+                                                                :src="host.data+'/static/internalapi/asset/'+(forum.user[i.author][0].head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                                                        </v-avatar>{{forum.user[i.author][0].nickname}}
+                                                        <span style="color:#aaa"
+                                                            class="pl-4">{{date(i.new_time)}}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!-- <v-divider></v-divider> -->
                                         </div>
-                                    </v-card>
-                                </v-col>
-                            </v-row>
-                        </v-container>
 
-                    </v-main>
+    </div>
+    </v-card>
+    </v-col>
+    </v-row>
+    </v-container>
 
-                    <v-footer padless>
-                        <v-col cols="12" class="px-5">
+    </v-main>
 
-                            <span>
-                                <div class="float-left">
-                                    <span class="l">友情链接：</span><br>
-                                    <a href="//bu40.com" target="_blank" class="l">bu40工具集</a><br>
-                                    <a href="//sc.bu40.com" target="_blank" class="l">scratch最新版下载</a><br>
-                                    <a href="http://150.158.13.104/" target="_blank" class="l">氧化钙编程社区</a><br>
-                                </div>
-                                <div class="float-left ml-5">
-                                    <span class="l">更多：</span><br>
-                                    <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank"
-                                        class="l">Q群:1071652975</a><br>
-                                    <!-- <a href="https://www.baidu.com/s?wd=40code%E7%A4%BE%E5%8C%BA" target="_blank" class="l">在此点击40code社区以支持我们</a><br> -->
-                                    <!-- <a href="//github.com/52black/sccode" target="_blank" class="l">此站点前端源代码</a><br> -->
-                                    <span class="l"> bug反馈/友链添加/功能建议加：</span><br>
-                                    <a class="l">站长QQ:3274235903</a>
+    <v-footer padless>
+        <v-col cols="12" class="px-5">
 
-                                </div>
+            <span>
+                <div class="float-left">
+                    <span class="l">友情链接：</span><br>
+                    <a href="//bu40.com" target="_blank" class="l">bu40工具集</a><br>
+                    <a href="//sc.bu40.com" target="_blank" class="l">scratch最新版下载</a><br>
+                    <a href="http://150.158.13.104/" target="_blank" class="l">氧化钙编程社区</a><br>
+                </div>
+                <div class="float-left ml-5">
+                    <span class="l">更多：</span><br>
+                    <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank" class="l">Q群:1071652975</a><br>
+                    <!-- <a href="https://www.baidu.com/s?wd=40code%E7%A4%BE%E5%8C%BA" target="_blank" class="l">在此点击40code社区以支持我们</a><br> -->
+                    <!-- <a href="//github.com/52black/sccode" target="_blank" class="l">此站点前端源代码</a><br> -->
+                    <span class="l"> bug反馈/友链添加/功能建议加：</span><br>
+                    <a class="l">站长QQ:3274235903</a>
 
-                            </span>
-                            <span class="float-right l">{{ new Date().getFullYear() }}
-                                —
-                                <strong>40CODE</strong>
-                            </span>
-                        </v-col>
-                    </v-footer>
+                </div>
 
-                </v-app>
-                <v-snackbar v-model="sb.show" :timeout="sb.timeout" top>
-                    <span v-html="sb.text"></span>
+            </span>
+            <span class="float-right l">{{ new Date().getFullYear() }}
+                —
+                <strong>40CODE</strong>
+            </span>
+        </v-col>
+    </v-footer>
 
-                    <template v-slot:action="{ attrs }">
-                        <v-btn color="blue" text v-bind="attrs" @click="sb.show = false">
-                            关闭
-                        </v-btn>
-                    </template>
-                </v-snackbar>
-                <v-dialog v-model="sb2.show" width="500">
-                    <v-card>
+    </v-app>
+    <v-snackbar v-model="sb.show" :timeout="sb.timeout" top>
+        <span v-html="sb.text"></span>
 
-                        <v-card-title v-html="sb2.text" class="pt-3"></v-card-title>
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="sb.show = false">
+                关闭
+            </v-btn>
+        </template>
+    </v-snackbar>
+    <v-dialog v-model="sb2.show" width="500">
+        <v-card>
 
-                        <v-divider></v-divider>
+            <v-card-title v-html="sb2.text" class="pt-3"></v-card-title>
 
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="primary" text @click="sb2.show = false">
-                                关闭
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </template>
+            <v-divider></v-divider>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" text @click="sb2.show = false">
+                    关闭
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    </template>
 </body>
 
 </html>
@@ -1064,8 +1091,8 @@
 </div>
 <script src="https://cdn.staticfile.org/vue/2.6.9/vue.js"></script>
 <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
-<script src="/js/app.js?v=15"></script>
-<script src="/js/index.js?v=39"></script>
+<script src="/file.php/js/app.js"></script>
+<script src="/file.php/js/index.js"></script>
 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
 <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
 </body>

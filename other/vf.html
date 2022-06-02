@@ -7,18 +7,19 @@
 <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
 <script src="/js/app.js?v=8"></script>
 <script>
-  post({
-    url: 'user/vf',
-    data: {
-      pw: getQueryString('pw'),
-      hash: getQueryString('hash'),
-      mail: getQueryString('mail'),
-      t: getQueryString('t'),
-      i: getQueryString('i'),
-    }
-  }, (e) => {
-    $('#info').html(e.msg)
-  })
+  // post({
+  //   url: 'user/vf',
+  //   data: {
+  //     pw: getQueryString('pw'),
+  //     hash: getQueryString('hash'),
+  //     mail: getQueryString('mail'),
+  //     t: getQueryString('t'),
+  //     i: getQueryString('i'),
+  //   }
+  // }, (e) => {
+  //   $('#info').html(e.msg)
+  // })
+  location.href=apihost+"user/vf"+location.hash.replace("#",'?');
 </script>
 <center style="padding: 10px;">
   <div id="info" style="color:#888;font-size:22px">请稍等</div><br><br>
