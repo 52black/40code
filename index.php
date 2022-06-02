@@ -36,7 +36,7 @@ _addEtag(__FILE__)
     <meta content="40code,40code少儿编程社区,少儿编程社区,图形化编程社区,编程创作学习,scratch社区" name="keywords" />
     <meta content="40code是一个公益性质的scratch社区，没有太多的规定，拥有3D扩展、云数据扩展、懒加载音乐扩展。用40code，你能轻松做出让人惊叹的3D作品和音游。"
         name="description" />
-    <link href="/file.php/other/index.css" rel="stylesheet">
+    <link href="/other/index.css" rel="stylesheet">
     <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
     <!-- <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script> -->
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
@@ -1091,8 +1091,8 @@ _addEtag(__FILE__)
 </div>
 <script src="https://cdn.staticfile.org/vue/2.6.9/vue.js"></script>
 <script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
-<script src="/file.php/js/app.js"></script>
-<script src="/file.php/js/index.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/index.js"></script>
 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
 <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
 </body>
