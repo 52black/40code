@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>40code少儿编程社区</title>
+    <script src="https://cdn.staticfile.org/echarts/5.3.2/echarts.min.js"></script>
+  </head>
+  <body>
+    <center><div id="main" style="width: 650px; height: 600px"></div></center>
+    <br><br><center>右键图片即可复制或保存</center>
+    <script>
+      setTimeout(() => {
+        var chartDom = document.getElementById("main");
+        var myChart = echarts.init(chartDom);
+        var option;
+        var h = JSON.parse(decodeURI(location.hash.slice(1, 999)));
+        var opcodes = {
+          looks: "外观",
+          control: "控制",
+          motion: "移动",
+          sound: "声音",
+          event: "事件",
+          sensing: "侦测",
+          operator: "运算",
+          procedures: "自定义",
+          argument: "参数",
+          data: "数据",
+          pen: "画笔",
+          other: "其它",
+        };
+        const data = genData(50);
+        option = {
+          title: {
+            text: h.info,
+            subtext: "由40code.com统计 总积木数："+data.total,
+            left: "center",
+          },
+          tooltip: {
+            trigger: "item",
+            formatter: "{a} <br/>{b} : {c} ({d}%)",
+          },
+          legend: {
+            type: "scroll",
+            orient: "vertical",
+            right: 10,
+            top: 20,
+            bottom: 20,
+            data: data.legendData,
+          },
+          series: [
+            {
+              name: "类别",
+              type: "pie",
+              radius: "55%",
+              center: ["40%", "50%"],
+              data: data.seriesData,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+              },
+            },
+          ],
+        };
+        function genData(count) {
+          // prettier-ignore
+          const legendData = [];
+          const seriesData = [];
+          let o = Object.keys(h.context),s=0;
+          for (var i = 0; i < o.length; i++) {
+            var name = opcodes[o[i]] || o[i];
+            legendData.push(name);
+            seriesData.push({
+              name: name,
+              value: h.context[o[i]],
+            });
+            s+=h.context[o[i]];
+          }
+          return {
+            legendData: legendData,
+            seriesData: seriesData,
+            total:s
+          };
+        }
+
+        option && myChart.setOption(option);
+      }, 1000);
+    </script>
+  </body>
+</html>

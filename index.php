@@ -475,8 +475,8 @@ _addEtag(__FILE__)
                                                         <v-icon>mdi-heart</v-icon>
                                                         {{ workview.like }}
                                                     </v-btn>
-                                                    <v-btn v-on:click="work.share()" plain text>
-                                                        <v-icon>mdi-share</v-icon>分享
+                                                    <v-btn v-on:click="work.analysis()" plain text>
+                                                        <v-icon>mdi-search</v-icon>代码分析
                                                     </v-btn>
                                                     <v-btn :href="'/other/workpreview.html#id='+workview.id" plain text>
                                                         <v-icon>mdi-fullscreen</v-icon>全屏

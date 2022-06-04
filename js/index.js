@@ -611,6 +611,31 @@ let functiona = {
                 <code>[对方称呼]，你好，请问你能看看我的scratch作品(${v.workview.name})吗？非常感谢。<br>链接： ${location.href + '&out=any&i=' + v.detail.id}<br>请复制链接到浏览器访问</code>
                 `
             )
+        },
+        analysis:()=>{
+            var json=JSON.parse(top[0].vm.toJSON());
+            if(!json.targets.length){
+                alert('请等待作品加载完毕再进行分析')
+                return;
+            }
+            var targets=json.targets;
+            var l={};
+            for(let i=0;i<targets.length;i++){
+                let b=targets[i].blocks;
+                let o=Object.keys(b);
+                for(let j=0;j<o.length;j++){
+                    try{
+                        let n=b[o[j]].opcode.split('_')[0];
+                        if(l[n]===undefined) l[n]=0;
+                        else l[n]++;
+                    }catch(e){
+                        console.log(e)
+                    }
+                }
+            }
+            console.log(l)
+            open("/other/analysis.html#"+encodeURI(JSON.stringify({context:l,info:v.workview.name+'-'+v.workview.nickname})))
+            // alert('当前功能还在开发……')
         }
     },
     lb:[{
@@ -661,6 +686,9 @@ let functiona = {
         {
             title: '刷新',
             c: function () {
+                if(location.href.indexOf('#')==-1)
+                location.href = location.href+"#t="+(new Date())/1
+                else
                 location.href = location.href+"&t="+(new Date())/1
             }
         },
