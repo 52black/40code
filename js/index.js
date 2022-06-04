@@ -613,20 +613,41 @@ let functiona = {
             )
         },
         analysis:()=>{
+            alert('请稍等');
+            var hatlist=['control_start_as_clone','procedures_definition','event_whenflagclicked', 'event_whenkeypressed', 'event_whenstageclicked', 'event_whenthisspriteclicked', 'event_whenbackdropswitchesto','event_whengreaterthan', 'event_whenbroadcastreceived','makeymakey_whenMakeyKeyPressed','makeymakey_whenCodePressed'];
             var json=JSON.parse(top[0].vm.toJSON());
             if(!json.targets.length){
                 alert('请等待作品加载完毕再进行分析')
                 return;
             }
             var targets=json.targets;
-            var l={};
+            var l={},valid=0,segs=0,vsegs=0; //有效代码数，片段数，有效片段数
             for(let i=0;i<targets.length;i++){
                 let b=targets[i].blocks;
                 let o=Object.keys(b);
                 for(let j=0;j<o.length;j++){
                     try{
+                        function find(t,n=0){
+                            if(t.next){
+                                return find(b[t.next],n+1);
+                            }else return n;
+                        }
+                        if (b[o[j]].topLevel){
+                            segs++;
+                            if(hatlist.indexOf(b[o[j]].opcode)!==-1){
+                                let f=find(b[o[j]]);
+                                if(f){
+                                    vsegs++;
+                                    valid+=f+1;
+                                }
+                            }
+                        }
+                    }catch(e){
+                        console.log(e)
+                    };
+                    try{
                         let n=b[o[j]].opcode.split('_')[0];
-                        if(l[n]===undefined) l[n]=0;
+                        if(l[n]===undefined) l[n]=1;
                         else l[n]++;
                     }catch(e){
                         console.log(e)
@@ -634,7 +655,11 @@ let functiona = {
                 }
             }
             console.log(l)
-            open("/other/analysis.html#"+encodeURI(JSON.stringify({context:l,info:v.workview.name+'-'+v.workview.nickname})))
+            var jn=json.targets.length-1;
+            var an=top[0].vm.assets.length;
+            let s=({context:l,info:v.workview.name+'-'+v.workview.nickname,segs:segs,vsegs:vsegs,valid:valid,jn:jn,an:an});
+            console.log(s);
+            open("/other/analysis.html#"+encodeURI(JSON.stringify(s)));
             // alert('当前功能还在开发……')
         }
     },

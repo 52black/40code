@@ -6,7 +6,7 @@
   </head>
   <body>
     <center><div id="main" style="width: 650px; height: 600px"></div></center>
-    <br><br><center>右键图片即可复制或保存</center>
+    <br><br><center><span id="r" style="color:#999"></span></center>
     <script>
       setTimeout(() => {
         var chartDom = document.getElementById("main");
@@ -69,14 +69,21 @@
           const seriesData = [];
           let o = Object.keys(h.context),s=0;
           for (var i = 0; i < o.length; i++) {
+            s+=h.context[o[i]];
+          }
+          for (var i = 0; i < o.length; i++) {
             var name = opcodes[o[i]] || o[i];
             legendData.push(name);
             seriesData.push({
-              name: name,
+              name: name+'  ' + (h.context[o[i]]/s*100).toFixed(1)+"%",
               value: h.context[o[i]],
             });
-            s+=h.context[o[i]];
           }
+          document.getElementById('r').innerHTML="有效积木数:"+h.valid+"<br>"
+          +"有效片段数:"+h.vsegs+"<br>"
+          +"总片段数:"+h.segs+"<br>"
+          +"角色数:"+h.jn+"<br>"
+          +"素材数:"+h.an+"<br>";
           return {
             legendData: legendData,
             seriesData: seriesData,
