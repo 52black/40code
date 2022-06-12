@@ -1242,7 +1242,7 @@ let functiona = {
                     // v.waitRequest.cover = 1;
                     alert('图片上传中',9000)
                     $.ajax({
-                        url: 'https://www.hualigs.cn/api/upload?token=cae93a8b4292f11486c738c9c25e5d68&apiType=ai58',
+                        url: 'https://www.hualigs.cn/api/upload?token=cae93a8b4292f11486c738c9c25e5d68&apiType=huluxia',
                         method: 'POST',
                         data: data,
                         cache: false,
@@ -1252,7 +1252,7 @@ let functiona = {
                         // 图片上传成功
                         success: function (res) {
                             try {
-                                let k = ''+res.data.url.ai58;
+                                let k = ''+res.data.url.huluxia;
                                 alert("图片上传成功")
                                 v.comment.text[id] += '![]('+k+')';
                             } catch (error) {    

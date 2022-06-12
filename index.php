@@ -1038,6 +1038,7 @@ _addEtag(__FILE__)
                     <a href="//bu40.com" target="_blank" class="l">bu40工具集</a><br>
                     <a href="//sc.bu40.com" target="_blank" class="l">scratch最新版下载</a><br>
                     <a href="http://150.158.13.104/" target="_blank" class="l">氧化钙编程社区</a><br>
+                    <a href="https://by-baipiao.rth.app/" target="_blank" class="l">白嫖网</a><br>
                 </div>
                 <div class="float-left ml-5">
                     <span class="l">更多：</span><br>
