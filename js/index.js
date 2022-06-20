@@ -344,7 +344,7 @@ var pagecz = {
                 d2.introduce2 = markdownToHtml(d2.introduce);
                 v.workview = d2;
                 v.comment.getcomment()
-                v.title=d2.title+' by '+d2.nickname;
+                v.title=d2.name+' by '+d2.nickname;
                 setTimeout(()=>{
                     $('#comment').bind('paste',v.paste);
                 },100)
