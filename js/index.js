@@ -158,7 +158,7 @@ Vue.component('s-workcard', {
         <v-btn color="red" text v-else depressed block text tile>未发布
         </v-btn>
         <span>
-            <v-btn color="accent" class="" v-if="my" :href="'/other/scratch.html#id='+work.id" target="_blank"
+            <v-btn color="accent" class="" v-if="my" :href="'/editor.html#id='+work.id" target="_blank"
                 depressed text block>继续创作
             </v-btn>
             <v-btn color="accent" class="" v-if="my" v-on:click="my.del(work.id)" target="_blank"

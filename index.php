@@ -464,7 +464,7 @@ _addEtag(__FILE__)
                                                             style="width:100%;height:100%"></iframe> -->
                                                         <iframe
                                                             v-if="workview.id && (workview.isauthor || (workview.publish))"
-                                                            src="/other/worksc.html" scrolling="no" frameborder="0"
+                                                            src="/embed.html" scrolling="no" frameborder="0"
                                                             style="width:100%;height:100%"></iframe>
                                                         <span v-else>
                                                             无权限访问此作品
@@ -478,9 +478,9 @@ _addEtag(__FILE__)
                                                     <v-btn v-on:click="work.analysis()" plain text>
                                                         <v-icon>mdi-search</v-icon>代码分析
                                                     </v-btn>
-                                                    <v-btn :href="'/other/workpreview.html#id='+workview.id" plain text>
+                                                    <!-- <v-btn :href="'/embed.html#id=722'+workview.id" plain text>
                                                         <v-icon>mdi-fullscreen</v-icon>全屏
-                                                    </v-btn>
+                                                    </v-btn> -->
                                                 </v-col>
                                                 <v-col>
                                                     <v-row>
@@ -495,7 +495,7 @@ _addEtag(__FILE__)
                                                         </v-col cols="12">
                                                         <v-col>
                                                             <v-btn color="accent" class="ma-2"
-                                                                :href="'/other/scratch.html#id='+workview.id"
+                                                                :href="'/editor.html#id='+workview.id"
                                                                 target="_blank"
                                                                 v-bind:disabled="!(workview.isauthor || workview.opensource) || !workview.issign">
                                                                 转到创作页

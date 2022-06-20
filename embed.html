@@ -1,0 +1,485 @@
+<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="google" value="notranslate"><meta name="description" content="40code编辑器是一个功能多，快速的编辑器"/><title>Embedded Project - 40code</title><link rel="stylesheet" href="https://cdn.staticfile.org/mdui/1.0.2/css/mdui.min.css"/><link rel="apple-touch-icon" href="images/apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><style>#splash {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #ff4c4c;
+    }
+
+    .tw-loaded #splash,
+    #splash-content {
+      display: none;
+    }
+
+    #splash[splash-theme="dark"] {
+      background-color: #333;
+      color: #fff;
+    }
+
+    #splash-spinner:after {
+      content: " ";
+      display: block;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 6px solid;
+      border-color: currentColor transparent currentColor transparent;
+      animation: splash-spinner 1.2s linear infinite;
+    }
+
+    @keyframes splash-spinner {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }</style><script src="https://cdn.staticfile.org/mdui/1.0.2/js/mdui.min.js"></script><script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script><script>function getQueryString(name) {
+      let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      if (top.location.hash.indexOf("#") < 0) return null;
+      let r = top.location.hash.split("#")[1].match(reg);
+      if (r != null) return decodeURIComponent(r[2]);
+      return null;
+    }
+    var id = getQueryString('id');</script></head><body><div id="splash" aria-hidden="true"><noscript><h1>Enable JavaScript</h1></noscript><div id="splash-content"><div id="splash-spinner"></div></div></div><script>apihost = "https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/";
+    window.waitRequest= {},scratch={};
+    var temp2 = {
+      apihost: "https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/",
+    };
+    function dataURLToBlob(dataurl) {
+      var arr = dataurl.split(',');
+      var mime = arr[0].match(/:(.*?);/)[1];
+      var bstr = atob(arr[1]);
+      var n = bstr.length;
+      var u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    }
+    // var workinfo = { "id": 722, "opensource": 1, "publish": 1, "author": 369, "introduce": "从XMW转载过来的，加了个存档码", "name": "躲开球！Dodge Ball!", "time": 1655540550, "image": "4e215e84d3a77d668ea727e747f74f22.png", "look": 16, "like": 0, "delete": 0, "publish_time": 1655543758, "update_time": 1655543691, "issign": 1, "islike": 0, "nickname": "RenJian", "head": "c7d3b642b558c93e56872b6038b2fbd8.jpg", "fuckyou": "cS1zaWduLWFsZ29yaXRobT1zaGExJnEtYWs9QUtJRHFVdDFzVHB2akdaaFk4YW10aktnbWNDVllMdkdNQmowJnEtc2lnbi10aW1lPTE2NTU2NTg5NTQ7MTY1NTY1OTA3NCZxLWtleS10aW1lPTE2NTU2NTg5NTQ7MTY1NTY1OTA3NCZxLWhlYWRlci1saXN0PSZxLXVybC1wYXJhbS1saXN0PSZxLXNpZ25hdHVyZT1jNmVjNzY5NDcwN2JmNzQ1NjY0Yjk1NzBjMmI3ZWZiNDM4ZTU3M2Vi" };
+
+    function setCookie(cname, cvalue, exdays) {
+      console.log('设置cookie')
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      var expires = "expires=" + d.toGMTString();
+      document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+    function getCookie(cname) {
+
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) {
+          let d = c.substring(name.length, c.length);
+          if (cname == 'token') {
+            try {
+              v.$data.token = d
+            } catch (error) { }
+          }
+          return d
+        }
+      }
+      return "";
+    }
+    function getuserinfo() {
+      get({
+        url: 'user/myinfo'
+      }, function (d) {
+        userdetail = d.data;
+        console.log('获取信息成功', d)
+        if ((typeof v) !== "undefined") {
+          v.$data.detail = d.data;
+          // qh('index')
+        }
+
+        //   $('#n-input')[0].value=d.data.nickname
+
+      })
+    }
+    function getuserinfosync() {
+      return new Promise(function (reslove) {
+        get({
+          url: 'user/myinfo'
+        }, function (d) {
+          userdetail = d.data;
+          console.log('获取信息成功', d)
+          if ((typeof v) !== "undefined") {
+            v.$data.detail = d.data;
+            // qh('index')
+          }
+          reslove(userdetail)
+        })
+      })
+    }
+    function getworkinfosync(id) {
+      return new Promise(function (reslove) {
+        get({
+          url: 'work/info',
+          data: { id: id }
+        }, function (d) {
+          reslove(d.data)
+        })
+      })
+    }
+    function get(d, n, eee) {
+      let d2 = d.data;
+      if (!d2) d2 = {};
+      if (d.p) {
+        if (waitRequest[d.p]) return;
+        waitRequest[d.p] = 1;
+      }
+      d2.token = getCookie('token');
+      $.ajax({
+        url: apihost + d.url,
+        data: d2,
+        type: 'get',
+        // headers: { "Authorization": getCookie('token') },
+        headers: { 'onreferer': location.pathname, 'href': location.href },
+        success: function (f) {
+          console.log(f)
+          if (f.redirect) {
+            location.href = f.redirect;
+            return;
+          }
+          if (f.cz == 'exit') {
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            console.log('清除cookie')
+          }
+          d.p && (delete waitRequest[d.p])
+          n && n(f)
+        },
+        error: function (e) {
+          d.p && (delete waitRequest[d.p])
+
+          console.log(e)
+          if (eee)
+            eee()
+          else
+            alert("服务器或网络错误")
+        }
+      })
+    }
+    function post(d, n, eee) {
+      let d2 = d.data;
+      if (d.p) {
+        if (waitRequest[d.p]) return;
+        waitRequest[d.p] = 1;
+      }
+      if (!d2) d2 = {};
+      $.ajax({
+        url: apihost + d.url + '?token=' + getCookie('token'),
+        data: JSON.stringify(d2),
+        type: 'post',
+        contentType: 'application/json',
+        headers: { 'onreferer': location.pathname, 'href': location.href },
+        success: function (f) {
+          console.log(f)
+          if (f.redirect) {
+            location.href = f.redirect;
+            return;
+          }
+          if (f.msg || f.errmsg) {
+            alert(f.msg || f.errmsg)
+          }
+          if (f.cz == 'exit') {
+            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            console.log('清除cookie')
+          }
+          d.p && (delete waitRequest[d.p])
+          n && n(f)
+        },
+        error: function (e) {
+          d.p && (delete waitRequest[d.p])
+          console.log(e)
+          if (eee) eee()
+          else alert("服务器或网络错误")
+        }
+      })
+    }
+
+    function downloadFileByBlob(blob, fileName = "file") {
+      let blobUrl = window.URL.createObjectURL(blob)
+      let link = document.createElement('a')
+      link.download = fileName || 'defaultName'
+      link.style.display = 'none'
+      link.href = blobUrl
+      // 触发点击
+      document.body.appendChild(link)
+      link.click()
+      // 移除
+      document.body.removeChild(link)
+    }
+    function dlp() {
+      window.scratch.getProjectFile(file => {
+        downloadFileByBlob(file);
+      })
+    }
+    function savecover(callback) {
+      $('#b').hide();
+      function uplw(d) {
+        let f = new FormData();
+        $("#loadinfo").html('正在保存封面文件');
+        f.append("image", d)
+        $.ajax({
+          url: apihost + 'work/uploads',
+          method: 'POST',
+          data: f,
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json',
+          // 图片上传成功
+          success: function (result1) {
+            if (result1.code != 1) {
+              hy();
+              alert("保存失败");
+              return;
+            }
+            hy(result1);
+            alert('封面保存成功')
+          },
+          error: function () {
+            hy();
+            alert("保存失败");
+          }
+        });
+      }
+      function hy(r) {
+        $("#scratch").css("opacity", "1");
+        $('#view').hide();
+        $('#dlp').hide();
+        let k = r.data[2][0][1].Key.split('/');
+        callback && callback(k[k.length - 1]);
+      }
+      $("#scratch").css("opacity", "0");
+      $('#view').show();
+      $('#dlp').show();
+      $("#loadinfo").html('正在保存封面');
+      vm.postIOData('video', { forceTransparentPreview: true });
+      vm.renderer.requestSnapshot(dataURI => {
+        vm.postIOData('video', { forceTransparentPreview: false });
+        uplw(dataURLToBlob(dataURI));
+      });
+      vm.renderer.draw();
+    }
+    async function saveproject(id, callback, Open) {
+      console.log("自定义按钮1");
+      console.log('分享按钮');
+      let data2 = [];
+      var vs = vm.assets;
+      $("#scratch").css("opacity", "0");
+      $('#view').show();
+      $('#dlp').show();
+      $('#i2').hide
+      let f = function (i2) {
+        let i = i2
+        for (let j = 0; j < vs.length; j++) {
+          if (vs[j].assetId == i.split('.')[0]) {
+            i = j; break;
+          }
+        }
+        debugger
+        i = new Blob([vs[i].data], { type: vs[i].assetType.contentType })
+        console.log(URL.createObjectURL(i))
+        return i
+      }
+
+      function hy() {
+        $("#scratch").css("opacity", "1");
+        $('#view').hide();
+        $('#dlp').hide();
+
+        callback && callback();
+      }
+      function uplw() {
+        let f = new FormData();
+        $("#loadinfo").html('正在保存作品文件');
+        f.append("work", new Blob([vm.toJSON()]))
+        $.ajax({
+          url: apihost + 'work/upload?token=' + getCookie('token') + '&id=' + (id || workinfo.id),
+          method: 'POST',
+          data: f,
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json',
+          // 图片上传成功
+          success: function (result1) {
+            if (result1.code != 1) {
+              hy();
+              alert("保存失败");
+              return;
+            }
+            hy();
+            $(window).unbind('beforeunload');
+            window.onbeforeunload = null;
+            Open && (location.href = ("/#page=workinfo&publish=1&id=" + workinfo.id))
+            alert('作品保存成功')
+          },
+          error: function () {
+            hy();
+            alert("保存失败");
+          }
+        });
+      }
+
+      function upa(t) {
+        // debugger;
+        if (f(data2[t]).size > 5 * 1024 * 1024) {
+          console.log('尺寸过大', t, data2[t], '跳过')
+          t++;
+          upa(t);
+          return;
+        }
+        // debugger;
+        let list = [], data = new FormData(), n = 0, file = f(data2[t]);
+        data.append('image', file)
+        console.log(n)
+        debugger;
+        $.ajax({
+          url: apihost + 'work/uploads',
+          method: 'POST',
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json',
+          // 图片上传成功
+          success: function (result1) {
+            if (result1.code != 1) {
+              hy();
+              alert("保存失败");
+              return;
+            }
+            // vm.assets[data2[t]].clean = true;
+            $('#b').html(parseInt((t + 1/*n + t*/) / data2.length * 10000) / 100 + '%')
+            if (t + 1/*n + t*/ >= data2.length) {
+              $('#b').hide();
+              uplw();
+            }
+            else
+              upa(t + 1)
+          },
+          error: function () {
+            hy();
+            alert("保存失败");
+            console.log('保存失败');
+          }
+        });
+      }
+
+      function chunk(arr, size) {
+        var objArr = new Array();
+        var index = 0;
+        var objArrLen = arr.length / size;
+        for (var i = 0; i < objArrLen; i++) {
+          var arrTemp = new Array();
+          for (var j = 0; j < size; j++) {
+            arrTemp[j] = arr[index++];
+            if (index == arr.length) {
+              break;
+            }
+          }
+          objArr[i] = arrTemp;
+        }
+        return objArr;
+      }
+
+      function aftercheck() {
+        if (data2.length) {
+          $("#loadinfo").html('正在保存素材');
+          $('#b').show()
+          upa(0);
+        }
+        else uplw();
+      }
+
+      $('#i2').hide()
+      $("#loadinfo").html('正在检查素材列表');
+      for (let i of vs) {
+        data2.push(i.assetId + '.' + i.dataFormat)
+      }
+      let checkdata = await new Promise((resolve) => {
+        console.log('fuckyou', data2)
+        let list = chunk(data2, 20), filelist = [], num = 0;
+        debugger;
+        if (!list.length) resolve([])
+        for (let i = 0; i < list.length; i++) {
+          debugger;
+          post({
+            url: 'work/imagelist',
+            data: { list: list[i] }
+          }, (d) => {
+            num++;
+            console.log(d);
+            filelist = filelist.concat(d.data);
+            if (num == list.length) {
+              resolve(filelist);
+            }
+          }, (d) => {
+            resolve(null)
+          })
+        }
+
+      });
+      if (checkdata) {
+        data2 = checkdata
+        console.log(data2)
+        aftercheck();
+      } else {
+        alert('作品素材检查失败，请联系QQ:3274235903查看原因')
+        hy();
+      }
+
+
+    }
+    function save(open) {
+      if (workinfo.isauthor)
+        saveproject(null, null, open)
+      else {
+        $("#scratch").css("opacity", "0");
+        $("#loadinfo").html('正在改编中');
+        get({
+          url: 'work/new',
+          p: 'newwork'
+        }, function (d) {
+          saveproject(
+            d.info.insertId,
+            function () {
+              location.href = "/scratch#id=" + d.info.insertId;
+              location.reload();
+            }, open
+          )
+        })
+      }
+
+    }
+    function dataURLToBlob(dataurl) {
+      var arr = dataurl.split(',');
+      var mime = arr[0].match(/:(.*?);/)[1];
+      var bstr = atob(arr[1]);
+      var n = bstr.length;
+      var u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    }
+
+    (function () {
+      document.querySelector('#splash-content').style.display = 'block';
+        
+      })();</script><div id="app"></div><script>$(document).ready(() => {
+      $('#app > div > div.interface_menu_2TZCG > div > div.menu-bar_menu-bar-item_264qQ').remove()
+      // $('#app > div > div.interface_menu_2TZCG > div').append(`<div class="menu-bar_menu-bar-item_264qQ"><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE tw-see-inside_see-inside-button_1fSk6" role="button"><img class="tw-see-inside_see-inside-button-icon_UKAVj button_icon_JhCuM" draggable="false" src="static/assets/2f9cda00a530ac237fc24063067377c3.svg" height="20" width="20"><div class="button_content_3y79K"><span>转到源代码</span></div></span><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE" role="button" buttonname="123"><div class="button_content_3y79K"></div></span></div>`)
+      // $('#app > div > div.interface_menu_2TZCG > div').append(`<div class="menu-bar_menu-bar-item_264qQ"><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE tw-see-inside_see-inside-button_1fSk6" role="button"><img class="tw-see-inside_see-inside-button-icon_UKAVj button_icon_JhCuM" draggable="false" src="static/assets/2f9cda00a530ac237fc24063067377c3.svg" height="20" width="20"><div class="button_content_3y79K"><span>转到源代码</span></div></span><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE" role="button" buttonname="123"><div class="button_content_3y79K"></div></span></div>`)
+    })</script><script src="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/scratch/js/vendors~addon-settings~credits~editor~embed~fullscreen~player.faad3eed4b969ab9972d.js"></script><script src="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/scratch/js/vendors~editor~embed~fullscreen~player.9914c0360792ced959d9.js"></script><script src="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/scratch/js/editor~embed~fullscreen~player.4b0f8dc5e6329b68c983.js"></script><script src="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/scratch/js/embed.4857bb0377dc97fa28a5.js"></script></body></html>
