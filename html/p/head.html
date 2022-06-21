@@ -1,20 +1,3 @@
-<?php
-date_default_timezone_set( 'Asia/Shanghai' );
-function _addEtag($file) {
-    $last_modified_time = filemtime($file);
-    $etag = md5_file($file);
-    // always send headers
-    header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
-    header("Etag: $etag");
-    // exit if not modified
-    if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
-        @trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
-        header("HTTP/1.1 304 Not Modified");
-        exit;
-    }
-};
-_addEtag(__FILE__)
-?>
 
 
 <!DOCTYPE html>
@@ -64,14 +47,7 @@ _addEtag(__FILE__)
             ]
             for (i of d) {
                 if (time.getMonth() == i[0] - 1 && time.getDate() == i[1]) {
-                    document.write(`
-            <style>
-              html {
-                filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
-                -webkit-filter: grayscale(100%);
-              }
-            </style>
-            `)
+                    document.write("<style>html {filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);-webkit-filter: grayscale(100%);}</style>")
                 }
             }
         })()

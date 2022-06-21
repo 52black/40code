@@ -3,6 +3,11 @@ module.exports={
         get({
             url:'item/store'
         },(d)=>{
+            v.item.StoreItems=d.data;
+        })
+        get({
+            url:'item/bag'
+        },(d)=>{
             v.item.BagItems=d.data;
         })
     },

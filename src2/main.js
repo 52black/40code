@@ -4,6 +4,8 @@ Vue.component('s-c2', require('./template/comment2'))
 Vue.component('s-workcard', require('./template/workcard'))
 Vue.component('s-usercard', require('./template/usercard'))
 Vue.component('s-studiocard',require('./template/studiocard'))
+Vue.component('s-store-item',require('./template/storeItem'))
+Vue.component('s-bag-item',require('./template/bagitem'))
 window.alert = (text, timeout) => {
     v.sb.text = text;
     v.sb.timeout = timeout || 3000;

@@ -5,6 +5,21 @@
                 <v-col cols="12" md="6">
                     <v-card class="sd mx-auto pa-8 my-12">
                         我的物品
+                        <v-row>
+                            <v-col xs="12" sm="6" md="12" v-for="i in item.BagItems">
+                                <s-bag-item :info="i" :host="host"></s-bag-item>
+                            </v-col>
+                        </v-row>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" md="6">
+                    <v-card class="sd mx-auto pa-8 my-12">
+                        商店
+                        <v-row>
+                            <v-col cols="12" v-for="i in item.StoreItems">
+                                <s-store-item :info="i" :host="host"></s-store-item>
+                            </v-col>
+                        </v-row>
                     </v-card>
                 </v-col>
             </v-row>
