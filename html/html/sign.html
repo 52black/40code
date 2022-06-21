@@ -1,0 +1,24 @@
+<v-container v-if="viewmode=='sign'" id="sign">
+    <v-row>
+        <v-col class="mx-auto" cols="12" md="6">
+            <v-card class="mx-auto pa-8 my-12" width="400">
+                <span color="accent">登录/注册</span>
+                <v-text-field label="邮箱" :rules="sign.email" hide-details="auto" class="my-2"
+                    id="email"></v-text-field>
+                <!-- <v-text-field label="密码" :rules="sign.pw" hide-details="auto" class="my-2 pb-2" id="pw">
+                                                                                                                                                                                                                        </v-text-field> -->
+                <v-text-field v-model="password"
+                    :append-icon="show0 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
+                    :type="show0 ? 'text' : 'password'" name="input-1" label="密码"
+                    hide-details="auto" counter @click:append="show0 = !show0" id="pw">
+                </v-text-field>
+                <div id="c1"></div>
+                <div cols="12" class="float-center mx-auto mt-2">
+                    <v-btn color="accent" class="pa-2" v-on:click="sign.l(0)">登录</v-btn>
+                    <v-btn color="accent" class="pa-2" v-on:click="sign.l(1)">注册</v-btn>
+                </div>
+                <!-- 当前站点为测试站点，数据定期清空，损失概不负责 -->
+            </v-card>
+        </v-col>
+    </v-row>
+</v-container>

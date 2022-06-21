@@ -1,0 +1,22 @@
+<v-container v-if="viewmode=='message'">
+    <v-row>
+        <v-col cols="12" sm="10" md="9" lg="7" class="mx-auto">
+            <v-card class="sd pa-8 my-12" v-if="user.message">
+                <span v-for="i in user.message">
+                    <span v-html="i.message"></span>
+                    <v-btn icon class=" ml-2 float-right" v-on:click="user.delmsg(i.id)">
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                    <span color="accent" class="text-h7 text--disabled ml-2 float-right">
+                        <span>{{ i.time }}</span>
+                    </span>
+                    <br><br>
+                </span>
+                <div class="text-center my-3" v-if="user.msgtotal>0">
+                    <v-pagination v-model="user.msgpage" :length="Math.ceil(user.msgtotal/20)"
+                        :total-visible="7"></v-pagination>
+                </div>
+            </v-card>
+        </v-col>
+    </v-row>
+</v-container>

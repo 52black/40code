@@ -1,0 +1,17 @@
+<v-container v-if="viewmode=='mystudio'">
+    <v-row>
+        <template>
+            <v-col class="" cols="12">
+                我的工作室：<v-btn color="white" class="pa-2 text--secondary" elevation="0"
+                    v-on:click="studio.new()">
+                    新建工作室</v-btn>
+            </v-col>
+
+            <v-col v-for="j in studio.my" :key="`${j}`" cols="12" sm="6" md="4" lg="3">
+                <s-studiocard :studio="j" :host="host"></s-studiocard>
+            </v-col>
+
+            </v-card>
+        </template>
+    </v-row>
+</v-container>

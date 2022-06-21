@@ -1,0 +1,97 @@
+<v-container v-if="viewmode=='studio'">
+    <v-row>
+        <v-col class="mx-auto pa-5 my-12" v-if="!studio.info">
+            工作室信息正在加载中
+        </v-col>
+        <template v-else class="mx-auto ">
+            <v-col cols="12">
+                <v-card class="pa-5 sd">
+                    <v-row>
+                        <span style="flex:0 0 140px">
+                            <v-avatar size="120">
+                                <img
+                                    :src="host.data+'/static/internalapi/asset/'+(studio.info.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                            </v-avatar>
+
+                        </span>
+                        <span v-if="detail && detail.id" style="flex:0 0 140px">
+                            <span color="accent"
+                                class="text-h5">{{ studio.info.name }}</span><br>
+                            <a :href="`#page=forum&sid=${studio.info.id}`">
+                                <v-btn color="accent" class="my-2 sd">论坛
+                                </v-btn>
+                            </a>
+                            <a v-if="studio.p>0"
+                                :href="`#page=studio_edit&id=${studio.info.id}`">
+                                <v-btn color="accent" class="my-2 sd">编辑信息
+                                </v-btn>
+                            </a>
+                            <v-btn v-if="studio.p===undefined" class="py-2 sd"
+                                v-on:click="studio.join()" color="accent">
+                                加入
+                            </v-btn>
+                            <v-btn v-else-if="studio.p!==3" v-on:click="studio.quit()"
+                                color="accent" class="my-2 sd">
+                                退出</v-btn>
+                            <v-btn v-if="studio.p!==undefined" v-on:click="studio.main()"
+                                color="accent" class="my-2 sd">
+                                设为主室</v-btn>
+                            <v-btn v-if="studio.p!==undefined" v-on:click="studio.upload()"
+                                color="accent" class="my-2 sd">
+                                投稿作品</v-btn>
+                        </span>
+                        <span color="accent" class="text-subtitle-1 float-right text--disabled">创建时间：{{
+                            date(studio.info.created_time) }}</span><br>
+                    </v-row>
+                </v-card>
+            </v-col>
+            <v-col cols="12">
+                <v-card class="pa-5 sd">
+                    <span color="accent" class="text-h5 text--primary"
+                        cols="24">工作室介绍</span><br><br>
+                    <span class="text--secondary pm" v-html="studio.info.introduce2"></span>
+                </v-card>
+            </v-col>
+
+            <v-col cols="12">
+                <span>工作室作品：</span>
+                <a class="float-right" :href="`#`">
+                    <v-btn text>更多</v-btn>
+                </a><br>
+            </v-col>
+
+            <template v-if="studio.worklist" cols="12">
+                <v-col v-for="j in studio.worklist" cols="6" sm="4" md="3" lg="2">
+                    <s-workcard :work="j" :host="host"></s-workcard>
+                </v-col>
+            </template>
+            <span v-else>当前工作室无作品</span>
+
+            <v-col cols="12">
+                <span>工作室成员：</span>
+                <a class="float-right" :href="`#`">
+                    <v-btn text>更多</v-btn>
+                </a><br>
+            </v-col>
+
+            <template v-if="studio.userlist" cols="12">
+                <v-col v-for="j in studio.userlist" cols="6" sm="4" md="3" lg="2">
+                    <s-usercard :user="j" :host="host">
+                        </s-workcard>
+                </v-col>
+            </template>
+            <span v-else>当前工作室无成员</span>
+            <v-col cols="12">
+                <v-card class=" pa-5 sd">
+                    <span color="accent" class="text-h5 text--primary"
+                        cols="24">评论</span><br><br>
+                    <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
+                    <s-comment :comment="comment" :host="host" :detail="detail" type="2">
+                    </s-comment>
+                </v-card>
+            </v-col>
+
+
+        </template>
+    </v-row>
+</v-container>

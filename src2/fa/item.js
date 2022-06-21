@@ -1,0 +1,11 @@
+module.exports={
+    get:()=>{
+        get({
+            url:'item/store'
+        },(d)=>{
+            v.item.BagItems=d.data;
+        })
+    },
+    BagItems:[],
+    StoreItems:[],
+}

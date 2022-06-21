@@ -1,0 +1,47 @@
+<v-container v-if="viewmode=='account'" id="account">
+    <v-row>
+        <v-col class="mx-auto" cols="12" md="6">
+            <v-card class="mx-auto pa-8 my-12 sd">
+                <span color="accent">信息更改</span>
+                <v-text-field label="昵称" hide-details="auto" class="my-2" id="i-input-0"
+                    :value="detail.nickname" maxlength="30"></v-text-field>
+                <!-- <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(0)" block>更改昵称</v-btn> -->
+                <v-textarea name="input-1" label="个人介绍" :value="detail.introduce"
+                    hint="支持使用markdown编写" id="i-input-1" maxlength="20000" counter></v-textarea>
+                <!-- <v-btn color="accent" class="pa-2 mx-auto" v-on:click="account.l(1)" block>更改介绍</v-btn> -->
+
+                <v-file-input :rules="rules"
+                    accept="image/png, image/jpeg, image/bmp, image/gif" label="头像(建议尺寸1:1)"
+                    id="workimg" show-size truncate-length="10"></v-file-input>
+                <v-switch v-model="account.newpage" label="不在新窗口打开页面(访问速度会更快。点更改信息后，按下f5生效)"
+                    color="primary" value="1" hide-details></v-switch>
+                <v-switch v-model="detail.darkmode" v-show="0" label="夜间模式(点更改信息后，按下ctrl+r生效)"
+                    color="primary" value="1" hide-details></v-switch><br><br>
+                <!-- <v-img :src="host.data+'/static/internalapi/asset/'+ (workview.image || detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" :aspect-ratio="1"
+                                                                                                                                                                                                                          class="ma-5 pb-2"></v-img> -->
+                <div v-if="waitRequest.cover==1">正在上传中……</div>
+                <div v-if="waitRequest.cover==-1">上传成功</div>
+                <v-btn color="accent" class="pa-2 mx-auto sd" v-on:click="account.update()"
+                    block>
+                    更改信息</v-btn>
+
+                <br>
+                <v-divider></v-divider><br>
+
+                <v-text-field v-model="password2"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
+                    :type="show1 ? 'text' : 'password'" name="input-2" label="旧密码"
+                    hide-details="auto" counter @click:append="show1 = !show1" id="a_opw">
+                </v-text-field>
+                <v-text-field v-model="password3"
+                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[pw]"
+                    :type="show2 ? 'text' : 'password'" name="input-3" label="新密码"
+                    hide-details="auto" counter @click:append="show2 = !show2" id="a_npw">
+                </v-text-field>
+                <v-btn color="accent" class="pa-2 mx-auto sd" v-on:click="account.n()" block>
+                    更改密码
+                </v-btn>
+            </v-card>
+        </v-col>
+    </v-row>
+</v-container>

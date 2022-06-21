@@ -1,0 +1,44 @@
+<v-container v-if="viewmode=='studio_edit'">
+    <v-row>
+        <v-col cols="12" md="7" class="mx-auto">
+            <span v-if="!studio.info">请等待 正在加载中</span>
+            <v-card class=" pa-8 my-12" v-else>
+                <a :href="`#page=studio&id=${studio.info.id}`">{{ studio.info.name }}</a>
+                <v-text-field label="工作室名" hide-details="auto" class="my-2" name="editinfo"
+                    t="s-name" :value="studio.info.name" maxlength="30"></v-text-field>
+                <v-textarea label="工作室介绍" hide-details="auto" class="my-2" name="editinfo"
+                    t="s-introduce" :value="studio.info.introduce" maxlength="20000">
+                </v-textarea>
+
+                <v-checkbox v-model="studio.info.haspw" label="启用密码" value name="editinfo"
+                    t="publish"></v-checkbox>
+
+                <v-text-field label="密码" hide-details="auto" class="mx-3" name="editinfo"
+                    t="s-pw" :value="studio.info.pw" v-if="studio.info.haspw" width="100px">
+                </v-text-field>
+
+                <v-radio-group v-model="studio.info.chose" mandatory>
+                    <v-radio :label="`允许${studio.info.haspw?'输对密码的':''}所有人加入`" value="0">
+                    </v-radio>
+                    <v-radio :label="`允许${studio.info.haspw?'输对密码并':''}没有工作室的人加入`" value="1">
+                    </v-radio>
+                    <v-radio label="禁止任何人加入" value="2"></v-radio>
+                </v-radio-group>
+
+                <v-text-field label="工作室头衔颜色(仅支持英文，例如green)" hide-details="auto" class="mx-3"
+                    t="s-color" :value="studio.info.color" width="100px"></v-text-field>
+
+                <v-file-input :rules="rules"
+                    accept="image/png, image/jpeg, image/bmp, image/gif" label="工作室头像(建议尺寸1:1)"
+                    id="simg" show-size truncate-length="10"></v-file-input>
+                <v-img :src="host.data+'/static/internalapi/asset/'+workview.image"
+                    :aspect-ratio="1" class="ma-5 pb-2 px-12"></v-img>
+                <div v-if="waitRequest.cover==1">正在上传中</div>
+                <div v-if="waitRequest.cover==-1">点击更新保存你的头像</div>
+                <div class="mx-auto">
+                    <v-btn color="accent" class="pa-2" v-on:click="studio.update()">更新</v-btn>
+                </div>
+            </v-card>
+        </v-col>
+    </v-row>
+</v-container>

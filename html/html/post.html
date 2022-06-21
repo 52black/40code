@@ -1,0 +1,34 @@
+<v-container v-if="viewmode=='post'">
+    <v-row>
+        <v-col cols="12">
+            <v-breadcrumbs
+                :items="[{text:forum.post.studio.name,href:'#page=studio&id='+forum.post.studio.id},{text:'论坛',href:'#page=forum&sid='+forum.post.studio.id},{text:forum.post.text.title}]"
+                divider=">"></v-breadcrumbs>
+        </v-col>
+        <v-col class="mx-auto">
+            <v-card class="mx-auto pa-8 my-2">
+                <div class="text-h5">{{ forum.post.text.title }}<span style="color:#aaa"
+                        class="pl-4">#{{forum.post.text.id}}</span></div><br>
+                <div><a :href="'#page=user&id='+forum.post.author.id" class="text-h6">
+                        <v-avatar size="20">
+                            <img
+                                :src="host.data+'/static/internalapi/asset/'+(forum.post.author.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                        </v-avatar>
+                        {{ forum.post.author.nickname }}
+                        <span style="color:#888;font-size: 6px;" class="pl-4">
+                            {{date(forum.post.text.new_time) }}
+                        </span>
+                    </a></div><br>
+                <div v-html="forum.post.text.context2" class="pm"></div>
+            </v-card>
+        </v-col>
+        <v-col cols="12">
+            <v-card class=" pa-5 sd">
+                <span color="accent" class="text-h5 text--primary" cols="24">评论</span><br><br>
+                <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
+                <s-comment :comment="comment" :host="host" :detail="detail" type="3">
+                </s-comment>
+            </v-card>
+        </v-col>
+    </v-row>
+</v-container>

@@ -1,0 +1,73 @@
+<v-container v-if="viewmode=='search'" id="search">
+    <v-row>
+        <v-tabs class="mx-3 sd" v-model="search.type">
+            <v-tab>作品</v-tab>
+            <v-tab>用户</v-tab>
+            <v-tab>工作室</v-tab>
+        </v-tabs>
+        <v-col cols="12" class="mx-auto">
+            <v-card class="sd py-2">
+                <v-row class="mx-4 mt-4">
+                    <v-col cols="12">
+                        <v-text-field label="作品名"
+                            onkeypress="if(event.keyCode==13) v.search.search();"
+                            class="float-left ml-4" id="sname" v-if="search.type==0"
+                            v-model="search.name">
+                        </v-text-field>
+                        <v-text-field label="作者id"
+                            onkeypress="if(event.keyCode==13) v.search.search();"
+                            class="float-left ml-4" id="sauthor" v-if="search.type==0"
+                            v-model="search.autor">
+                        </v-text-field>
+                        <v-text-field label="用户名"
+                            onkeypress="if(event.keyCode==13) v.search.search();"
+                            class="float-left ml-4" id="sname" v-if="search.type==1"
+                            v-model="search.name">
+                        </v-text-field>
+                        <v-text-field label="工作室名称"
+                            onkeypress="if(event.keyCode==13) v.search.search();"
+                            class="float-left ml-4" id="sname" v-if="search.type==2"
+                            v-model="search.name">
+                        </v-text-field>
+                        <v-btn v-on:click="search.search()" class="float-left ml-4"
+                            elevation="0" large color="white">
+                            <v-icon>mdi-magnify</v-icon>
+                            搜索
+                        </v-btn>
+                    </v-col>
+                    <v-col class="d-flex" cols="6" sm="3">
+                        <v-select class="ml-4" v-model="search.select[search.type]"
+                            :items="search.s[search.type]" :hint="search.select[search.type]">
+                        </v-select>
+                    </v-col>
+                    <!-- <br><br><br> -->
+                </v-row>
+
+            </v-card>
+        </v-col>
+        <v-col class="mt-2" cols="12">
+            <span class="ml-2" style="color:#888">为你找到
+                {{search.num}}
+                个{{['作品','用户','工作室'][search.type]}}，耗时
+                {{search.time}}
+                ms</span>
+        </v-col>
+        <v-col v-for="j in search.work.worklist" cols="6" sm="4" md="3" lg="2"
+            v-if="search.type==0">
+            <s-workcard :work="j" :user="search.work.userlist[j.author.toString()][0]"
+                :host="host"></s-workcard>
+        </v-col>
+        <v-col v-if="search.type==1 && search.user.user" v-for="j in search.user.user" cols="6"
+            sm="4" md="3" lg="2">
+            <s-usercard :user="j" :host="host"></s-usercard>
+        </v-col>
+        <v-col v-if="search.type==2 && search.studio.studio" v-for="j in search.studio.studio"
+            cols="6" sm="4" md="3" lg="2">
+            <s-studiocard :studio="j" :host="host"></s-studiocard>
+        </v-col>
+    </v-row>
+    <div class="text-center my-3" v-if="search.num>0">
+        <v-pagination v-model="search.page" :length="Math.ceil(search.num/12)"
+            :total-visible="7" v-on:click="search.search()"></v-pagination>
+    </div>
+</v-container>

@@ -1,0 +1,161 @@
+<v-container v-if="viewmode=='user'">
+    <v-row>
+        <v-col class="mx-auto pa-5 my-12" v-if="!workview.id">
+            用户信息正在加载中
+        </v-col>
+        <template v-else-if="(!workview.ban || workview.id==detail.id)" class="mx-auto ">
+            <v-col cols="12">
+                <v-card class="pa-5 sd">
+                    <v-row>
+                        <v-col cols="12" sm="8" md="6">
+                            <v-row>
+                                <span style="flex:0 0 140px">
+                                    <v-avatar size="120">
+                                        <img
+                                            :src="host.data+'/static/internalapi/asset/'+(workview.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                                    </v-avatar>
+                                </span>
+                                <span style="flex:0 0 calc( 100% - 150px ) ">
+                                    <v-row no-gutters>
+                                        <v-col cols="12">
+                                            <span color="accent" class="text-h5"
+                                                v-if="workview.id!=detail.id || user.edit!=1">{{
+                                                workview.nickname }} <span
+                                                    style="color:#888;font-size: 6px;">#{{workview.id}}</span></span>
+                                            <v-text-field label="昵称" :value="detail.nickname"
+                                                id="nnedit" v-else>
+                                            </v-text-field>
+
+                                            <v-btn small class="sd tg"
+                                                v-on:click="user.edit==1?(user.edit=0):(user.edit=1)"
+                                                v-if="workview.id==detail.id"
+                                                :style="(workview.id==detail.id && user.edit==1)?'margin-top: -25px;':''">
+                                                <span>
+                                                    <v-icon>mdi-edit</v-icon><span
+                                                        v-if="user.edit==1">取消</span>编辑
+                                                </span>
+                                            </v-btn>
+                                            <v-btn color="accent" v-on:click="account.edits(1)"
+                                                v-if="workview.id==detail.id && user.edit==1"
+                                                class="sd" style="margin-top: -25px;" small>保存
+                                            </v-btn>
+
+                                            <a :href="`#page=studio&id=${workview.studio.id}`"
+                                                v-if="workview.studio">
+                                                <v-btn style="text-transform: none!important;"
+                                                    :color="workview.studio.color || 'green'"
+                                                    class="sd tg" small>
+                                                    <span style="color:white">{{
+                                                        workview.studio.name }}</span>
+                                                </v-btn>
+                                            </a>
+                                        </v-col>
+                                        <v-col cols="12" style="color:#888;font-size: 6px;">
+                                            {{date(workview.signtime) }} 加入
+                                        </v-col>
+                                        <v-col cols="12" style="color:#888;font-size: 6px;">
+                                            {{date(workview.last_active) }} 最后活跃
+                                        </v-col>
+                                        <v-col cols="12" class="mt-2">
+                                            <v-btn class="sd" v-on:click="user.signin()"
+                                                color="accent" v-if="workview.id==detail.id">
+                                                签到</v-btn>
+                                            <v-btn class="sd" color="accent"
+                                                v-on:click="user.follow()" v-else>
+                                                {{
+                                                workview.followu ? '取消' : ''}}关注
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </span>
+                            </v-row>
+
+                        </v-col>
+                        <v-col>
+                            <a>
+                                <v-btn text class="text-subtitle-1 text--secondary sd tg"
+                                    :href=" `#page=flist&id=`+workview.id">{{
+                                        workview.fan }}
+                                    粉丝
+                                </v-btn>
+                            </a>
+                            <a :href="`#page=flist&f=1&id=`+workview.id">
+                                <v-btn text class="text-subtitle-1 text--secondary sd tg">{{
+                                        workview.follow }}
+                                    关注</v-btn>
+                            </a><br>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <span color="accent" class="text-subtitle-1 " v-bind="attrs"
+                                        v-on="on">
+                                        <span class="text--disabled">金币：</span>
+                                        <span style="color:#FF9800;">{{ workview.coins
+                                                }}</span>
+                                    </span>
+                                </template>
+                                <span>获取方式：<br>
+                                    1.签到(每次所得金币数是四舍五入(当月连续签到天数+4)<br>
+                                    2.分享作品，点击作品展示页下方的分享，按照上面的提示做<br>
+                                    3.点赞作品，点赞1作品金币+3<br>
+                                    4.被点赞作品，被点赞1次金币+4<br>
+                                </span>
+                            </v-tooltip>
+                        </v-col>
+                    </v-row>
+                </v-card>
+            </v-col>
+            <v-col cols="12">
+                <v-card class="pa-5 sd pm">
+                    <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span>
+                    <v-btn v-on:click="user.edit==2?(user.edit=0):(user.edit=2)"
+                        v-if="workview.id==detail.id" :class="'sd '+(user.edit!=2?null:'tg')"
+                        :color="user.edit==2?null:'accent'">
+                        <v-icon>mdi-edit</v-icon><span v-if="user.edit==2">取消</span>编辑
+                    </v-btn>
+                    <v-btn v-on:click="account.edits(2)"
+                        v-if="workview.id==detail.id && user.edit==2" color="accent" class="sd">
+                        保存</v-btn>
+                    <br><br>
+
+                    <span v-html="workview.introduce2"
+                        v-if="workview.id!=detail.id || user.edit!=2"></span>
+                    <span v-else>
+                        <v-textarea label="介绍" :value="workview.introduce"
+                            hint="支持markdown，您可以拖动输入框右下角的三条斜线以拉大输入框" id="iedit"></v-textarea>
+                    </span>
+                </v-card>
+            </v-col>
+
+            <v-col cols="12">
+                <span>他的作品：</span>
+                <a class="float-right"
+                    :href="'#page=search&name=&type=0&p=1&s=0&author='+workview.id">
+                    <v-btn text>更多</v-btn>
+                </a><br>
+            </v-col>
+
+            <template v-if="worklist" cols="12">
+                <v-col v-for="j in worklist" cols="6" sm="4" md="3" lg="2">
+                    <s-workcard :work="j" :host="host"></s-workcard>
+                </v-col>
+            </template>
+            <span v-else>当前用户还没有作品哦</span>
+            <v-col cols="12">
+                <v-card class=" pa-5 sd">
+                    <span color="accent" class="text-h5 text--primary" cols="24">评论 </span><span
+                        style="color:#888" class="ml-3">{{comment.comment &&
+                        (comment.comment.num+' 条评论')}}</span><br><br>
+                    <s-c2 :comment="comment" :host="host" :detail="detail"></s-c2>
+                    <s-comment :comment="comment" :host="host" :detail="detail" type="0">
+                    </s-comment>
+                </v-card>
+            </v-col>
+
+
+        </template>
+
+        <v-col class="mx-auto pa-5 my-12" width="600" v-else>
+            无权限查看当前用户
+        </v-col>
+    </v-row>
+</v-container>

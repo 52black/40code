@@ -1,0 +1,11 @@
+<v-container v-if="viewmode=='flist'">
+    <v-row>
+        <v-col class="mx-auto">
+            <v-row>
+                <v-col v-for="j in user.flist" cols="6" sm="4" md="3" lg="2">
+                    <s-usercard :user="j" :host="host"></s-usercard>
+                </v-col>
+            </v-row>
+        </v-col>
+    </v-row>
+</v-container>

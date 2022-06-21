@@ -1,0 +1,60 @@
+<v-container v-if="viewmode=='forum'">
+    <v-row>
+        <v-col cols="12">
+            <v-dialog v-model="forum.dialog" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-breadcrumbs
+                        :items="[{text:forum.studio.name,href:'#page=studio&id='+forum.studio.id},{text:'论坛',href:'#page=forum&sid='+forum.studio.id}]"
+                        divider=">"></v-breadcrumbs>
+                    <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+                        发布帖子
+                    </v-btn>
+                </template>
+
+                <v-card class="px-3">
+                    <v-card-title class="text-h5 grey lighten-2">
+                        帖子发出
+                    </v-card-title>
+
+                    <v-text-field label="标题" id="ftitle"></v-text-field>
+                    <v-textarea label="帖子内容" value="发点什么吧" id="fcontext"></v-textarea>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary" text @click="forum.send();"
+                            :disable="forum.sending">
+                            发布
+                        </v-btn>
+                        <v-btn color="primary" text @click="forum.dialog = false">
+                            取消
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-col>
+        <v-col cols="12" color="white">
+            <v-card class="pa-6">
+                <div v-for="i in forum.list" :key="i">
+                    <div class="my-7">
+                        <a :href="'#page=post&id='+i.id" class="text-h6"
+                            v-text="i.title"></a><span style="color:#aaa"
+                            class="pl-4">#{{i.id}}</span><br>
+                        <div class="mt-1">
+                            <a :href="'#page=user&id='+i.author">
+                                <v-avatar size="20">
+                                    <img
+                                        :src="host.data+'/static/internalapi/asset/'+(forum.user[i.author][0].head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                                </v-avatar>{{forum.user[i.author][0].nickname}}
+                                <span style="color:#aaa"
+                                    class="pl-4">{{date(i.new_time)}}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- <v-divider></v-divider> -->
+                </div>
+            </v-card>
+        </v-col>
+    </v-row>
+</v-container>

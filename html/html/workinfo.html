@@ -1,0 +1,33 @@
+<v-container v-if="viewmode=='workinfo'">
+    <v-row>
+        <v-col class="mx-auto" cols="12" md="6">
+            <v-card class="pa-8 my-12" v-if="!workview.id">
+                作品信息正在加载中
+            </v-card>
+            <v-card class="pa-8 my-12" v-else-if="(workview.isauthor)">
+                <v-text-field label="作品名" hide-details="auto" class="my-2" name="editinfo"
+                    t="name" :value="workview.name"></v-text-field>
+                <v-textarea label="作品介绍" hide-details="auto" class="my-2" name="editinfo"
+                    t="introduce" :value="workview.introduce"></v-textarea>
+                <v-checkbox v-model="publish" value :label="`发布 `" name="editinfo" t="publish">
+                </v-checkbox>
+                <v-checkbox v-model="opensource" value :label="`开源 `" name="editinfo"
+                    t="opensource"></v-checkbox>
+                <v-file-input :rules="rules"
+                    accept="image/png, image/jpeg, image/bmp, image/gif" label="作品封面图(建议尺寸4:3)"
+                    id="workimg" show-size truncate-length="10"></v-file-input>
+                <v-img :src="host.data+'/static/internalapi/asset/'+workview.image"
+                    :aspect-ratio="4/3" class="ma-5 pb-2"></v-img>
+                <div v-if="waitRequest.cover==1">正在上传中</div>
+                <div v-if="waitRequest.cover==-1">点击更新保存你的头像</div>
+                <div class="mx-auto">
+                    <v-btn color="accent" class="pa-2" v-on:click="work.update()">更新</v-btn>
+                    <v-btn color="accent" class="pa-2" v-on:click="work.return()">返回</v-btn>
+                </div>
+            </v-card>
+            <v-card class="pa-8 my-12" v-else>
+                无权限查看当前作品
+            </v-card>
+        </v-col>
+    </v-row>
+</v-container>

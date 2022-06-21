@@ -1,0 +1,169 @@
+<?php
+date_default_timezone_set( 'Asia/Shanghai' );
+function _addEtag($file) {
+    $last_modified_time = filemtime($file);
+    $etag = md5_file($file);
+    // always send headers
+    header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT");
+    header("Etag: $etag");
+    // exit if not modified
+    if (@strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $last_modified_time ||
+        @trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag) {
+        header("HTTP/1.1 304 Not Modified");
+        exit;
+    }
+};
+_addEtag(__FILE__)
+?>
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.staticfile.org/MaterialDesign-Webfont/6.6.96/css/materialdesignicons.min.css"
+        rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/vuetify-dialog@2.0.17/dist/vuetify-dialog.min.css"> -->
+    <link href="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.css" rel="stylesheet">
+    <link href="https://cdn.staticfile.org/viewerjs/1.10.5/viewer.min.css" rel="stylesheet">
+
+
+    <link rel="shortcut icon" href="/other/favicon.ico" />
+    <link rel="bookmark" href="/other/favicon.ico" />
+
+    <title>40code少儿编程社区</title>
+    <meta content="40code,40code少儿编程社区,少儿编程社区,图形化编程社区,编程创作学习,scratch社区" name="keywords" />
+    <meta content="40code是一个公益性质的scratch社区，没有太多的规定，拥有3D扩展、云数据扩展、懒加载音乐扩展。用40code，你能轻松做出让人惊叹的3D作品和音游。"
+        name="description" />
+    <link href="/other/index.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script src="https://cdn.staticfile.org/markdown.js/0.5.0/markdown.min.js"></script> -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script src="https://cdn.dingxiang-inc.com/ctu-group/captcha-ui/index.js"></script>
+    <script src="https://lib.baomitu.com/dompurify/2.3.6/purify.min.js"></script>
+    <script crossorigin="anonymous"
+        integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww=="
+        src="https://lib.baomitu.com/marked/4.0.2/marked.min.js"></script>
+    <script src="https://cdn.staticfile.org/viewerjs/1.10.5/viewer.min.js"></script>
+    <script src="https://cdn.gitblock.cn/static/scripts-lib/scratchblocks-v3.4-min.js"></script>
+    <script>
+        // var normalizedDomain = "www.40code.com";
+        // if (window.location.host != "localhost" && window.location.host != normalizedDomain) {
+        //     window.location.href = "https://" + normalizedDomain + window.location.pathname + window.location.search + window.location.hash;
+        // }
+        (() => {
+            let time = (new Date());
+            let d = [
+                [
+                    12, 13
+                ],
+                // [
+                //     4, 4
+                // ]
+            ]
+            for (i of d) {
+                if (time.getMonth() == i[0] - 1 && time.getDate() == i[1]) {
+                    document.write(`
+            <style>
+              html {
+                filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+                -webkit-filter: grayscale(100%);
+              }
+            </style>
+            `)
+                }
+            }
+        })()
+
+        function getCookie(cname) {
+
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i].trim();
+                if (c.indexOf(name) == 0) {
+                    let d = c.substring(name.length, c.length);
+                    if (cname == 'token') {
+                        try {
+                            v.$data.token = d
+                        } catch (error) { }
+                    }
+                    return d
+                }
+            }
+            return "";
+        }
+        function IsPC() {
+            var userAgentInfo = navigator.userAgent;
+            var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+            var flag = true;
+            for (var v = 0; v < Agents.length; v++) {
+                if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; }
+            }
+            return flag;
+        }
+        if (IsPC() && getCookie('newpage') != '1') document.write('<base target="_blank" />')
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <center>当前网站正在加载中，请稍等</center>
+            <template>
+                <v-app id="inspire">
+
+                    <v-app-bar app color="primary" dark
+                        style="box-shadow: 0 2px 4px -1px rgb(0 0 0 / 5%), 0 4px 5px 0 rgb(0 0 0 / 3%), 0 1px 10px 0 rgb(0 0 0 / 3%)!important">
+                        <a href="#" style="color:white;font-size:20px" target="_self">40code</a>
+                        <span class="d-none d-sm-flex">
+                            <a href="#page=search&name=&author=&type=0&p=1&s=4" style="color:white;font-size:10px"
+                                target="_self" class="ml-5">发现作品</a>
+                            <a href="#page=search&name=&author=&type=2&p=1&s=1" style="color:white;font-size:10px"
+                                target="_self" class="ml-5">工作室</a>
+                            <a href="#page=post&id=5" style="color:white;font-size:10px" target="_self"
+                                class="ml-5">论坛</a>
+                        </span>
+
+                        <v-spacer></v-spacer>
+
+                        <span v-if="detail">
+
+                            <v-btn icon href="#page=message">
+                                <span v-if="detail && detail.msgnum">
+                                    <v-badge color="red" :content="detail.msgnum" overlap>
+                                        <v-icon>mdi-bell</v-icon>
+                                    </v-badge>
+                                </span>
+                                <v-icon v-else>mdi-bell</v-icon>
+                            </v-btn>
+                            <v-menu>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn color="rgb(52,130,207)" dark v-bind="attrs" v-on="on" class="sd"
+                                        style="text-transform: none!important;">
+                                        <v-avatar size="20" class="mr-2">
+                                            <img
+                                                :src="host.data+'/static/internalapi/asset/'+(detail.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                                        </v-avatar>
+                                        {{ detail.nickname }}
+                                    </v-btn>
+                                </template>
+
+                                <v-list>
+                                    <v-list-item v-for="(item, index) in items" :key="index" @click="() => {}"
+                                        v-on:click="item.c()">
+                                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </span>
+                        <v-toolbar-title v-else-if="detail===undefined">
+                            <a v-on:click="sign.go()" target="_self">
+                                <v-btn color="rgb(52,130,207)" class="sd">登录/注册</v-btn>
+                            </a>
+                        </v-toolbar-title>
+                    </v-app-bar>
+
+                    <v-main class="grey lighten-5">

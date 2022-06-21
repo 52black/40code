@@ -1,0 +1,102 @@
+
+
+                        
+
+                       
+
+
+
+                       
+
+                        
+
+                        
+
+                        
+
+                       
+
+                       
+
+                      
+
+                      
+
+                       
+
+                       
+
+                      
+
+                     
+                      
+
+                        
+
+                        
+                    </v-main>
+                    <v-footer padless>
+                        <v-col cols="12" class="px-5">
+
+                            <span>
+                                <div class="float-left">
+                                    <span class="l">友情链接：</span><br>
+                                    <a href="//bu40.com" target="_blank" class="l">bu40工具集</a><br>
+                                    <a href="//sc.bu40.com" target="_blank" class="l">scratch最新版下载</a><br>
+                                    <a href="http://150.158.13.104/" target="_blank" class="l">氧化钙编程社区</a><br>
+                                    <a href="https://by-baipiao.rth.app/" target="_blank" class="l">白嫖网</a><br>
+                                </div>
+                                <div class="float-left ml-5">
+                                    <span class="l">更多：</span><br>
+                                    <a href="https://jq.qq.com/?_wv=1027&k=7X0G5yel" target="_blank" class="l">Q群:1071652975</a><br>
+                                    <!-- <a href="https://www.baidu.com/s?wd=40code%E7%A4%BE%E5%8C%BA" target="_blank" class="l">在此点击40code社区以支持我们</a><br> -->
+                                    <!-- <a href="//github.com/52black/sccode" target="_blank" class="l">此站点前端源代码</a><br> -->
+                                    <span class="l"> bug反馈/友链添加/功能建议加：</span><br>
+                                    <a class="l">站长QQ:3274235903</a>
+
+                                </div>
+
+                            </span>
+                            <span class="float-right l">{{ new Date().getFullYear() }}
+                                —
+                                <strong>40CODE</strong>
+                            </span>
+                        </v-col>
+                    </v-footer>
+                </v-app>
+                <v-snackbar v-model="sb.show" :timeout="sb.timeout" top>
+                    <span v-html="sb.text"></span>
+
+                    <template v-slot:action="{ attrs }">
+                        <v-btn color="blue" text v-bind="attrs" @click="sb.show = false">
+                            关闭
+                        </v-btn>
+                    </template>
+                </v-snackbar>
+                <v-dialog v-model="sb2.show" width="500">
+                    <v-card>
+
+                        <v-card-title v-html="sb2.text" class="pt-3"></v-card-title>
+
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="sb2.show = false">
+                                关闭
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+        </template>
+    </body>
+
+<script src="https://cdn.staticfile.org/vue/2.6.9/vue.js"></script>
+<script src="https://cdn.staticfile.org/vuetify/2.5.8/vuetify.min.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/main.js"></script>
+<script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
+</body>
+
+</html><!-- https://uytmyv-iqnzlm-3000.preview.myide.io/ -->

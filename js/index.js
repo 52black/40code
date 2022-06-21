@@ -1,3 +1,9 @@
+Vue.component('s-item',{
+    props:['info'],
+    template:`<template>
+    
+    </template>`
+})
 Vue.component('s-comment', {
     props: ['comment', 'host', 'detail', 'type', 'author'],
     template: `<div v-if="comment.comment" class="my-5">
@@ -443,6 +449,9 @@ var pagecz = {
     },
     'post':()=>{
         v.forum.post.get()
+    },
+    'myitem':()=>{
+        v.item.get();
     }
 };
 
@@ -485,6 +494,17 @@ let functiona = {
         }
         // value => !value || value.size < 2000000 || '图片必须小于2MB',
     ],
+    item:{
+        get:()=>{
+            get({
+                url:'item/store'
+            },(d)=>{
+                v.item.BagItems=d.data;
+            })
+        },
+        BagItems:[],
+        StoreItems:[],
+    },
     host: {
         data: 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com',
         scratch: 'https://newsccode-1302921490.cos-website.ap-shanghai.myqcloud.com'
@@ -1401,7 +1421,7 @@ let functiono = {
         pagecz[a] && pagecz[a](id);
     },
     qh2: () => {
-        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'search', 'flist', 'mystudio', 'studio', 'studio_edit','about','forum','post'], q = getQueryString('page');
+        let d = ['index', 'sign', 'account', 'mywork', 'work', 'workinfo', 'user', 'message', 'search', 'flist', 'mystudio', 'studio', 'studio_edit','about','forum','post','myitem'], q = getQueryString('page');
         if (!q) {
             q = 'index'
         } else if (d.indexOf(q) != -1) {
