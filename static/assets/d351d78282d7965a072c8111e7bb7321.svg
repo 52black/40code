@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="294px" height="186px" viewBox="0 0 294 186" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <rect width="294" height="186" id="artboard_1" />
+    <clipPath id="clip_1">
+      <use xlink:href="#artboard_1" clip-rule="evenodd" />
+    </clipPath>
+  </defs>
+  <g id="云" clip-path="url(#clip_1)">
+    <use xlink:href="#artboard_1" stroke="none" fill="#0FBD8C" />
+    <g id="cloud" transform="matrix(-1 0 0 1 179 73)">
+      <path d="M15 19.5C15 8.73045 23.7304 0 34.5 0C45.2696 0 54 8.73045 54 19.5C54 30.2696 45.2696 39 34.5 39C23.7304 39 15 30.2696 15 19.5Z" id="Ellipse" fill="#FFFFFF" fill-rule="evenodd" stroke="none" />
+      <path d="M0 26C0 17.7157 6.71573 11 15 11C23.2843 11 30 17.7157 30 26C30 34.2843 23.2843 41 15 41C6.71573 41 0 34.2843 0 26Z" id="Ellipse-2" fill="#FFFFFF" fill-rule="evenodd" stroke="none" />
+      <path d="M38 28C38 20.8203 43.8203 15 51 15C58.1797 15 64 20.8203 64 28C64 35.1797 58.1797 41 51 41C43.8203 41 38 35.1797 38 28Z" id="Ellipse-3" fill="#FFFFFF" fill-rule="evenodd" stroke="none" />
+      <path d="M15 34L51 34L51 41L15 41L15 34Z" id="Rectangle" fill="#FFFFFF" fill-rule="evenodd" stroke="none" />
+    </g>
+    <g id="up" transform="translate(138 86)">
+      <path d="M9.5 0L19 9.94737L0 9.94737L9.5 0Z" id="Triangle" fill="#1B95FF" fill-rule="evenodd" stroke="none" />
+      <path d="M6.78575 8.8421L12.2143 8.8421L12.2143 21C12.2143 21 11.9455 22.5 9.50003 22.5C7.05458 22.5 6.78575 21 6.78575 21L6.78575 8.8421Z" id="Rectangle" fill="#1B95FF" fill-rule="evenodd" stroke="none" />
+    </g>
+  </g>
+</svg>
