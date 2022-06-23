@@ -70,7 +70,7 @@
                                     <v-img @click="item.get(item.showbag=1)" src="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/static/internalapi/asset/d0b383f2c6c38eb356e8d60fc7197acf.svg"></v-img>
                                 </v-col>
                                 <v-col cols="2" sm="2" md="2" lg="2"  v-for="i in item.workItems">
-                                    <v-card class="pa-1" style="background-color:#f5f5f5" @click="item.getWorkItem(i)">
+                                    <v-card class="pa-1" style="background-color:#f5f5f5" @click="item.getWorkItem(i)" style="box-shadow: inset 0 2px 2px 2px #00000006!important">
                                         <v-img  :src="'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/static/internalapi/asset/'+i.item.thumbId"></v-img>
                                     </v-card>
                                 </v-col>

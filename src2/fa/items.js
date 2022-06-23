@@ -35,17 +35,18 @@ module.exports=[
            ${'https://40code.com/#out=any&i=' + v.detail.id}
            </code><br>
            别人通过你的专属链接进行账号注册<br>
-           你和他都可获得20金币
+           你和他都可获得100金币
            `)
         }
     },
     {
         title: '刷新',
         c: function () {
-            if(location.href.indexOf('#')==-1)
-            location.href = location.href+"#t="+(new Date())/1
-            else
-            location.href = location.href+"&t="+(new Date())/1
+            // if(location.href.indexOf('#')==-1)
+            // location.href = location.href+"#t="+(new Date())/1
+            // else
+            // location.href = location.href+"&t="+(new Date())/1
+            v.qh2()
         }
     },
     {

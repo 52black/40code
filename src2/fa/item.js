@@ -22,6 +22,9 @@ module.exports={
         })
     },
     getWorkItem:(i)=>{
+        try {
+            i.options=JSON.parse(i.options)
+        } catch (error) {}
         console.log(v.item.dialog=i)
     },
     getStoreItem:(id)=>{
@@ -31,6 +34,16 @@ module.exports={
         v.item.buynum=1;
     },
     buy:(id)=>{
+        post({
+            url:'item/buy',
+            data:{
+                itemId:id,
+                count:v.item.buynum,
+            },
+            p:'itembuy'
+        },(d)=>{
+            v.qh2();
+        })
     },
     use:(id)=>{
         v.item.showbag=0
@@ -39,17 +52,27 @@ module.exports={
             template:require('./item_template')[id]
         };
     },
-    tuse:()=>{
+    tuse:(id)=>{
+        if(id){
+            v.item.useinfo={
+                id,
+                template:require('./item_template')[id]
+            } 
+        }
         post({
             url:'item/use',
             data:{
                 itemId:v.item.useinfo.id,
                 useid:v.comment.t[v.viewmode] == 2 ? v.studio.info.id : (v.comment.t[v.viewmode] == 3 ?v.forum.post.text.id: v.workview.id),
                 useto:v.comment.t[v.viewmode],
-                options:eval('('+v.item.useinfo.template.f+')')
-            }
+                options:v.item.useinfo.template.f && eval('('+v.item.useinfo.template.f+')')
+            },
+            p:'item'
         },(d)=>{
+            v.item.dialog=null;
+            v.item.useinfo.template.a && dialog(v.item.useinfo.template.a)
             v.item.useinfo=0;
+            v.qh2();
         })
     },
     getwork:(id)=>{

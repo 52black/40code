@@ -44,7 +44,7 @@
                         <v-list-item-title class="text-h5 mb-1">
                             {{item.dialog && item.dialog.item.name}}
                         </v-list-item-title>
-                        <v-list-item-subtitle>{{item.dialog && (item.dialog.item.options || item.dialog.item.descp)}}</v-list-item-subtitle>
+                        <v-list-item-subtitle>{{item.dialog && ((item.dialog.options && item.dialog.options.descp) || item.dialog.item.descp)}}</v-list-item-subtitle>
                     </v-list-item-content>
 
                     <v-list-item-avatar tile size="80">
@@ -52,7 +52,7 @@
                             :src="host.data+'/static/internalapi/asset/'+(item.dialog.item.thumbId || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" />
                     </v-list-item-avatar>
                 </v-list-item>
-                <v-list-item style="color:#555">
+                <v-list-item style="color:#555" v-if="viewmode=='myitem' && item.dialog.userItem">
                     <v-list-item-text>
                         类别: {{item.dialog.item.category}}
                         <br>
@@ -61,7 +61,7 @@
                         {{item.dialog.item.canUseToFourmPost?'帖子':''}}
                         {{item.dialog.item.canUseToProject?'作品':''}}
                         {{item.dialog.item.canUseToUser?'个人中心':''}}
-                        {{item.dialog.item.canUseToStudio?'个人中心':''}}
+                        {{item.dialog.item.canUseToStudio?'工作室':''}}
                         <br>
                         价格：{{item.dialog.item.price}} 金币
                         <br>
@@ -69,10 +69,14 @@
                             仅可对自己使用
                         </v-list-item-text>
                 </v-list-item>
-                <v-card-actions v-if="!item.dialog.userItem">
+                <v-card-actions v-if="viewmode=='myitem' && item.dialog.userItem && item.dialog.item.canUseInBag">
+                    <v-btn color="accent" class="my-2 sd" @click="item.tuse(item.dialog.item.id)">使用
+                    </v-btn>
+                </v-card-actions>
+                <v-card-actions v-if="viewmode=='myitem' && !item.dialog.userItem">
                     <v-text-field label="数量" outlined v-model="item.buynum"></v-text-field>
                     <v-spacer></v-spacer>
-                    <v-btn color="accent" class="my-2 sd" @click="item.buy()">购买
+                    <v-btn color="accent" class="my-2 sd" @click="item.buy(item.dialog.item.id)">购买
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -97,7 +101,7 @@
             </v-card>
         </v-dialog>
     </v-row>
-    <v-row justify="center" v-if="item.useinfo">
+    <v-row justify="center" v-if="item.useinfo && !item.dialog">
         <v-dialog v-model="item.useinfo" max-width="600" min-height="300">
             <v-card>
                 <v-toolbar dark color="primary">
@@ -110,7 +114,7 @@
                 </v-list-item>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="accent" class="my-2 sd" @click="item.tuse(item.useinfo.template.f)">使用
+                    <v-btn color="accent" class="my-2 sd" @click="item.tuse()">使用
                     </v-btn>
                 </v-card-actions>
             </v-card>

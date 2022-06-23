@@ -134,5 +134,5 @@ module.exports={
     },
     page:1,
     rid:null,
-    t: { 'user': 0, 'work': 1, 'studio': 2,'post':3 }
+    t: { 'user': 0, 'work': 1, 'studio': 2,'post':3,'myitem':10 }
 }
