@@ -6,8 +6,8 @@
                     <v-card class="sd mx-auto pa-8 my-12">
                         我的物品
                         <v-row>
-                            <v-col xs="12" sm="6" md="12" v-for="i in item.BagItems">
-                                <s-bag-item :info="i" :host="host"></s-bag-item>
+                            <v-col cols="3" sm="2" md="3" lg="2" v-for="i in item.BagItems">
+                                <s-bag-item :info="i" :host="host" :item="item" :c="item.getBagItem"></s-bag-item>
                             </v-col>
                         </v-row>
                     </v-card>
@@ -16,13 +16,104 @@
                     <v-card class="sd mx-auto pa-8 my-12">
                         商店
                         <v-row>
-                            <v-col cols="12" v-for="i in item.StoreItems">
-                                <s-store-item :info="i" :host="host"></s-store-item>
+                            <v-col cols="12" v-for="i in item.StoreItems"  v-if="i.isBuyable">
+                                <s-store-item :info="i" :host="host" :c="item.getStoreItem"></s-store-item>
+
                             </v-col>
                         </v-row>
                     </v-card>
                 </v-col>
             </v-row>
         </v-col>
+    </v-row>
+</v-container>
+<v-container>
+    
+    <v-row justify="center" v-if="item.dialog">
+        <v-dialog v-model="item.dialog" max-width="600">
+            <v-card>
+                <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="item.dialog = null">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>物品信息</v-toolbar-title>
+                </v-toolbar>
+
+                <v-list-item three-line>
+                    <v-list-item-content>
+                        <v-list-item-title class="text-h5 mb-1">
+                            {{item.dialog && item.dialog.item.name}}
+                        </v-list-item-title>
+                        <v-list-item-subtitle>{{item.dialog && (item.dialog.item.options || item.dialog.item.descp)}}</v-list-item-subtitle>
+                    </v-list-item-content>
+
+                    <v-list-item-avatar tile size="80">
+                        <v-img
+                            :src="host.data+'/static/internalapi/asset/'+(item.dialog.item.thumbId || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" />
+                    </v-list-item-avatar>
+                </v-list-item>
+                <v-list-item style="color:#555">
+                    <v-list-item-text>
+                        类别: {{item.dialog.item.category}}
+                        <br>
+                        使用位置:
+                        {{item.dialog.item.canUseInBag?'背包':''}}
+                        {{item.dialog.item.canUseToFourmPost?'帖子':''}}
+                        {{item.dialog.item.canUseToProject?'作品':''}}
+                        {{item.dialog.item.canUseToUser?'个人中心':''}}
+                        {{item.dialog.item.canUseToStudio?'个人中心':''}}
+                        <br>
+                        价格：{{item.dialog.item.price}} 金币
+                        <br>
+                        <v-list-item-text v-if="item.dialog.item.canUseToSelfOnly">
+                            仅可对自己使用
+                        </v-list-item-text>
+                </v-list-item>
+                <v-card-actions v-if="!item.dialog.userItem">
+                    <v-text-field label="数量" outlined v-model="item.buynum"></v-text-field>
+                    <v-spacer></v-spacer>
+                    <v-btn color="accent" class="my-2 sd" @click="item.buy()">购买
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+    </v-row>
+    <v-row justify="center" v-if="item.showbag">
+        <v-dialog v-model="item.showbag" max-width="600">
+            <v-card>
+                <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="item.showbag = null">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>使用</v-toolbar-title>
+                </v-toolbar>
+                <v-list-item>
+                    <v-row class="pa-3">
+                        <v-col cols="3" sm="2" md="3" lg="2" v-for="i in item.BagItems">
+                            <s-bag-item :info="i" :host="host" :item="item" :c="item.use" ></s-bag-item>
+                        </v-col>
+                    </v-row>
+                </v-list-item>
+            </v-card>
+        </v-dialog>
+    </v-row>
+    <v-row justify="center" v-if="item.useinfo">
+        <v-dialog v-model="item.useinfo" max-width="600" min-height="300">
+            <v-card>
+                <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="item.useinfo = null">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>使用 - {{item.StoreItems[item.useinfo.id].name}}</v-toolbar-title>
+                </v-toolbar>
+                <v-list-item v-html="item.useinfo.template.t">
+                </v-list-item>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="accent" class="my-2 sd" @click="item.tuse(item.useinfo.template.f)">使用
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-row>
 </v-container>

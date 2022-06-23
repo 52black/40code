@@ -10,6 +10,7 @@ module.exports=function (id) {
             d2.introduce2 = markdownToHtml(d2.introduce);
             v.workview = d2;
             v.comment.getcomment()
+            v.item.getwork()
             v.title=d2.name+' by '+d2.nickname;
             setTimeout(()=>{
                 $('#comment').bind('paste',v.paste);

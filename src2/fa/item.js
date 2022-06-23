@@ -11,6 +11,62 @@ module.exports={
             v.item.BagItems=d.data;
         })
     },
+    getBagItem:(id)=>{
+        get({
+            url:'item/item',
+            data:{
+                id
+            }
+        },(d)=>{
+            v.item.dialog=d.data;
+        })
+    },
+    getWorkItem:(i)=>{
+        console.log(v.item.dialog=i)
+    },
+    getStoreItem:(id)=>{
+        v.item.dialog={
+            item:v.item.StoreItems[id]
+        }
+        v.item.buynum=1;
+    },
+    buy:(id)=>{
+    },
+    use:(id)=>{
+        v.item.showbag=0
+        v.item.useinfo={
+            id,
+            template:require('./item_template')[id]
+        };
+    },
+    tuse:()=>{
+        post({
+            url:'item/use',
+            data:{
+                itemId:v.item.useinfo.id,
+                useid:v.comment.t[v.viewmode] == 2 ? v.studio.info.id : (v.comment.t[v.viewmode] == 3 ?v.forum.post.text.id: v.workview.id),
+                useto:v.comment.t[v.viewmode],
+                options:eval('('+v.item.useinfo.template.f+')')
+            }
+        },(d)=>{
+            v.item.useinfo=0;
+        })
+    },
+    getwork:(id)=>{
+        get({
+            url:'item/work',
+            data:{
+                id: v.workview.id
+            }
+        },(d)=>{
+            v.item.workItems=d.data;
+        })
+    },
+    useinfo:null,
+    showbag:0,
+    buynum:1,
+    dialog:null,
     BagItems:[],
+    workItems:[],
     StoreItems:[],
 }

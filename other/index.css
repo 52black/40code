@@ -26,3 +26,13 @@ a {
 .pm img {
     max-width:100%
 }
+.s-input{
+    background: #f7f7f7;
+    margin-top: 24px!important;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    color: #555;
+    border: none;
+    outline: none;
+}

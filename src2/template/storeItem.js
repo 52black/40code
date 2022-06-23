@@ -1,7 +1,7 @@
 module.exports={
-    props: ['info','host'],
+    props: ['info','host','c'],
     template: `
-    <v-card outlined >
+    <v-card outlined @click="c(info.id)">
     <v-list-item three-line>
       <v-list-item-content>
         <v-list-item-title class="text-h5 mb-1">
@@ -24,7 +24,7 @@ module.exports={
       >
         购买
       </v-btn>
-      <v-spacer></v-spacer>{{price}}金币
+      <v-spacer></v-spacer>{{info.price}}金币
     </v-card-actions>
     
     
