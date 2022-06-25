@@ -40,6 +40,7 @@ window.pagecz = {
     },
     'myitem':()=>{
         v.item.get();
+        getuserinfo();
     }
 };
 

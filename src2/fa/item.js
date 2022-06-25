@@ -34,7 +34,7 @@ module.exports={
         v.item.buynum=1;
     },
     buy:(id)=>{
-        post({
+        post({ 
             url:'item/buy',
             data:{
                 itemId:id,
@@ -42,6 +42,8 @@ module.exports={
             },
             p:'itembuy'
         },(d)=>{
+            v.item.dialog=null;
+            v.item.useinfo=0;
             v.qh2();
         })
     },
@@ -49,14 +51,14 @@ module.exports={
         v.item.showbag=0
         v.item.useinfo={
             id,
-            template:require('./item_template')[id]
+            template:require('./item_template')[id] || ({t:'确认使用-'+v.item.StoreItems[id]?.name+'?'})
         };
     },
     tuse:(id)=>{
         if(id){
             v.item.useinfo={
                 id,
-                template:require('./item_template')[id]
+                template:require('./item_template')[id] || ({})
             } 
         }
         post({
