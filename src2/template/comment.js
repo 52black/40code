@@ -58,7 +58,7 @@ module.exports={
                 <div v-for="j in comment.comment.user[k.fromuser.toString()]" class="mt-2">
 
                     <v-row no-gutters>
-                        <span style="flex: 0 0 35px;"></span>
+                        <span style="flex: 0 0 50px;"></span>
                         <span style="flex: 0 0 10px;" class="mt-1">
                             <a :href="'#page=user&id='+i.fromuser">
                                 <v-avatar size=40 class="">
@@ -68,7 +68,7 @@ module.exports={
                             </a>
                         </span>
                         <span style="flex: 0 0 15px;"></span>
-                        <span style="flex:0 0 calc( 100% - 95px )">
+                        <span style="flex:0 0 calc( 100% - 110px )">
                             <v-row no-gutters>
                                 <v-col cols="12">
                                     <a :href="'#page=user&id='+k.fromuser">

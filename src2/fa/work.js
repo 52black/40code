@@ -5,7 +5,7 @@ module.exports={
             url: 'work/new',
             p: 'newwork'
         }, function (d) {
-            location.href = "/other/scratch.html#id=" + d.info.insertId;
+            location.href = "/editor.html#id=" + d.info.insertId;
         })
     },
     update: function () {

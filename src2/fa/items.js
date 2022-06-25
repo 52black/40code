@@ -21,6 +21,12 @@ module.exports=[
         }
     },
     {
+        title: '我的物品',
+        c: function () {
+            location.href = "#page=myitem"
+        }
+    },
+    {
         title: '账号设置',
         c: function () {
             // v.$data.qh('account');

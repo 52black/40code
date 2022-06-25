@@ -14,7 +14,10 @@ module.exports={
                 </span>
             </span>
         </v-img>
-        <div class="text-truncate px-5 mt-3 mb-1 text-heading-6">{{ work.name }}</div>
+        <div class="text-truncate px-5 mt-3 mb-1 text-heading-6">
+         <span v-if="work.featuredLevel==1" class="pr-1" style="color:#888">初精</span>
+      {{ work.name }}
+      </div>
         <span class="px-5 text-truncate text-caption row" v-if="user">
             <span class="col-12 text-truncate">
                 <v-avatar size="25">

@@ -99,7 +99,7 @@
                 </v-toolbar>
                 <v-list-item>
                     <v-row class="pa-3">
-                        <v-col cols="3" sm="2" md="3" lg="2" v-for="i in item.BagItems">
+                        <v-col cols="3" sm="2" md="3" lg="2" v-for="i in item.BagItems" v-if="viewmode=='work' && i.item.canUseToProject &&(!i.item.canUseToSelfOnly || workview.isauthor)">
                             <s-bag-item :info="i" :host="host" :item="item" :c="item.use"></s-bag-item>
                         </v-col>
                     </v-row>

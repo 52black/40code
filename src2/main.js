@@ -16,7 +16,7 @@ window.dialog = (text) => {
     v.sb2.show = 1;
 }
 window.markdownToHtml=(text)=>{
-    return marked.parse(DOMPurify.sanitize(text));
+    return DOMPurify.sanitize(marked.parse(text));
 }
 window.pagecz = {
     'index': require('./pagecz/index'),
