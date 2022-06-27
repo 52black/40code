@@ -48,7 +48,7 @@ let functiona = {
     rules: require('./fa/rules'),
     item:require('./fa/item'),
     host: {
-        data: 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com',
+        data: 'https://40code-cdn.zq990.com',
         scratch: 'https://newsccode-1302921490.cos-website.ap-shanghai.myqcloud.com'
     },
     work: require('./fa/work'),
@@ -130,6 +130,7 @@ let functiona = {
     forum:require('./fa/forum')
 }
 let functiono = {
+    open:(url)=>window.open(url),
     workview: { image: "6e2b0b1056aaa08419fb69a3d7aa5727.png" },
     detail: (getCookie('token') === undefined) ? undefined : 0,
     token: getCookie('token'),

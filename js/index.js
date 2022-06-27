@@ -506,7 +506,7 @@ let functiona = {
         StoreItems:[],
     },
     host: {
-        data: 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com',
+        data: 'https://40code-cdn.zq990.com',
         scratch: 'https://newsccode-1302921490.cos-website.ap-shanghai.myqcloud.com'
     },
     work: {

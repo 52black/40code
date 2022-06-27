@@ -22,7 +22,8 @@ module.exports={
             <span class="col-12 text-truncate">
                 <v-avatar size="25">
                     <img
-                        :src="host.data+'/static/internalapi/asset/'+(user.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
+                    :lazy-src="host.data+'/static/internalapi/asset/'+(user.head || '26d7d5882a55edf148d97f50facc828a.svg')"
+                        :src="host.data+'/static/internalapi/asset/'+(user.head || '26d7d5882a55edf148d97f50facc828a.svg')">
                 </v-avatar>
                 <span class="text-subtitle-1 text--secondary "
                     :href="'#page=user&id='+work.author">{{

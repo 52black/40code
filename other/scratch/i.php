@@ -1,4 +1,4 @@
 <?php
-$url='https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/'.$_GET['type'].'?v=1';
+$url='https://40code-cdn.zq990.com/'.$_GET['type'].'?v=1';
 header("Location: $url");
 ?>

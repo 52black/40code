@@ -65,7 +65,7 @@ $('#dlp').hide();
         $(document).text("你没有权限，当前作品未开源或未发布")
         return
     }
-    downloadurl = 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/work/' + d.id + '.json?' + atob(d.fuckyou);
+    downloadurl = 'https://40code-cdn.zq990.com/work/' + d.id + '.json?' + atob(d.fuckyou);
     // downloadurl = '/work/' + d.id + '.json';
     // $('body').append('<script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/lib35.min.js"></script> \
     // <script type="text/javascript" src="https://raw.fastgit.org/52black/123/master/scratch/gui9.js"></script>')

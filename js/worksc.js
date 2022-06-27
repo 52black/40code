@@ -11,7 +11,7 @@ function getQueryString(name) {
 var id= getQueryString('id'),temp2={};
 var apihost = "https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/",
 mianhost="http://127.0.0.1:5500",
-scratchhost="https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com";
+scratchhost="https://40code-cdn.zq990.com";
 
 function dataURLToBlob(dataurl) {
   var arr = dataurl.split(',');
@@ -25,7 +25,7 @@ function dataURLToBlob(dataurl) {
   return new Blob([u8arr], { type: mime });
 }
 
-var downloadurl = 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/work/' + getQueryString('id') + '.json?' + atob(top.v.workview.fuckyou);
+var downloadurl = 'https://40code-cdn.zq990.com/work/' + getQueryString('id') + '.json?' + atob(top.v.workview.fuckyou);
 window.scratchConfig = {
   stageArea: {
     scale: window.innerWidth / 480,
