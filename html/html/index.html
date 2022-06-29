@@ -9,11 +9,13 @@
                 </v-carousel>
             </div>
         </v-col>
-        <template v-for="n in rows">
+        <template v-for="(n,i) in rows">
             <v-col class="mt-2" cols="12">
                 <v-icon>{{ n.icon }}</v-icon>
                 <strong>{{ n.title }}</strong>
-                <a class="float-right" href="#page=search&name=&author=&type=0&p=1&s=3">
+                <a class="float-right" 
+                :href="i?'#page=search&name=&author=&type=0&p=1&s=3':'#page=search&name=&author=&type=0&p=1&s=0&sid=&fl=1&follow='"
+                >
                     <v-btn text>
                         <v-icon>mdi-arrow-right</v-icon>
                         更多

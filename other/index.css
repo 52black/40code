@@ -26,6 +26,9 @@ a {
 .pm img {
     max-width:100%
 }
+.comment-view .pm img{
+    max-height: 200px;
+}
 .s-input{
     background: #f7f7f7;
     margin-top: 24px!important;

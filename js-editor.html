@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>40code云脚本-js-上海节点</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/mdui/1.0.2/css/mdui.min.css" />
+    <script src="https://cdn.staticfile.org/ace/1.6.1/ace.min.js"></script>
+    <script src="https://cdn.staticfile.org/ace/1.6.1/ext-language_tools.min.js"></script>
+    <script src="https://cdn.staticfile.org/ace/1.6.1/theme-monokai.min.js"></script>
+    <script src="https://cdn.staticfile.org/ace/1.6.1/mode-javascript.min.js"></script>
+    <script src="https://cdn.staticfile.org/ace/1.6.1/snippets/javascript.js"></script>
+    <script src="https://cdn.staticfile.org/ace/1.6.1/worker-javascript.js"></script>
+    <script src="https://cdn.staticfile.org/mdui/1.0.2/js/mdui.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.1.0/axios.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" onclick="save()">保存</button>
+        <button class="mdui-btn mdui-color-theme-accent mdui-ripple" onclick="save('1')">运行</button>
+        脚本地址(支持POST,GET)：https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/script/run?id=<span id="id"></span>
+    </div>
+    <pre id="codeEditor" class="ace_editor" style="height: calc( 100vh - 100px );">
+        <s:textarea class="ace_text-input"   cssStyle="97.5%;height:320px;"/>
+    </pre>
+    <script>
+        document.getElementById('id').innerHTML = getQueryString('id')
+        function getQueryString(name) {
+            let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            if (window.location.hash.indexOf("#") < 0) return null;
+            let r = window.location.hash.split("#")[1].match(reg);
+            if (r != null) return decodeURIComponent(r[2]);
+            return null;
+        }
+        function getCookie(cname) {
+
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i].trim();
+                if (c.indexOf(name) == 0) {
+                    let d = c.substring(name.length, c.length);
+                    if (cname == 'token') {
+                        try {
+                            v.$data.token = d
+                        } catch (error) { }
+                    }
+                    return d
+                }
+            }
+            return "";
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+            console.log('设置cookie')
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toGMTString();
+            document.cookie = cname + "=" + cvalue + "; " + expires;
+        }
+        function initEditor() {
+            editor = ace.edit("codeEditor");
+            theme = "monokai";
+            language = "javascript";
+            editor.setTheme("ace/theme/" + theme);
+            editor.session.setMode("ace/mode/" + language);
+            editor.setFontSize(15);
+            editor.setReadOnly(false);
+            editor.setOption("wrap", "free");
+            ace.require("ace/ext/language_tools");
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+                enableSnippets: true,
+                enableLiveAutocompletion: true
+            });
+        }
+        function get() {
+            if (!getCookie('token')) {
+                alert('请登录后再保存')
+                return;
+            }
+            axios.get('https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/script/?id=' + getQueryString('id') + '&token=' + getCookie('token'))
+                .then(d => {
+                    if (d.data.cz == 'exit') {
+                        alert('请登录后再访问')
+                        return;
+                    }
+                    editor.setValue(d.data)
+
+                })
+        }
+        function run(){
+            axios.get('https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/script/run?id='+getQueryString('id'))
+            .then(d=>mdui.alert(d))
+        }
+        function save(f) {
+            var annotations = editor.getSession().getAnnotations();
+            var error = "";
+            var errorNum = 0;
+            var warning = "";
+            var warningNum = 0;
+            for (var aid = 0, alen = annotations.length; aid < alen; ++aid) {
+                var row = annotations[aid].row + 1;
+                if (annotations[aid].type === 'error') {
+                    var txt = " 行：" + row + "；列：" + annotations[aid].column + ";  提示:" + annotations[aid].text;
+                    error += txt + "<br>";
+                    errorNum++;
+                }
+                if (annotations[aid].type === 'warning' || annotations[aid].type === 'info') {
+                    var txt = " 行：" + row + "；列：" + annotations[aid].column + ";  提示 : " + annotations[aid].text;
+                    warning += txt + "<br>";
+                    warningNum++;
+                }
+            }
+            if (!getCookie('token')) {
+                alert('请登录后再保存')
+                return;
+            }
+            axios.post("https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/script/?id=" + getQueryString('id') + '&token=' + getCookie('token'), {
+                data: editor.getValue()
+            })
+                .then(d => {
+                    if (d.cz == 'exit') {
+                        mdui.alert('请登录后再保存')
+                        return;
+                    }
+                    if (d.code == -1) {
+                        mdui.alert('保存失败')
+                        return;
+                    }
+                    if (d.code == 1) {
+                        mdui.snackbar('保存成功')
+                        if(f)run();
+                        return;
+                    }
+                })
+        }
+        document.addEventListener('keydown', function (e) {
+            if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+
+                save();
+            }
+        });
+        get();
+        initEditor();
+    </script>
+    
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({ id: "JW9Ijj81HxjUscHB", ck: "JW9Ijj81HxjUscHB", hashMode: true })</script>
+</body>
+
+</html>

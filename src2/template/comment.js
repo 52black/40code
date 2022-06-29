@@ -1,6 +1,6 @@
 module.exports={
     props: ['comment', 'host', 'detail', 'type', 'author','date'],
-    template: `<div v-if="comment.comment" class="my-5">
+    template: `<div v-if="comment.comment" class="my-5 comment-view">
     <div v-for="(i, index) in comment.comment.comment" class="my-6">
         <div v-for="j in comment.comment.user[i.fromuser.toString()]" class="mt-2">
             <div>
@@ -55,8 +55,8 @@ module.exports={
                 </v-row>
             </div>
             <div v-if="i.replynum">
-                <div v-for="k in comment.comment.reply[i.id.toString()]">
-                    <div v-for="j in comment.comment.user[k.fromuser.toString()]" class="mt-2">
+                <div v-for="(k,num) in comment.comment.reply[i.id.toString()]">
+                    <div v-for="j in comment.comment.user[k.fromuser.toString()]" class="mt-2" v-if="num<2 || i.show">
 
                         <v-row no-gutters>
                             <span style="flex: 0 0 50px;"></span>
@@ -104,6 +104,11 @@ module.exports={
 
                         </v-row>
                     </div>
+                </div>
+                <div class="text-center">
+                    <v-btn class="text--secondary px-auto" v-if="i.replynum>2 && !i.show" text small v-on:click="comment.showmore(index)" style="">
+                        显示更多
+                    </v-btn>
                 </div>
             </div>
         </div>

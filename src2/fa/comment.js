@@ -23,6 +23,9 @@ module.exports={
             })
         }
     },
+    showmore:(i)=>{
+        Vue.set(v.comment.comment.comment[i],'show',1)
+    },
     getcomment: () => {
         Vue.set(v.comment, 'comment', [])
         get({

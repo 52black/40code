@@ -12,6 +12,7 @@ module.exports=function (id) {
             v.comment.getcomment()
             v.item.getwork()
             v.title=d2.name+' by '+d2.nickname;
+            v.stitle(d2.name+' by '+d2.nickname);
             setTimeout(()=>{
                 $('#comment').bind('paste',v.paste);
             },100)

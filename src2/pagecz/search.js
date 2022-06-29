@@ -15,6 +15,10 @@ module.exports=(id)=>{
             author:getQueryString('author'),
             type:getQueryString('type'),
             s:getQueryString('s')||0,
+            sid:getQueryString('sid')||0,
+            fl:getQueryString('fl')||0,
+            fan:getQueryString('fan')||0,
+            follow:getQueryString('follow')||0,
             page:v.search.page
         }
     },function(d){

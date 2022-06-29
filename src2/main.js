@@ -227,7 +227,7 @@ window.v = new Vue({
                 v.search.page=1;
                 v.search.author='';
                 v.search.name='';
-                v.search.search()
+                v.search.search(1)
             }
         },
         'comment.page':()=>{
