@@ -1,7 +1,7 @@
 module.exports={
     checkbox: [],
     new: function () {
-        get({
+        post({
             url: 'work/new',
             p: 'newwork'
         }, function (d) {
@@ -83,43 +83,18 @@ module.exports={
         })
     },
     share: () => {
-        dialog(
-            `
-            通过分享作品到其他平台，他人通过链接注册账号，你和他都可获得20金币<br>
-            还可以让你的作品有更多人看到<br>
-            链接：<code>${location.href + '&out=any&i=' + v.detail.id}</code>
-            推荐分享形式(不推荐在他人作品下发)<br>
-            复制内容到相应位置即可
-            <h2>若你要分享到A营：</h2>
-            1.自己A营个人主页的简介
-            <code>
-                [${v.workview.name}](${location.href + '&out=aying&i=' + v.detail.id})
-            </code>
-            2.A营同个作品的介绍
-            <code>
-                [这个作品也发布到了40code](${location.href + '&out=aying&i=' + v.detail.id})
-            </code><br>
-            3.A营其他人主页评论(不建议)
-            <code>
-                [对方称呼]，你好，请问你能看看[${v.workview.name}](${location.href + '&out=aying&i=' + v.detail.id})吗？非常感谢。
-            </code><br>
-            <h2>若你要分享到小码王、scratch中社、共创世界：</h2>
-            1.自己这些平台主页下的进行留言<br>
-            <code>
-                我在40code发了一个作品，链接：${location.href + '&out=any&i=' + v.detail.id}
-            </code>
-            2.这些平台同个作品的介绍
-            <code>
-                这个作品也发布到了40code: ${location.href + '&out=any&i=' + v.detail.id})
-            </code>
-            3.这些平台其他人主页评论(不建议)
-            <code>
-                [对方称呼]，你好，请问你能看看${v.workview.name}吗？非常感谢。链接： ${location.href + '&out=any&i=' + v.detail.id}
-            </code><br>
-            <h2>若你要分享到QQ、微信：</h2>
-            <code>[对方称呼]，你好，请问你能看看我的scratch作品(${v.workview.name})吗？非常感谢。<br>链接： ${location.href + '&out=any&i=' + v.detail.id}<br>请复制链接到浏览器访问</code>
-            `
-        )
+        get({
+            url: 'work/link',
+            data: {
+                id: getQueryString('id'),
+            }
+        }, function (d) {
+            if(d.data.indexOf('etime'))
+            dialog(d.data+'<br>'+'链接有效期7天，获取到此链接的人可查看此作品')
+            else
+            dialog(d.data+'<br>'+'分享此作品给未注册40code的人，通过此链接注册，你可获得100金币')
+        })
+        
     },
     analysis:()=>{
         alert('请稍等');

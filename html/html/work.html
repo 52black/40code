@@ -64,12 +64,16 @@
                             </v-btn>
                             <v-btn v-on:click="work.analysis()" plain text>
                                 <v-icon>mdi-search</v-icon>代码分析
-                            </v-btn><br><br>
+                            </v-btn>
+                            <v-btn v-on:click="work.share()" plain text>
+                                <v-icon></v-icon>分享
+                            </v-btn>
+                            <br><br>
                             <v-row>
-                                <span style="flex: 0 0 90px;max-width: 90px;" class="ma-2">
+                                <span style="flex: 0 0 90px;max-width: 90px;" class="ma-2"  v-if="detail">
                                     <v-img @click="item.get(item.showbag=1)" src="https://40code-cdn.zq990.com/static/internalapi/asset/d0b383f2c6c38eb356e8d60fc7197acf.svg"></v-img>
                                 </span>
-                                <span style="flex: 0 0 90px;max-width: 90px;" class="ma-2" v-for="i in item.workItems" v-if="!i.itemexpirationTime || i.itemexpirationTime>new Date/1000">
+                                <span style="flex: 0 0 90px;max-width: 90px;" class="ma-2" v-for="i in item.workItems" v-if="!i.expirationTime || i.expirationTime>new Date/1000">
                                     <v-card class="pa-3" style="background-color:#f5f5f5;box-shadow: inset 0 2px 2px 2px #00000006!important" @click="item.getWorkItem(i)">
                                         <v-img  :src="'https://40code-cdn.zq990.com/static/internalapi/asset/'+i.item.thumbId"></v-img>
                                     </v-card>

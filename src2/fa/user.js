@@ -1,4 +1,24 @@
 module.exports={
+    postmessage:()=>{
+        v.user.pm.show=1;
+    },
+    pm:{
+        show:0,
+        send:()=>{
+            post({
+                url:'user/private',
+                data:{
+                    'id':v.user.pm.id,
+                    'text':v.user.pm.text
+                },
+                p:'pm'
+            },()=>{
+                v.user.pm.show=0;
+            })
+        },
+        id:'',
+        text:''
+    },
     getwork: (l) => {
         get({
             url: "work/user",

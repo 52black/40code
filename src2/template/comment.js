@@ -10,7 +10,7 @@ module.exports={
                         <a :href="'#page=user&id='+i.fromuser">
                             <v-avatar size=40 class="">
                                 <img
-                                    :src="host.data+'/static/internalapi/asset/'+(j.head || '26d7d5882a55edf148d97f50facc828a.svg')">
+                                    :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                             </v-avatar>
                         </a>
                     </span>
@@ -36,8 +36,8 @@ module.exports={
                                     <v-icon>mdi-reply</v-icon> 回复
                                 </v-btn>
                                 <v-btn class="text--secondary float-right" text small style="margin-top: -15px;"
-                                    v-if="detail.id==i.touser || detail.id==i.fromuser"
-                                    v-on:click="comment.delete(i.id)">
+                                    v-if="detail.id==i.touser || detail.id==i.fromuser || detail.is_admin"
+                                    v-on:click="comment.delete(i.id,detail.id==i.touser || detail.id==i.fromuser)">
                                     <v-icon>mdi-delete</v-icon> 删除
                                 </v-btn>
                                 <br>
@@ -61,10 +61,10 @@ module.exports={
                         <v-row no-gutters>
                             <span style="flex: 0 0 50px;"></span>
                             <span style="flex: 0 0 10px;" class="mt-1">
-                                <a :href="'#page=user&id='+i.fromuser">
+                                <a :href="'#page=user&id='+j.id">
                                     <v-avatar size=40 class="">
                                         <img
-                                            :src="host.data+'/static/internalapi/asset/'+(j.head || '26d7d5882a55edf148d97f50facc828a.svg')">
+                                            :src="host.data+'/static/internalapi/asset/'+(j.head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                                     </v-avatar>
                                 </a>
                             </span>
@@ -93,8 +93,8 @@ module.exports={
                                             <v-icon>mdi-reply</v-icon> 回复
                                         </v-btn>
                                         <v-btn class="text--secondary float-right" text small
-                                            v-if="detail.id==k.fromuser" style="margin-top: -15px;"
-                                            v-on:click="comment.deletereply(k.id)">
+                                            v-if="detail.id==k.fromuser || detail.is_admin" style="margin-top: -15px;"
+                                            v-on:click="comment.deletereply(k.id,detail.id==k.fromuser)">
                                             <v-icon>mdi-delete</v-icon> 删除
                                         </v-btn>
                                     </v-col>
@@ -119,7 +119,7 @@ module.exports={
                     <a :href="'#page=user&id='+comment.comment.ad[index/4].author">
                         <v-avatar size=40 class="">
                             <img
-                                :src="host.data+'/static/internalapi/asset/'+(comment.comment.admap[comment.comment.ad[index/4%4].author].head || '26d7d5882a55edf148d97f50facc828a.svg')">
+                                :src="host.data+'/static/internalapi/asset/'+(comment.comment.admap[comment.comment.ad[index/4%4].author].head || '6e2b0b1056aaa08419fb69a3d7aa5727.png')">
                         </v-avatar>
                     </a>
                 </span>
@@ -137,7 +137,7 @@ module.exports={
                         <span style="flex: 0 0 200px;">
                             <a :href="'#page=work&id='+comment.comment.ad[index/4%4].id">
                                 <img style="max-width:200px"
-                                    :src="host.data+'/static/internalapi/asset/'+(comment.comment.ad[index/4%4].image || '26d7d5882a55edf148d97f50facc828a.svg')" />
+                                    :src="host.data+'/static/internalapi/asset/'+(comment.comment.ad[index/4%4].image || '6e2b0b1056aaa08419fb69a3d7aa5727.png')" />
                             </a>
                         </span>
                         <span style="flex: 0 0 10px;"></span>

@@ -3,7 +3,7 @@
         <v-col class="mx-auto pa-5 my-12" v-if="!workview.id">
             用户信息正在加载中
         </v-col>
-        <template v-else-if="(!workview.ban || workview.id==detail.id)" class="mx-auto ">
+        <template v-else-if="(!workview.ban || detail && detail.id==workview.id)" class="mx-auto ">
             <v-col cols="12">
                 <v-card class="pa-5 sd">
                     <v-row>
@@ -20,23 +20,23 @@
                                         <v-col cols="12">
                                             <span color="accent" class="text-h5"
                                                 v-if="workview.id!=detail.id || user.edit!=1">{{
-                                                workview.nickname }} <span
+                                                workview.nickname }} 
+                                                <span
                                                     style="color:#888;font-size: 6px;">#{{workview.id}}</span></span>
                                             <v-text-field label="昵称" :value="detail.nickname"
                                                 id="nnedit" v-else>
                                             </v-text-field>
-
                                             <v-btn small class="sd tg"
                                                 v-on:click="user.edit==1?(user.edit=0):(user.edit=1)"
-                                                v-if="workview.id==detail.id"
-                                                :style="(workview.id==detail.id && user.edit==1)?'margin-top: -25px;':''">
+                                                v-if="detail && workview.id==detail.id"
+                                                :style="(detail && detail.id==workview.id && user.edit==1)?'margin-top: -25px;':''">
                                                 <span>
                                                     <v-icon>mdi-edit</v-icon><span
                                                         v-if="user.edit==1">取消</span>编辑
                                                 </span>
                                             </v-btn>
                                             <v-btn color="accent" v-on:click="account.edits(1)"
-                                                v-if="workview.id==detail.id && user.edit==1"
+                                                v-if="detail && workview.id==detail.id && user.edit==1"
                                                 class="sd" style="margin-top: -25px;" small>保存
                                             </v-btn>
 
@@ -58,7 +58,7 @@
                                         </v-col>
                                         <v-col cols="12" class="mt-2">
                                             <v-btn class="sd" v-on:click="user.signin()"
-                                                color="accent" v-if="workview.id==detail.id">
+                                                color="accent" v-if="detail && workview.id==detail.id">
                                                 签到</v-btn>
                                             <v-btn class="sd" color="accent"
                                                 v-on:click="user.follow()" v-else>
@@ -109,12 +109,12 @@
                 <v-card class="pa-5 sd pm">
                     <span color="accent" class="text-h5 text--primary" cols="24">用户介绍</span>
                     <v-btn v-on:click="user.edit==2?(user.edit=0):(user.edit=2)"
-                        v-if="workview.id==detail.id" :class="'sd '+(user.edit!=2?null:'tg')"
+                        v-if="detail && detail.id==workview.id" :class="'sd '+(user.edit!=2?null:'tg')"
                         :color="user.edit==2?null:'accent'">
                         <v-icon>mdi-edit</v-icon><span v-if="user.edit==2">取消</span>编辑
                     </v-btn>
                     <v-btn v-on:click="account.edits(2)"
-                        v-if="workview.id==detail.id && user.edit==2" color="accent" class="sd">
+                        v-if="detail && detail.id==workview.id && user.edit==2" color="accent" class="sd">
                         保存</v-btn>
                     <br><br>
 

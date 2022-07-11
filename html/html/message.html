@@ -2,6 +2,11 @@
     <v-row>
         <v-col cols="12" sm="10" md="9" lg="7" class="mx-auto">
             <v-card class="sd pa-8 my-12" v-if="user.message">
+                <span>
+                    <v-btn @click="user.postmessage()"  color="accent" >
+                        发送私信
+                    </v-btn>
+                </span><br><br>
                 <span v-for="i in user.message">
                     <span v-html="i.message"></span>
                     <v-btn icon class=" ml-2 float-right" v-on:click="user.delmsg(i.id)">
@@ -18,5 +23,19 @@
                 </div>
             </v-card>
         </v-col>
+    </v-row>
+    <v-row justify="center" v-if="user.pm.show">
+        <v-dialog v-model="user.pm.show" max-width="600" min-height="300">
+            <v-card class="pa-4">
+                <v-text-field label="对方id" v-model="user.pm.id"></v-text-field>
+                <v-text-field label="内容" v-model="user.pm.text"></v-text-field>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="accent" class="my-2 sd" @click="user.pm.send()">
+                        发送
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-row>
 </v-container>

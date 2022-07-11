@@ -42,7 +42,7 @@
                     </v-btn>
                     <v-toolbar-title>物品信息</v-toolbar-title>
                 </v-toolbar>
-
+                
                 <v-list-item three-line>
                     <v-list-item-content>
                         <v-list-item-title class="text-h5 mb-1">
@@ -50,6 +50,9 @@
                         </v-list-item-title>
                         <v-list-item-subtitle>
                             {{item.dialog && ((item.dialog.options && item.dialog.options.descp) || item.dialog.item.descp)}}
+                        </v-list-item-subtitle><br><br>
+                        <v-list-item-subtitle>
+                            还有 {{((item.dialog.expirationTime-new Date/1000)/3600).toFixed(1)}} 小时失效<br><br>
                         </v-list-item-subtitle>
                     </v-list-item-content>
 

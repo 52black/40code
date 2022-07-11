@@ -64,8 +64,8 @@ module.exports={
             console.log('获取评论', d)
         })
     },
-    delete: async function (id) {
-        if (!confirm("你确定要删除此评论吗")) {
+    delete: async function (id,q) {
+        if (!confirm("你确定要删除此评论吗? "+(q?'':"(你正在使用管理员权限)"))) {
             return;
         }
         post({
@@ -81,8 +81,8 @@ module.exports={
             v.comment.getcomment();
         })
     },
-    deletereply: async function (id) {
-        if (!confirm("你确定要删除此评论吗")) {
+    deletereply: async function (id,q) {
+        if (!confirm("你确定要删除此评论吗? "+(q?'':"(你正在使用管理员权限)"))) {
             return;
         }
         post({
