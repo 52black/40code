@@ -24,6 +24,14 @@ module.exports={
         }
     },
     showmore:(i)=>{
+        setTimeout(()=>{
+            viewer.update();
+            scratchblocks.renderMatching('code.language-scratch3,code.language-scratch-blocks', {
+                style:     'scratch3',   // Optional, defaults to 'scratch2'.
+                languages: ['en'], // Optional, defaults to ['en'].
+                scale: 1,                // Optional, defaults to 1
+              });
+        },300)
         Vue.set(v.comment.comment.comment[i],'show',1)
     },
     getcomment: () => {
@@ -115,7 +123,7 @@ module.exports={
 
             }, (d) => {
                 console.log(d);
-                v.comment.text[r]=""
+                v.comment.text['c-'+r]=""
                 alert("发送成功");
                 v.comment.getcomment();
             })

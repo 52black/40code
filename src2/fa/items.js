@@ -40,7 +40,7 @@ module.exports=[
            你的专属链接<code>
            ${'https://40code.com/#out=any&i=' + v.detail.id}
            </code><br>
-           别人通过你的专属链接进行账号注册<br>
+           别人(必须是新用户)通过你的专属链接进行账号注册<br>
            你和他都可获得100金币
            `)
         }

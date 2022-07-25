@@ -19,7 +19,7 @@ module.exports={
                         <v-row no-gutters>
                             <v-col cols="12">
                                 <a :href="'#page=user&id='+i.fromuser">
-                                    {{ j.nickname }} <span style="color:#888;font-size: 7px;">{{ i.time }}</span>
+                                    {{ j.nickname }} <span style="color:#888;font-size: 7px;">{{ i.time }}<span class="ml-2" v-if="i.ip_format">[{{ i.ip_format }}]</span></span>
                                 </a>
                                 <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`"
                                     v-if="comment.comment.studio[j.studio]">
@@ -74,7 +74,7 @@ module.exports={
                                     <v-col cols="12">
                                         <a :href="'#page=user&id='+k.fromuser">
                                             {{ j.nickname }} <span
-                                                style="color:#888;font-size: 7px;">{{ k.time }}</span>
+                                                style="color:#888;font-size: 7px;">{{ k.time }} <span class="ml-2" v-if="k.ip_format">[{{ k.ip_format }}]</span> </span>
                                         </a>
                                         <a :href="\`#page=studio&id=\${comment.comment.studio[j.studio].id}\`"
                                             v-if="comment.comment.studio[j.studio]">

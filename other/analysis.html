@@ -5,7 +5,7 @@
     <script src="https://cdn.staticfile.org/echarts/5.3.2/echarts.min.js"></script>
   </head>
   <body>
-    <center><div id="main" style="width: 650px; height: 600px"></div></center>
+    <center><div id="main" style="width: 650px; height: 550px"></div></center>
     <br><br><center><span id="r" style="color:#999"></span></center>
     <script>
       setTimeout(() => {
@@ -79,7 +79,9 @@
               value: h.context[o[i]],
             });
           }
-          document.getElementById('r').innerHTML="有效积木数:"+h.valid+"<br>"
+          document.getElementById('r').innerHTML=
+          // "不含圆形积木数:"+h.noreturn+"<br>"+
+          "有效积木数:"+h.valid+"<br>"
           +"有效片段数:"+h.vsegs+"<br>"
           +"总片段数:"+h.segs+"<br>"
           +"角色数:"+h.jn+"<br>"

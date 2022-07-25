@@ -75,7 +75,7 @@
                         </v-btn>
                     </template>
                 </v-snackbar>
-                <v-dialog v-model="sb2.show" width="500">
+                <v-dialog v-model="sb2.show" :width="sb2.width||500">
                     <v-card>
 
                         <v-card-title v-html="sb2.text" class="pt-3"></v-card-title>

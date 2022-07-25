@@ -5,8 +5,12 @@ module.exports={
             return pattern.test(value) || '请输入正确的邮箱'
         },
     ],
+    state:0,
+    s:(e)=>{
+        v.sign.state=e;
+    },
     l: function (n) {
-        let d = ['login', 'signup']
+        let d = ['login', 'signup','signup']
         if (!v.sign.token) {
             alert("请先完成验证码")
             return;
@@ -17,7 +21,9 @@ module.exports={
                 email: $('#email').val(),
                 pw: $('#pw').val(),
                 t2: v.sign.token,
-                i: getCookie('i')
+                i: getCookie('i'),
+                nickname:$('#snickname').val(),
+                type:n==2?1:0
             },
             p: 'sign'
         },

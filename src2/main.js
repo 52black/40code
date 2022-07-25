@@ -11,9 +11,12 @@ window.alert = (text, timeout) => {
     v.sb.timeout = timeout || 3000;
     v.sb.show = 1;
 };
-window.dialog = (text) => {
+window.dialog = (text,width) => {
     v.sb2.text = text;
-    v.sb2.show = 1;
+    v.sb2.width = width;
+    setTimeout(()=>{
+        v.sb2.show = 1;
+    },5)
 }
 window.markdownToHtml=(text)=>{
     return DOMPurify.sanitize(marked.parse(text));
@@ -91,10 +94,10 @@ let functiona = {
 	            if (blob.size === 0) {
 	                return;
 	            }
-                if(blob.size > 1024*80){
-                    alert('图片大小不能大于80kb');
-                    return;
-                }
+                // if(blob.size > 1024*80){
+                //     alert('图片大小不能大于80kb');
+                //     return;
+                // }
 				var f = new FormData();
 				function upa(data) {
                     // v.waitRequest.cover = 1;
