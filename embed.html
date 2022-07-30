@@ -40,7 +40,7 @@
       100% {
         transform: rotate(360deg);
       }
-    }</style><script src="https://cdn.staticfile.org/mdui/1.0.2/js/mdui.min.js"></script><script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script><script src="https://lib.baomitu.com/dompurify/2.3.6/purify.min.js"></script><script crossorigin="anonymous" integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww==" src="https://lib.baomitu.com/marked/4.0.2/marked.min.js"></script><script>var markdownToHtml=e=>DOMPurify.sanitize(marked.parse(e))
+    }</style><script src="https://cdn.staticfile.org/mdui/1.0.2/js/mdui.min.js"></script><script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script><script src="https://lib.baomitu.com/dompurify/2.3.6/purify.min.js"></script><script crossorigin="anonymous" integrity="sha512-hzyXu3u+VDu/7vpPjRKFp9w33Idx7pWWNazPm+aCMRu26yZXFCby1gn1JxevVv3LDwnSbyKrvLo3JNdi4Qx1ww==" src="https://lib.baomitu.com/marked/4.0.2/marked.min.js"></script><script>var markdownToHtml = e => DOMPurify.sanitize(marked.parse(e))
     function getQueryString(name) {
       let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
       if (top.location.hash.indexOf("#") < 0) return null;
@@ -49,7 +49,7 @@
       return null;
     }
     var id = getQueryString('id');</script></head><body><div id="splash" aria-hidden="true"><noscript><h1>Enable JavaScript</h1></noscript><div id="splash-content"><div id="splash-spinner"></div></div></div><script>apihost = "https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/";
-    window.waitRequest= {},scratch={};
+    window.waitRequest = {}, scratch = {};
     var temp2 = {
       apihost: "https://service-dq726wx5-1302921490.sh.apigw.tencentcs.com/",
     };
@@ -298,7 +298,11 @@
         $("#scratch").css("opacity", "1");
         $('#view').hide();
         $('#dlp').hide();
-
+        try {
+          $("#app > div > div > div > div.gui_menu-bar-position_6ejza.menu-bar_menu-bar_1gLUp.box_box_tWy-0 > div.menu-bar_main-menu_EyCGw > div:nth-child(4) > span:nth-child(3) > div")[0].text("保存")
+        } catch (e) {
+          console.log(e)
+        }
         callback && callback();
       }
       function uplw() {
@@ -325,7 +329,7 @@
             window.onbeforeunload = null;
             Open && (location.href = ("/#page=workinfo&publish=1&id=" + workinfo.id))
             alert('作品保存成功')
-            window.onbeforeunload = function(){ return;} 
+            window.onbeforeunload = function () { return; }
           },
           error: function () {
             hy();
@@ -445,12 +449,22 @@
 
     }
     function save(open) {
+      try {
+        $("#app > div > div > div > div.gui_menu-bar-position_6ejza.menu-bar_menu-bar_1gLUp.box_box_tWy-0 > div.menu-bar_main-menu_EyCGw > div:nth-child(4) > span:nth-child(3) > div")[0].text("保存中……")
+      } catch (e) {
+        console.log(e);
+      }
       if (workinfo.isauthor)
         saveproject(null, null, open)
       else {
-        $("#scratch").css("opacity", "0");
-        $("#loadinfo").html('正在改编中');
-        get({
+        try {
+          $("#app > div > div > div > div.gui_menu-bar-position_6ejza.menu-bar_menu-bar_1gLUp.box_box_tWy-0 > div.menu-bar_main-menu_EyCGw > div.menu-bar_menu-bar-item_264qQ > span:nth-child(2) > div")[0].text("改编中……")
+        } catch (e) {
+          console.log(e);
+        }
+        // $("#scratch").css("opacity", "0");
+        // $("#loadinfo").html('正在改编中');
+        post({
           url: 'work/new',
           p: 'newwork'
         }, function (d) {
@@ -484,4 +498,4 @@
       $('#app > div > div.interface_menu_2TZCG > div > div.menu-bar_menu-bar-item_264qQ').remove()
       // $('#app > div > div.interface_menu_2TZCG > div').append(`<div class="menu-bar_menu-bar-item_264qQ"><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE tw-see-inside_see-inside-button_1fSk6" role="button"><img class="tw-see-inside_see-inside-button-icon_UKAVj button_icon_JhCuM" draggable="false" src="static/assets/2f9cda00a530ac237fc24063067377c3.svg" height="20" width="20"><div class="button_content_3y79K"><span>转到源代码</span></div></span><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE" role="button" buttonname="123"><div class="button_content_3y79K"></div></span></div>`)
       // $('#app > div > div.interface_menu_2TZCG > div').append(`<div class="menu-bar_menu-bar-item_264qQ"><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE tw-see-inside_see-inside-button_1fSk6" role="button"><img class="tw-see-inside_see-inside-button-icon_UKAVj button_icon_JhCuM" draggable="false" src="static/assets/2f9cda00a530ac237fc24063067377c3.svg" height="20" width="20"><div class="button_content_3y79K"><span>转到源代码</span></div></span><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE" role="button" buttonname="123"><div class="button_content_3y79K"></div></span></div>`)
-    })</script><script src="https://40code-cdn.zq990.com/scratch/js/vendors~addon-settings~credits~editor~embed~fullscreen~player.bf65e6c5329ce310669c.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/vendors~editor~embed~fullscreen~player.da1d52090ea119afed97.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/editor~embed~fullscreen~player.682e973bbb2cb7299115.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/embed.62dd039ac0e64be4c4f2.js"></script></body></html>
+    })</script><script src="https://40code-cdn.zq990.com/scratch/js/vendors~addon-settings~credits~editor~embed~fullscreen~player.bf65e6c5329ce310669c.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/vendors~editor~embed~fullscreen~player.1cfaae44ac63fe61a302.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/editor~embed~fullscreen~player.40598b0c39c327ab408a.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/embed.62dd039ac0e64be4c4f2.js"></script></body></html>

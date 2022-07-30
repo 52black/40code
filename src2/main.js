@@ -243,7 +243,8 @@ window.v = new Vue({
             
         },
         'search.select':()=>{
-            v.search.s2=v.search.s[v.search.type].indexOf(v.search.select[v.search.type]);
+            let s=v.search.s[v.search.type].indexOf(v.search.select[v.search.type]);
+            s==-1 || (v.search.s2=s);
         }
     }
 })

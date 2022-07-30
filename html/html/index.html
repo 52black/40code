@@ -13,9 +13,8 @@
             <v-col class="mt-2" cols="12">
                 <v-icon>{{ n.icon }}</v-icon>
                 <strong>{{ n.title }}</strong>
-                <a class="float-right" 
-                :href="i?'#page=search&name=&author=&type=0&p=1&s=3':'#page=search&name=&author=&type=0&p=1&s=0&sid=&fl=1&follow='"
-                >
+                <a class="float-right"
+                    :href="i==2?'#page=search&name=&author=&type=0&p=1&s=2&sid=&fl=&fan=&follow=':'#page=search&name=&author=&type=0&p=1&s=0&sid=&fl=1&follow='">
                     <v-btn text>
                         <v-icon>mdi-arrow-right</v-icon>
                         更多
@@ -26,36 +25,39 @@
                 <s-workcard :work="j" :user="n.userlist[j.author.toString()][0]" :host="host">
                 </s-workcard>
             </v-col>
-
+            <v-col v-if="i==1" cols="12">
+                <v-row>
+                    <v-col class="mt-2" cols="12" v-if="viewmode=='index' && user.list">
+                        <v-icon>mdi-medal</v-icon>
+                        <strong>用户榜</strong>
+                        <a class="float-right" href="#page=search&name=&author=&type=1&p=1&s=1">
+                            <v-btn text>
+                                <v-icon>mdi-arrow-right</v-icon>
+                                更多
+                            </v-btn>
+                        </a>
+                    </v-col>
+                    <v-col v-if="user.list" v-for="j in user.list" :key="`${n}${j}`" cols="6" sm="4" md="3" lg="2">
+                        <s-usercard :user="j" :host="host"></s-usercard>
+                    </v-col>
+                    <v-col class="mt-2" cols="12" v-if="viewmode=='index' && studio.ilist">
+                        <v-icon>mdi-format-list-numbered</v-icon>
+                        <strong>工作室榜</strong>
+                        <a class="float-right" href="#page=search&name=&author=&type=2&p=1&s=2">
+                            <v-btn text>
+                                <v-icon>mdi-arrow-right</v-icon>
+                                更多
+                            </v-btn>
+                        </a>
+                    </v-col>
+                    <v-col v-if="viewmode=='index' && user.list" v-for="j in studio.ilist" :key="`${n}${j}`" cols="6"
+                        sm="4" md="3" lg="2">
+                        <s-studiocard :studio="j" :host="host">
+                            </s-usercard>
+                    </v-col>
+                </v-row>
+            </v-col>
         </template>
-        <v-col class="mt-2" cols="12" v-if="viewmode=='index' && user.list">
-            <v-icon>mdi-medal</v-icon>
-            <strong>用户榜</strong>
-            <a class="float-right" href="#page=search&name=&author=&type=1&p=1&s=1">
-                <v-btn text>
-                    <v-icon>mdi-arrow-right</v-icon>
-                    更多
-                </v-btn>
-            </a>
-        </v-col>
-        <v-col v-if="user.list" v-for="j in user.list" :key="`${n}${j}`" cols="6" sm="4" md="3"
-            lg="2">
-            <s-usercard :user="j" :host="host"></s-usercard>
-        </v-col>
-        <v-col class="mt-2" cols="12" v-if="viewmode=='index' && studio.ilist">
-            <v-icon>mdi-format-list-numbered</v-icon>
-            <strong>工作室榜</strong>
-            <a class="float-right" href="#page=search&name=&author=&type=2&p=1&s=2">
-                <v-btn text>
-                    <v-icon>mdi-arrow-right</v-icon>
-                    更多
-                </v-btn>
-            </a>
-        </v-col>
-        <v-col v-if="viewmode=='index' && user.list" v-for="j in studio.ilist" :key="`${n}${j}`"
-            cols="6" sm="4" md="3" lg="2">
-            <s-studiocard :studio="j" :host="host">
-                </s-usercard>
-        </v-col>
+
     </v-row>
 </v-container>
