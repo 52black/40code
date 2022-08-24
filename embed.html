@@ -228,7 +228,7 @@
       $('#b').hide();
       function uplw(d) {
         let f = new FormData();
-        $("#loadinfo").html('正在保存封面文件');
+        $("#setCover").text('正在保存封面文件');
         f.append("image", d)
         $.ajax({
           url: apihost + 'work/uploads',
@@ -246,7 +246,7 @@
               return;
             }
             hy(result1);
-            alert('封面保存成功')
+            $("#setCover").text('封面保存成功')
           },
           error: function () {
             hy();
@@ -255,16 +255,15 @@
         });
       }
       function hy(r) {
-        $("#scratch").css("opacity", "1");
-        $('#view').hide();
-        $('#dlp').hide();
+
         let k = r.data[2][0][1].Key.split('/');
         callback && callback(k[k.length - 1]);
+        setTimeout(()=>{
+          $("#setCover").text('设置当前截图为封面');
+          $("#saveProject").text('保存');
+        },5000)
       }
-      $("#scratch").css("opacity", "0");
-      $('#view').show();
-      $('#dlp').show();
-      $("#loadinfo").html('正在保存封面');
+      $("#setCover").text('正在保存封面……');
       vm.postIOData('video', { forceTransparentPreview: true });
       vm.renderer.requestSnapshot(dataURI => {
         vm.postIOData('video', { forceTransparentPreview: false });
@@ -303,11 +302,16 @@
         } catch (e) {
           console.log(e)
         }
+        setTimeout(()=>{
+          $("#setCover").text('设置当前截图为封面');
+          $("#saveProject").text('保存');
+        },5000)
         callback && callback();
       }
       function uplw() {
         let f = new FormData();
-        $("#loadinfo").html('正在保存作品文件');
+        $("#saveProject").text('正在保存作品文件……');
+        
         f.append("work", new Blob([vm.toJSON()]))
         $.ajax({
           url: apihost + 'work/upload?token=' + getCookie('token') + '&id=' + (id || workinfo.id),
@@ -328,7 +332,7 @@
             $(window).unbind('beforeunload');
             window.onbeforeunload = null;
             Open && (location.href = ("/#page=workinfo&publish=1&id=" + workinfo.id))
-            alert('作品保存成功')
+            $("#saveProject").text('作品保存成功')
             window.onbeforeunload = function () { return; }
           },
           error: function () {
@@ -340,8 +344,11 @@
 
       function upa(t) {
         // debugger;
-        if (f(data2[t]).size > 5 * 1024 * 1024) {
+        if (f(data2[t]).size > 5.5 * 1024 * 1024) {
           console.log('尺寸过大', t, data2[t], '跳过')
+          mdui.snackbar('含有>5.5MB的素材，已跳过')
+        }
+        if(f(data2[t]).size > 5.5 * 1024 * 1024){
           t++;
           upa(t);
           return;
@@ -366,8 +373,9 @@
               alert("保存失败");
               return;
             }
-            // vm.assets[data2[t]].clean = true;
-            $('#b').html(parseInt((t + 1/*n + t*/) / data2.length * 10000) / 100 + '%')
+            if(vm.assets && data2[t] && vm.assets[data2[t]]) vm.assets[data2[t]].clean = true;
+            console.log(vm.assets,data2[t])
+            $('#saveProject').text('保存素材中…… '+parseInt((t + 1/*n + t*/) / data2.length * 10000) / 100 + '%')
             if (t + 1/*n + t*/ >= data2.length) {
               $('#b').hide();
               uplw();
@@ -402,16 +410,18 @@
 
       function aftercheck() {
         if (data2.length) {
-          $("#loadinfo").html('正在保存素材');
+          // $("#loadinfo").html('正在保存素材');
+          $('#saveProject').text("正在保存素材……")
           $('#b').show()
           upa(0);
         }
         else uplw();
       }
 
-      $('#i2').hide()
-      $("#loadinfo").html('正在检查素材列表');
+      $('#i2').hide();
+      $('#saveProject').text("正在检查素材列表……")
       for (let i of vs) {
+        if(!i.clean)
         data2.push(i.assetId + '.' + i.dataFormat)
       }
       let checkdata = await new Promise((resolve) => {
@@ -498,4 +508,4 @@
       $('#app > div > div.interface_menu_2TZCG > div > div.menu-bar_menu-bar-item_264qQ').remove()
       // $('#app > div > div.interface_menu_2TZCG > div').append(`<div class="menu-bar_menu-bar-item_264qQ"><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE tw-see-inside_see-inside-button_1fSk6" role="button"><img class="tw-see-inside_see-inside-button-icon_UKAVj button_icon_JhCuM" draggable="false" src="static/assets/2f9cda00a530ac237fc24063067377c3.svg" height="20" width="20"><div class="button_content_3y79K"><span>转到源代码</span></div></span><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE" role="button" buttonname="123"><div class="button_content_3y79K"></div></span></div>`)
       // $('#app > div > div.interface_menu_2TZCG > div').append(`<div class="menu-bar_menu-bar-item_264qQ"><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE tw-see-inside_see-inside-button_1fSk6" role="button"><img class="tw-see-inside_see-inside-button-icon_UKAVj button_icon_JhCuM" draggable="false" src="static/assets/2f9cda00a530ac237fc24063067377c3.svg" height="20" width="20"><div class="button_content_3y79K"><span>转到源代码</span></div></span><span class="button_outlined-button_2f510 menu-bar_menu-bar-button_45YjE" role="button" buttonname="123"><div class="button_content_3y79K"></div></span></div>`)
-    })</script><script src="https://40code-cdn.zq990.com/scratch/js/vendors~addon-settings~credits~editor~embed~fullscreen~player.bf65e6c5329ce310669c.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/vendors~editor~embed~fullscreen~player.1cfaae44ac63fe61a302.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/editor~embed~fullscreen~player.40598b0c39c327ab408a.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/embed.62dd039ac0e64be4c4f2.js"></script></body></html>
+    })</script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({id:"JW9Ijj81HxjUscHB",ck:"JW9Ijj81HxjUscHB"})</script><script src="https://40code-cdn.zq990.com/scratch/js/vendors~addon-settings~credits~editor~embed~fullscreen~player.e86b7fd164fe2b6d243e.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/vendors~editor~embed~fullscreen~player.3e5fa827168cfda32fe5.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/editor~embed~fullscreen~player.d9324a2b30db0e10ee11.js"></script><script src="https://40code-cdn.zq990.com/scratch/js/embed.051cff59c5711cd80e1e.js"></script></body></html>

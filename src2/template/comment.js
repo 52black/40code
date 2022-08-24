@@ -32,7 +32,7 @@ module.exports={
                             <v-col cols="12">
                                 <span color="accent" class="pm" v-html="i.comment"></span>
                                 <v-btn class="text--secondary float-left" text small
-                                    v-on:click="comment.showreply(i.id)" style="margin-top: -15px;">
+                                    v-on:click="comment.showreply(i.id,)" style="margin-top: -15px;">
                                     <v-icon>mdi-reply</v-icon> 回复
                                 </v-btn>
                                 <v-btn class="text--secondary float-right" text small style="margin-top: -15px;"
@@ -112,7 +112,7 @@ module.exports={
                 </div>
             </div>
         </div>
-        <div v-if="index%4==0" class="mt-2">
+        <div v-if="index%4==0 && comment.comment.ad && comment.comment.ad[index/4]" class="mt-2">
             <v-row no-gutters>
                 <span style="flex: 0 0 5px;"></span>
                 <span style="flex: 0 0 10px;" class="mt-3">

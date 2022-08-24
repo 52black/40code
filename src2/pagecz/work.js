@@ -14,7 +14,10 @@ module.exports=function (id) {
             d2.introduce2 = markdownToHtml(d2.introduce);
             v.workview = d2;
             v.comment.getcomment()
-            v.detail && v.item.getwork()
+            if(v.detail)v.item.getwork()
+            else setTimeout(()=>{
+                v.detail && v.item.getwork()
+            },2000)
             v.title=d2.name+' by '+d2.nickname;
             v.stitle(d2.name+' by '+d2.nickname);
             setTimeout(()=>{

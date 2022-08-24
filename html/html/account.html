@@ -41,6 +41,14 @@
                 <v-btn color="accent" class="pa-2 mx-auto sd" v-on:click="account.n()" block>
                     更改密码
                 </v-btn>
+
+                <v-divider></v-divider><br>
+
+                <span style="color:#aaa">
+                    手机号：<span style="padding-left: 4px;">{{ detail.phone }}</span><br>
+                    邮箱：<span style="padding-left: 4px;">{{ detail.email }}</span>
+                </span>
+
             </v-card>
         </v-col>
     </v-row>

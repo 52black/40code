@@ -2,7 +2,7 @@ module.exports={
     search:(f)=>{
         setTimeout(()=>{
             if(v.search.s2==-1) v.search.s2=0;
-            location.href="#page=search&name="+($('#sname').val() || '')+"&author="+($('#sauthor').val() || '')+"&type="+v.search.type
+            location.href="#page=search&name="+($('#sname').val() || '')+"&author="+($('#sauthor').val() || getQueryString('author') || '')+"&type="+v.search.type
             +'&p='+v.search.page+'&s='+v.search.s2+'&sid='+(f?'':(getQueryString('sid') || ''))+'&fl='+(f?'':(getQueryString('fl') || ''))+'&fan='
             +(f?'':(getQueryString('fan') || ''))+'&follow='+(f?'':(getQueryString('follow') || ''));
         },1)
