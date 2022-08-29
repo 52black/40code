@@ -13,5 +13,6 @@ html += fs.readFileSync('./p/foot.html')
 html = minify(html, {
     removeComments: true, collapseWhitespace: true, minifyJS: true, minifyCSS: true
 })
+fs.writeFileSync('../m.html', html)
 html = fs.readFileSync('./p/h.html') + html
 fs.writeFileSync('../index.php', html)
