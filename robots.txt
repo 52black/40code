@@ -1,5 +1,2 @@
 User-agent: *
-Allow: /#page=user
-Allow: /#page=studio
-Allow: /#page=work
-Disallow: /
+Allow: /
